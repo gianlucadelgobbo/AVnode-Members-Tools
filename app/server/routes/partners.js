@@ -16,20 +16,49 @@ exports.get = function get(req, res) {
           }
         });
       }
-      DB.partners.find({}).sort( { name: 1 } ).toArray(function(e, result) {
+      DB.partners.find({}).sort( { brand: 1 } ).toArray(function(e, result) {
         var conta = 0;
         if (result.length) {
-          result.forEach(function(item, index, arr) {
-            DB.invoices.find({"to_client._id":arr[index]._id.toString()}).toArray(function (e, result) {
-              conta++;
-              arr[index].invoicesCount = result.length;
-              if (conta == arr.length) res.render('partners', { title: __("Partners"), result : arr, msg: msg, udata : req.session.user });
+          console.log("trovati");
+          res.render('partners', { title: __("Partners"), result : result, msg: msg, udata : req.session.user });
+        } else {
+          helpers.getPartners(function(result){
+            //console.log(result);
+            DB.insert_partner(result,function() {
+              res.render('partners', { title: __("Partners"), result : result, msg: msg, udata : req.session.user, js:'/js/partners.js' });
             });
           });
-        } else {
-          res.render('partners', { title: __("Partners"), msg: msg, udata : req.session.user, js:'/js/partners.js' });
         }
 
+      });
+      /*
+       DB.partners.find({}).sort( { name: 1 } ).toArray(function(e, result) {
+       res.render('partners', {  locals: { title: __("Partners"), result : result, msg: msg, udata : req.session.user } });
+       });
+       */
+    } else {
+      res.redirect('/?from='+req.url);
+    }
+  });
+};
+
+exports.getProject = function getProject(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+      var msg = {};
+      if (req.query.id && req.query.del) {
+        DB.delete_customer(req.query.id, function(err, obj){
+          if (obj){
+            msg.c = [];
+            msg.c.push({name:"",m:__("Partner deleted successfully")});
+          } else {
+            msg.e = [];
+            msg.e.push({name:"",m:__("Partner not found")});
+          }
+        });
+      }
+      DB.partners.find({"partnerships.name": req.params.project}).sort( { brand: 1 } ).toArray(function(e, result) {
+        res.render('partners', { title: __("Partners"), result : result, msg: msg, udata : req.session.user });
       });
       /*
        DB.partners.find({}).sort( { name: 1 } ).toArray(function(e, result) {

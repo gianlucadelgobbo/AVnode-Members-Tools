@@ -48,7 +48,7 @@ var accessToken;
 var post_id;
 var check_post_id;
 jQuery(function() {
-  getData();
+  //getData();
 });
 function getData() {
   var config = loadJsonFileAjaxSync("https://spreadsheets.google.com/feeds/list/1sAqX96AjK69cTkZPkKBXG29dMNVSULnzntoTwCdJ2no/1/public/values?alt=json", "application/json", 0);

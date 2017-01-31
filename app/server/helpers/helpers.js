@@ -4,17 +4,14 @@ var accounting = require('accounting');
 var DBusers = require('./db-users-manager');
 var DB = require('./db-manager');
 var Validators = require('../../common/validators').Validators;
+var request = require('request');
 
 exports.canIseeThis = function canIseeThis(req,callback) {
-  console.log("sto qui");
   if(req.session.user == null) {
-    console.log("sto qui 1");
     callback(false);
   } else if(req.params.dbname && req.session.user.dbs.indexOf(req.params.dbname)==-1) {
-    console.log("sto qui 2");
     callback(false);
   } else if(req.params.dbname && global.settings.dbName != req.params.dbname) {
-    console.log("sto qui 3");
     var index = req.session.user.dbs.indexOf(req.params.dbname);
     global.settings.dbName = req.session.user.companies[index].dbname;
     global.settings.companyName = req.session.user.companies[index].companyname;
@@ -22,12 +19,10 @@ exports.canIseeThis = function canIseeThis(req,callback) {
       callback(true);
     });
   } else if(req.params.dbname && global.settings.dbName == req.params.dbname) {
-    console.log("sto qui 4");
     callback(true);
   //} else if(global.settings.dbName) {
   //  callback(true);
   } else {
-    console.log("sto qui 5");
     callback(false);
   }
 };
@@ -186,3 +181,155 @@ exports.validateFormCustomer = function validateFormCustomer(o,callback) {
     });
   }
 };
+
+
+
+
+exports.getPartners = function getPartners(callback) {
+  //var mainList = loadJsonFileAjaxSync("https://spreadsheets.google.com/feeds/list/1sAqX96AjK69cTkZPkKBXG29dMNVSULnzntoTwCdJ2no/1/public/values?alt=json", "application/json", 0);
+  request("https://spreadsheets.google.com/feeds/list/1sAqX96AjK69cTkZPkKBXG29dMNVSULnzntoTwCdJ2no/1/public/values?alt=json", function (error, response, body) {
+    //console.log(error);
+    if (!error && response.statusCode == 200) {
+      var mainList = JSON.parse(body);
+      console.log("getData");
+      console.log(mainList);
+      var partners = [];
+      var status = "ACTIVE";
+      for (var row in mainList.feed.entry) {
+        var partner = {
+          delegate : mainList.feed.entry[row].gsx$person.$t,
+          brand : mainList.feed.entry[row].gsx$displayname.$t,
+          type  : mainList.feed.entry[row].gsx$event.$t=="X" ? "Event" : "Organization",
+          country : mainList.feed.entry[row].gsx$country.$t,
+          contacts : [],
+          partnerships : [],
+          channels : [],
+          avnode : mainList.feed.entry[row].gsx$avnode.$t=="X" ? true : false,
+          websites : []
+        };
+        if (mainList.feed.entry[row].gsx$lpm.$t=="X") partner.partnerships.push({name:"LPM",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
+        if (mainList.feed.entry[row].gsx$lcf.$t=="X") partner.partnerships.push({name:"LCF",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
+        if (mainList.feed.entry[row].gsx$website.$t) partner.websites = [mainList.feed.entry[row].gsx$website.$t];
+        var contact = {};
+        if (mainList.feed.entry[row].gsx$name.$t) contact.name = mainList.feed.entry[row].gsx$name.$t;
+        if (mainList.feed.entry[row].gsx$surname.$t) contact.surname = mainList.feed.entry[row].gsx$surname.$t;
+        if (mainList.feed.entry[row].gsx$email.$t) contact.email = mainList.feed.entry[row].gsx$email.$t;
+        if (mainList.feed.entry[row].gsx$phone.$t) contact.phone = mainList.feed.entry[row].gsx$phone.$t;
+        if (mainList.feed.entry[row].gsx$lang.$t && (contact.name || contact.surname || contact.email)) contact.lang = mainList.feed.entry[row].gsx$lang.$t;
+        if (contact.lang) contact.types = ["Contact"];
+        if (contact.lang) partner.contacts.push(contact);
+        contact = {};
+        if (mainList.feed.entry[row].gsx$ccname.$t) contact.name = mainList.feed.entry[row].gsx$ccname.$t;
+        if (mainList.feed.entry[row].gsx$ccsurname.$t) contact.surname = mainList.feed.entry[row].gsx$ccsurname.$t;
+        if (mainList.feed.entry[row].gsx$ccemail.$t) contact.email = mainList.feed.entry[row].gsx$ccemail.$t;
+        if (mainList.feed.entry[row].gsx$ccphone.$t) contact.phone = mainList.feed.entry[row].gsx$ccphone.$t;
+        if (mainList.feed.entry[row].gsx$lang.$t && (contact.name || contact.surname || contact.email)) contact.lang = mainList.feed.entry[row].gsx$lang.$t;
+        if (contact.lang) contact.types = ["Head Master"];
+        if (contact.lang) partner.contacts.push(contact);
+
+
+        for (var item in mainList.feed.entry[row]) {
+          if (item.indexOf("$")>0) {
+            //partner[item.split("$")[1]] = mainList.feed.entry[row][item].$t;
+          }
+        }
+        partners.push(partner);
+      }
+      console.log("Partners");
+      console.log(partners);
+      //var subList = loadJsonFileAjaxSync("https://spreadsheets.google.com/feeds/list/13VxuoM3TK6kWoDq313pgpJkPdK0GpoIiGIM5vToHfhY/1/public/values?alt=json", "application/json", 0);
+      request("https://spreadsheets.google.com/feeds/list/1sAqX96AjK69cTkZPkKBXG29dMNVSULnzntoTwCdJ2no/2/public/values?alt=json", function (error, response, body) {
+        //console.log(error);
+        if (!error && response.statusCode == 200) {
+          var mainList = JSON.parse(body);
+          console.log("getData");
+          console.log(mainList);
+          var status = "NEW";
+          for (var row in mainList.feed.entry) {
+            var partner = {
+              delegate : mainList.feed.entry[row].gsx$person.$t,
+              brand : mainList.feed.entry[row].gsx$displayname.$t,
+              type  : mainList.feed.entry[row].gsx$type.$t ? mainList.feed.entry[row].gsx$type.$t : mainList.feed.entry[row].gsx$event.$t=="X" ? "Event" : "Organization",
+              country : mainList.feed.entry[row].gsx$country.$t,
+              description : mainList.feed.entry[row].gsx$description.$t,
+              address : mainList.feed.entry[row].gsx$address.$t,
+              contacts : [],
+              partnerships : [],
+              channels : [],
+              avnode : mainList.feed.entry[row].gsx$avnode.$t=="X" ? true : false,
+              websites : []
+            };
+            if (mainList.feed.entry[row].gsx$lpm.$t=="X") partner.partnerships.push({name:"LPM",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
+            if (mainList.feed.entry[row].gsx$lcf.$t=="X") partner.partnerships.push({name:"LCF",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
+            if (mainList.feed.entry[row].gsx$website.$t) partner.websites = [mainList.feed.entry[row].gsx$website.$t];
+            var contact = {};
+            if (mainList.feed.entry[row].gsx$name.$t) contact.name = mainList.feed.entry[row].gsx$name.$t;
+            if (mainList.feed.entry[row].gsx$surname.$t) contact.surname = mainList.feed.entry[row].gsx$surname.$t;
+            if (mainList.feed.entry[row].gsx$email.$t) contact.email = mainList.feed.entry[row].gsx$email.$t;
+            if (mainList.feed.entry[row].gsx$phone.$t) contact.phone = mainList.feed.entry[row].gsx$phone.$t;
+            if (mainList.feed.entry[row].gsx$lang.$t && (contact.name || contact.surname || contact.email)) contact.lang = mainList.feed.entry[row].gsx$lang.$t;
+            if (contact.lang) contact.types = ["Contact"];
+            if (contact.lang) partner.contacts.push(contact);
+            contact = {};
+            if (mainList.feed.entry[row].gsx$ccname.$t) contact.name = mainList.feed.entry[row].gsx$ccname.$t;
+            if (mainList.feed.entry[row].gsx$ccsurname.$t) contact.surname = mainList.feed.entry[row].gsx$ccsurname.$t;
+            if (mainList.feed.entry[row].gsx$ccemail.$t) contact.email = mainList.feed.entry[row].gsx$ccemail.$t;
+            if (mainList.feed.entry[row].gsx$ccphone.$t) contact.phone = mainList.feed.entry[row].gsx$ccphone.$t;
+            if (mainList.feed.entry[row].gsx$lang.$t && (contact.name || contact.surname || contact.email)) contact.lang = mainList.feed.entry[row].gsx$lang.$t;
+            if (contact.lang) contact.types = ["Head Master"];
+            if (contact.lang) partner.contacts.push(contact);
+
+
+            for (var item in mainList.feed.entry[row]) {
+              if (item.indexOf("$")>0) {
+                //partner[item.split("$")[1]] = mainList.feed.entry[row][item].$t;
+              }
+            }
+            partners.push(partner);
+          }
+          console.log("Partners");
+          console.log(partners);
+          //var subList = loadJsonFileAjaxSync("https://spreadsheets.google.com/feeds/list/13VxuoM3TK6kWoDq313pgpJkPdK0GpoIiGIM5vToHfhY/1/public/values?alt=json", "application/json", 0);
+          request("https://spreadsheets.google.com/feeds/list/13VxuoM3TK6kWoDq313pgpJkPdK0GpoIiGIM5vToHfhY/1/public/values?alt=json", function (error, response, body) {
+            console.log("getData");
+            var subList = JSON.parse(body);
+            console.log(subList);
+            for (var row in subList.feed.entry) {
+              console.log(subList.feed.entry[row].gsx$partner.$t);
+              var index = 0;
+              for (var item in partners) {
+                if (partners[item].brand == subList.feed.entry[row].gsx$partner.$t) {
+                  partners[item].channels.push({
+                    profilename: subList.feed.entry[row].gsx$profilename.$t,
+                    type: subList.feed.entry[row].gsx$type.$t,
+                    url: subList.feed.entry[row].gsx$url.$t
+
+                  });
+                  //console.log("TROVATO"+index);
+                } else {
+                  //console.log("NON TROVATO"+subList.feed.entry[row].gsx$partner.$t);
+                }
+                index++;
+              }
+            }
+            /*for (var row in subList.feed.entry) {
+             for (var item in partners) {
+             if (partners[item].brand == subList.feed.entry[row].gsx$partner.$t) {
+             console.log("TROVATO " + partners[item].brand);
+             } else {
+             console.log("NON TROVATO "+partners[item].brand);
+             }
+             }
+             }*/
+
+            console.log("Partners");
+            console.log(partners);
+            callback(partners);
+          });
+        }
+      });
+    }
+  });
+
+}
+

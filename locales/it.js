@@ -169,5 +169,14 @@
 	"Dear {{client_name}}": "Dear {{client_name}}",
 	"{{result.to_client.name}} xxx Invoice number {{result.invoice_number}} - {{date}}": "{{result.to_client.name}} xxx Invoice number {{result.invoice_number}} - {{date}}",
 	"{{result.to_client.name}} • Invoice number {{result.invoice_number}} - {{date}}": "{{result.to_client.name}} • Invoice number {{result.invoice_number}} - {{date}}",
-	"Partners": "Partners"
+	"Partners": "Partners",
+	"Delegate": "Delegate",
+	"Brand": "Brand",
+	"Type": "Type",
+	"Status": "Status",
+	"Partnerships": "Partnerships",
+	"Channels": "Channels",
+	"Avnode": "Avnode",
+	"Notes": "Notes",
+	"Website": "Website"
 }

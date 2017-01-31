@@ -186,6 +186,26 @@ DB.delete_customer = function(id, callback) {
   });
 };
 
+DB.insert_partner = function(newData, callback) {
+  delete newData.id;
+  DB.partners.insert(newData, {safe: true}, function(err, records){
+    callback(err, records.ops[0]);
+  });
+};
+DB.update_partner = function(newData, callback) {
+  DB.partners.findOne({_id:new ObjectID(newData.id)}, function(e, o){
+    newData._id = o._id;
+    delete newData.id;
+    DB.partners.save(newData);
+    callback(newData);
+  });
+};
+DB.delete_partner = function(id, callback) {
+  DB.partners.remove({_id: new ObjectID(id)},{safe: true}, function(err, records){
+    callback(err, records);
+  });
+};
+
 
 function unformatPrices(newInvoice){
   newInvoice.subtotal=parseFloat(accounting.unformat(newInvoice.subtotal, ","));
