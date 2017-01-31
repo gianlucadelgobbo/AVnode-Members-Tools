@@ -1,0 +1,9 @@
+.DS_Store
+.idea
+err.log
+forever.log
+node_modules
+out.log
+app.js
+app/public/css/style.css
+warehouse/accounts/*
