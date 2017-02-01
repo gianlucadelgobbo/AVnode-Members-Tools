@@ -185,5 +185,6 @@
 	"All Partners": "All Partners",
 	"Facebook groups": "Facebook groups",
 	"Projects": "Projects",
-	"Project": "Project"
+	"Project": "Project",
+	"Please select a Project": "Please select a Project"
 }
