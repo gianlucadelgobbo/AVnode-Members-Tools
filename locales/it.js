@@ -178,5 +178,12 @@
 	"Channels": "Channels",
 	"Avnode": "Avnode",
 	"Notes": "Notes",
-	"Website": "Website"
+	"Website": "Website",
+	"Accounting": "Accounting",
+	"offers": "offers",
+	"Make invoice": "Make invoice",
+	"All Partners": "All Partners",
+	"Facebook groups": "Facebook groups",
+	"Projects": "Projects",
+	"Project": "Project"
 }

@@ -1,0 +1,10 @@
+#sidebar.sidebar-offcanvas
+  .col-md-12
+    h3=__("Partners")
+    ul.nav.nav-pills.nav-stacked
+      li(class=global.settings.currenturl.lastIndexOf('/partners/') == 12 ? "active" : undefined)
+        a(href="/" + global.settings.dbName + "/partners/")=__("All Partners")
+      li(class=global.settings.currenturl.lastIndexOf('/partners/facebookgroups/') == 12 ? "active" : undefined)
+        a(href="/" + global.settings.dbName + "/partners/facebookgroups/")=__("Facebook groups")
+      li(class=global.settings.currenturl.lastIndexOf('/partners/actions/') == 12 ? "active" : undefined)
+        a(href="/" + global.settings.dbName + "/partners/actions/")=__("Actions")

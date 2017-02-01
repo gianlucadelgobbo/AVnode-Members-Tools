@@ -20,12 +20,12 @@ exports.get = function get(req, res) {
         var conta = 0;
         if (result.length) {
           console.log("trovati");
-          res.render('partners', { title: __("Partners"), result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true });
+          res.render('partners_all', { title: __("Partners"), result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true });
         } else {
           helpers.getPartners(function(result){
             //console.log(result);
             DB.insert_partner(result,function() {
-              res.render('partners', { title: __("Partners"), result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true });
+              res.render('partners_all', { title: __("Partners"), result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true });
             });
           });
         }
@@ -58,7 +58,7 @@ exports.getProject = function getProject(req, res) {
         });
       }
       DB.partners.find({"partnerships.name": req.params.project}).sort( { brand: 1 } ).toArray(function(e, result) {
-        res.render('partners', { title: __("Partners"), result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+        res.render('partners', { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
       });
       /*
        DB.partners.find({}).sort( { name: 1 } ).toArray(function(e, result) {

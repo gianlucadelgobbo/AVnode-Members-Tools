@@ -47,18 +47,10 @@ html(lang=global.settings.defaultLocale)
               li
                 b=global.settings.companyName
           ul.nav.navbar-nav
-            li
-              a(href="/" + global.settings.dbName + "/customers")=__("Customers")
-            li
-              a(href="/" + global.settings.dbName + "/customer")=__("New customer")
-            li
-              a(href="/" + global.settings.dbName + "/offers")=__("Offers")
-            li
-              a(href="/" + global.settings.dbName + "/offer")=__("New offer")
-            li
-              a(href="/" + global.settings.dbName + "/invoices")=__("Invoices")
-            li
-              a(href="/" + global.settings.dbName + "/invoice")=__("New invoice")
+            li(class=global.settings.currenturl.indexOf('/accounting/')>0 ? "active" : undefined)
+              a(href="/" + global.settings.dbName + "/accounting/customers/")=__("Accounting")
+            li(class=global.settings.currenturl.indexOf('/partners/')>0 ? "active" : undefined)
+              a(href="/" + global.settings.dbName + "/partners/")=__("Partners")
           ul.nav.navbar-nav.navbar-right
             li
               a(href="#", onmouseup="var bella = $(this);setTimeout(function() {bella.parent().parent().parent().scrollTop(1000);}, 300)", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false", style="padding-top:12px;padding-bottom:5px;text-align:left").dropdown-toggle
@@ -78,8 +70,7 @@ html(lang=global.settings.defaultLocale)
                   a(href="/logout")
                     i.glyphicon.glyphicon-lock.icon-white
                     !=" "+__("Log Out")
-    .container-fluid.cnt
-      block content
+    block content
 
     include modals/alert
     include modals/confirm

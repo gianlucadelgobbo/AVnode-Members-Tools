@@ -1,10 +1,10 @@
 extends layout
 block content
   .row-offcanvas.row-offcanvas-left.cnt
-    include sidebar_partners
+    include sidebar_partners_projects
     #main
       .col-md-12
-        h1.page-title=__("Partners")+": "+project
+        h1.page-title=__("All Partners")
         div
           if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
             .alert.alert-danger
@@ -30,11 +30,8 @@ block content
                 th(data-field="country" data-sortable="true")=__("Country")
                 th(data-field="website" data-sortable="true")=__("Website")
                 th(data-field="contacts" data-sortable="true")=__("Contacts")
+                th(data-field="partnerships" data-sortable="true")=__("Partnerships")
                 th(data-field="channels" data-sortable="true")=__("Channels")
-                th(data-field="project" data-sortable="true")=__("Project")
-                th(data-field="status" data-sortable="true")=__("Status")
-                th(data-field="notes" data-sortable="true")=__("Notes")
-
             tbody
               if result
                 each x in result
@@ -71,12 +68,20 @@ block content
                           !=" "
                           each type in contact.types
                             span.label.label-default!=type
+
+                    td
+                      each partnership in x.partnerships
+                        p
+                          b=partnership.name
+                          br
+                          !=partnership.group
+                          br
+                          !=partnership.status
+                        if partnership.notes!=""
+                          p
+                            b=__("Notes")
+                            br
+                            !=partnership.notes
                     td
                       each channel in x.channels
-                        p!=channel.profilename + " " + channel.type + " " + channel.url
-                    each partnership in x.partnerships
-                      if partnership.name == project
-                        td=partnership.group
-                        td=partnership.status
-                        td=partnership.notes
-
+                        p!=channel.profilename+" "+channel.type+" "+channel.url

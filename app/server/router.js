@@ -10,7 +10,6 @@ var settingsRoutes = require('./routes/settings');
 var lostPasswordRoutes = require('./routes/lost-password');
 var resetPasswordRoutes = require('./routes/reset-password');
 var customersRoutes = require('./routes/customers');
-var customerRoutes = require('./routes/customer');
 var partnersRoutes = require('./routes/partners');
 var partnerRoutes = require('./routes/partner');
 var invoicesRoutes = require('./routes/invoices');
@@ -30,11 +29,11 @@ module.exports = function(app) {
 
   // Api //
   //app.get('/api/partners', apiRoutes.getPartners);
-  app.get('/api/customers', apiRoutes.getCustomers);
-  app.get('/api/payments', apiRoutes.getPayments);
-  app.get('/api/invoices', apiRoutes.getInvoices);
-  app.get('/api/products', apiRoutes.getProducts);
-  app.get('/api/offers', apiRoutes.getOffers);
+  app.get('/api/accounting/customers', apiRoutes.getCustomers);
+  app.get('/api/accounting/payments', apiRoutes.getPayments);
+  app.get('/api/accounting/invoices', apiRoutes.getInvoices);
+  app.get('/api/accounting/products', apiRoutes.getProducts);
+  app.get('/api/accounting/offers', apiRoutes.getOffers);
 
   // Logged-in redirect / homepage //
   app.get('/:dbname/home', homeRoutes.get);
@@ -47,6 +46,11 @@ module.exports = function(app) {
   app.get('/sendemail', sendemailRoutes.get);
   app.post('/sendemail', sendemailRoutes.post);
 
+  // password reset //
+  app.post('/lost-password', lostPasswordRoutes.post);
+  app.get('/reset-password', resetPasswordRoutes.get);
+  app.post('/reset-password', resetPasswordRoutes.post);
+
   // Settings //
   app.get('/:dbname/settings', settingsRoutes.get);
   app.post('/:dbname/settings', settingsRoutes.post);
@@ -56,33 +60,28 @@ module.exports = function(app) {
   app.get('/:dbname/account', accountRoutes.get);
   app.post('/:dbname/account', accountRoutes.post);
 
-  // password reset //
-  app.post('/lost-password', lostPasswordRoutes.post);
-  app.get('/reset-password', resetPasswordRoutes.get);
-  app.post('/reset-password', resetPasswordRoutes.post);
-
-  // Customers //
-  app.get('/:dbname/customers', customersRoutes.get);
-  app.get('/:dbname/customer', customerRoutes.get);
-  app.post('/:dbname/customer', customerRoutes.post);
-
   // Partners //
   app.get('/:dbname/partners', partnersRoutes.get);
   app.get('/:dbname/partners/:project', partnersRoutes.getProject);
-  app.get('/:dbname/partner', partnerRoutes.get);
-  app.post('/:dbname/partner', partnerRoutes.post);
+  //app.get('/:dbname/partners/partner/:partner', partnersRoutes.getPartner);
+  app.post('/:dbname/partners/partner/:partner', partnerRoutes.post);
+
+  // Customers //
+  app.get('/:dbname/accounting/customers', customersRoutes.getAll);
+  app.get('/:dbname/accounting/customers/:customer', customersRoutes.get);
+  app.post('/:dbname/accounting/customers', customersRoutes.post);
 
   // Invoices //
-  app.get('/:dbname/invoices', invoicesRoutes.get);
-  app.get('/:dbname/invoice', invoiceRoutes.get);
-  app.post('/:dbname/invoice', invoiceRoutes.post);
-  app.get('/:dbname/print/invoice', invoiceRoutes.print);
+  app.get('/:dbname/accounting/invoices', invoicesRoutes.get);
+  app.get('/:dbname/accounting/invoice', invoiceRoutes.get);
+  app.post('/:dbname/accounting/invoice', invoiceRoutes.post);
+  app.get('/:dbname/accounting/print/invoice', invoiceRoutes.print);
 
   // Offers //
-  app.get('/:dbname/offers', offersRoutes.get);
-  app.get('/:dbname/offer', offerRoutes.get);
-  app.post('/:dbname/offer', offerRoutes.post);
-  app.get('/:dbname/print/offer', offerRoutes.print);
+  app.get('/:dbname/accounting/offers', offersRoutes.get);
+  app.get('/:dbname/accounting/offer', offerRoutes.get);
+  app.post('/:dbname/accounting/offer', offerRoutes.post);
+  app.get('/:dbname/accounting/print/offer', offerRoutes.print);
 
   // ChangeDB //
   app.get('/:dbname', changedbRoutes.get);

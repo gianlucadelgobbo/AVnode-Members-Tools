@@ -7,6 +7,7 @@ var Validators = require('../../common/validators').Validators;
 var request = require('request');
 
 exports.canIseeThis = function canIseeThis(req,callback) {
+  global.settings.currenturl = req.url;
   if(req.session.user == null) {
     callback(false);
   } else if(req.params.dbname && req.session.user.dbs.indexOf(req.params.dbname)==-1) {
