@@ -73,7 +73,49 @@ block content
                             span.label.label-default!=type
                     td
                       each channel in x.channels
-                        p!=channel.profilename + " " + channel.type + " " + channel.url
+                        p
+                          if channel.type == "FB-Page"
+                            i.icon-facebook-squared
+                            b!=" Page "
+                            !=channel.profilename + " "
+                            !=" "
+                            a(href=channel.url,target="_blank")=channel.url
+                          else if channel.type == "FB-Group"
+                            i.icon-facebook-squared
+                            b!=" Group "
+                            !=channel.profilename + " "
+                            !=" "
+                            a(href=channel.url,target="_blank")=channel.url
+                          else if channel.type == "FB-Profile"
+                            i.icon-facebook-squared
+                            b!=" Profile "
+                            !=channel.profilename + " "
+                            !=" "
+                            a(href=channel.url,target="_blank")=channel.url
+                          else if channel.type == "Twitter"
+                            i.icon-twitter-squared
+                            b!=" Profile "
+                            !=channel.profilename + " "
+                            !=" "
+                            a(href=channel.url,target="_blank")=channel.url
+                          else if channel.type == "Instagram"
+                            i.icon-instagram
+                            b!=" Profile "
+                            !=channel.profilename + " "
+                            !=" "
+                            a(href=channel.url,target="_blank")=channel.url
+                          else if channel.type == "WebSite"
+                            i.glyphicon.glyphicon-globe
+                            b!=" WebSite "
+                            !=channel.profilename + " "
+                            !=" "
+                            a(href=channel.url,target="_blank")=channel.url
+                          else
+                            i.glyphicon.glyphicon-globe
+                            b!=" "+channel.type+" "
+                            !=channel.profilename + " "
+                            !=" "
+                            a(href=channel.url,target="_blank")=channel.url
                     each partnership in x.partnerships
                       if partnership.name == project
                         td=partnership.group
