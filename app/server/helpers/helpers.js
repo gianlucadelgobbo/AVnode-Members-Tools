@@ -133,7 +133,15 @@ exports.formatMoneyList = function formatMoneyList(result) {
 };
 
 
-exports.validateFormAction = function validateFormCustomer(o,callback) {
+exports.validateFormPartner = function validateFormPartner(o,callback) {
+  var e = [];
+  if (!Validators.validateStringLength(o.name, 3, 100)){
+    e.push({name:"name",m:__("Please enter a valid Action name")});
+  }
+  callback(e, o);
+};
+
+exports.validateFormAction = function validateFormAction(o,callback) {
   var e = [];
   if (!Validators.validateStringLength(o.name, 3, 100)){
     e.push({name:"name",m:__("Please enter a valid Action name")});

@@ -11,7 +11,6 @@ var lostPasswordRoutes = require('./routes/lost-password');
 var resetPasswordRoutes = require('./routes/reset-password');
 var customersRoutes = require('./routes/customers');
 var partnersRoutes = require('./routes/partners');
-var partnerRoutes = require('./routes/partner');
 var invoicesRoutes = require('./routes/invoices');
 var invoiceRoutes = require('./routes/invoice');
 var offerRoutes = require('./routes/offer');
@@ -61,14 +60,23 @@ module.exports = function(app) {
   app.post('/:dbname/account', accountRoutes.post);
 
   // Partners //
-  app.get('/:dbname/partners', partnersRoutes.get);
+  app.get('/:dbname/partners', partnersRoutes.getPartners);
+  //app.get('/:dbname/partners/partner/new', partnersRoutes.getPartners);
+  app.get('/:dbname/partners/partner/:partner', partnersRoutes.getPartners);
+  app.post('/:dbname/partners/partner/new', partnersRoutes.setPartner);
+  app.get('/:dbname/partners/partner/:partner/edit', partnersRoutes.getPartners);
+  app.post('/:dbname/partners/partner/:partner/edit', partnersRoutes.setPartner);
+
   app.get('/:dbname/partners/:project', partnersRoutes.getProject);
+
   app.get('/:dbname/partners/:project/actions', partnersRoutes.getActions);
-  app.post('/:dbname/partners/:project/actions/new/', partnersRoutes.setAction);
+  //app.get('/:dbname/partners/:project/actions/new', partnersRoutes.getActions);
   app.get('/:dbname/partners/:project/actions/:action', partnersRoutes.getActions);
+  app.post('/:dbname/partners/:project/actions/new', partnersRoutes.setAction);
+  app.get('/:dbname/partners/:project/actions/:action/edit', partnersRoutes.getActions);
+  app.post('/:dbname/partners/:project/actions/:action/edit', partnersRoutes.setAction);
+
   app.get('/:dbname/partners/:project/channels', partnersRoutes.getProject);
-  //app.get('/:dbname/partners/partner/:partner', partnersRoutes.getPartner);
-  app.post('/:dbname/partners/partner/:partner', partnerRoutes.post);
 
   // Customers //
   app.get('/:dbname/accounting/customers', customersRoutes.getAll);

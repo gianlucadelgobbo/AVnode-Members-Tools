@@ -206,5 +206,8 @@
 	"Include Facebook groups": "Include Facebook groups",
 	"Please enter a valid Action name": "Please enter a valid Action name",
 	"Action saved with success": "Action saved with success",
-	"Analysis": "Analysis"
+	"Analysis": "Analysis",
+	"New Partner": "New Partner",
+	"Partner": "Partner",
+	"New partner": "New partner"
 }

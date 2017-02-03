@@ -4,7 +4,13 @@ block content
     include sidebar_partners
     #main
       .col-md-12
-        h1.page-title=__("Partners")+": "+project
+        .row
+          .col-md-9
+            h1.page-title=__("Partners")+(project ? ": "+project : "")
+          .col-md-3
+            .pull-right
+              a.btn.btn-primary(href="/" + global.settings.dbName + "/partners/partner/new/")=__("New Partner")
+
         div
           if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
             .alert.alert-danger
@@ -41,21 +47,19 @@ block content
                   tr
                     td
                       div.btn-group
-                        a.btn.btn-primary(href="/"+global.settings.dbName+"/invoices/?year=ALL%20Years&customer="+x._id)=__("Invoices")
+                        a.btn.btn-primary(href="/"+global.settings.dbName+"/partners/partner/"+x._id+"/")=__("View")
                         button.btn.btn-primary.dropdown-toggle(data-toggle="dropdown")
                           span.caret
                         ul.dropdown-menu
                           li
-                            a(href="/" + global.settings.dbName + "/invoices/?year=ALL%20Years&customer=" + x._id)=__("Invoices")
+                            a(href="/" + global.settings.dbName + "/partners/partner/"+x._id+"/")=__("View")
                           li
-                            a(href="/" + global.settings.dbName + "/offers/?year=ALL%20Years&customer=" + x._id)=__("Offers")
+                            a(href="/" + global.settings.dbName + "/partners/partner/"+x._id+"/")=__("Edit")
                           li
-                            a(href="/" + global.settings.dbName + "/customer/?id=" + x._id)=__("Edit")
-                          li
-                            a(href="/"+global.settings.dbName+"/customers/?id="+x._id+"&del="+1)=__("Delete")
+                            a(href="/"+global.settings.dbName+"/partners/partner/"+x._id+"/?del=1")=__("Delete")
                     td=x.delegate
                     td
-                      a(href="/" + global.settings.dbName + "/customer/?id=" + x._id)=x.brand
+                      a(href="/" + global.settings.dbName + "/partners/partner/"+x._id+"/")=x.brand
                     td=x.type
                     td=x.avnode
                     td=x.country
@@ -75,47 +79,32 @@ block content
                       each channel in x.channels
                         p
                           if channel.type == "FB-Page"
-                            i.icon-facebook-squared
+                            i.icon-fontello-facebook-squared
                             b!=" Page "
                             !=channel.profilename + " "
                             !=" "
                             a(href=channel.url,target="_blank")=channel.url
                           else if channel.type == "FB-Group"
-                            i.icon-facebook-squared
+                            i.icon-fontello-facebook-squared
                             b!=" Group "
-                            !=channel.profilename + " "
-                            !=" "
-                            a(href=channel.url,target="_blank")=channel.url
                           else if channel.type == "FB-Profile"
-                            i.icon-facebook-squared
+                            i.icon-fontello-facebook-squared
                             b!=" Profile "
-                            !=channel.profilename + " "
-                            !=" "
-                            a(href=channel.url,target="_blank")=channel.url
                           else if channel.type == "Twitter"
-                            i.icon-twitter-squared
+                            i.icon-fontello-twitter-squared
                             b!=" Profile "
-                            !=channel.profilename + " "
-                            !=" "
-                            a(href=channel.url,target="_blank")=channel.url
                           else if channel.type == "Instagram"
-                            i.icon-instagram
+                            i.icon-fontello-instagram
                             b!=" Profile "
-                            !=channel.profilename + " "
-                            !=" "
-                            a(href=channel.url,target="_blank")=channel.url
                           else if channel.type == "WebSite"
                             i.glyphicon.glyphicon-globe
                             b!=" WebSite "
-                            !=channel.profilename + " "
-                            !=" "
-                            a(href=channel.url,target="_blank")=channel.url
                           else
                             i.glyphicon.glyphicon-globe
                             b!=" "+channel.type+" "
-                            !=channel.profilename + " "
-                            !=" "
-                            a(href=channel.url,target="_blank")=channel.url
+                          !=channel.profilename + " "
+                          !=" "
+                          a(href=channel.url,target="_blank")=channel.url
                     each partnership in x.partnerships
                       if partnership.name == project
                         td=partnership.group
