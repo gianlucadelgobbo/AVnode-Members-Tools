@@ -1,8 +1,11 @@
 var ObjectID = require('mongodb').ObjectID;
 var DB = require('./../helpers/db-manager');
 var helpers = require('./../helpers/helpers');
-/*
-exports.get = function get(req, res) {
+var CT = require('../helpers/country-list');
+
+/* PARTNERS */
+
+exports.getPartners = function getPartners(req, res) {
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
       var msg = {};
@@ -17,28 +20,24 @@ exports.get = function get(req, res) {
           }
         });
       }
-      DB.partners.find({}).sort( { brand: 1 } ).toArray(function(e, result) {
-        var conta = 0;
-        if (result.length) {
-          console.log("trovati");
-          res.render('partners_all', { title: __("Partners"), result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true });
-        } else {
-          helpers.getPartners(function(result){
-            //console.log(result);
-            DB.insert_partner(result,function() {
-              res.render('partners_all', { title: __("Partners"), result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true });
-            });
-          });
-        }
-
+      //var query = {"channels.0":{ $exists:true }};
+      var query = {};
+      if (req.params.project) query["partnerships.name"] = req.params.project;
+      DB.partners.find(query).sort({brand: 1}).toArray(function (e, result) {
+        var sez = "";
+        console.log("sto qui");
+        //console.log(result);
+        if (req.params.project) sez = req.url.split(req.params.project)[1].split("/").join("");
+        console.log(sez);
+        res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
       });
     } else {
       res.redirect('/?from='+req.url);
     }
   });
 };
-*/
-exports.getProject = function getProject(req, res) {
+/*
+exports.getProjectPartners = function getProjectPartners(req, res) {
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
       var msg = {};
@@ -56,13 +55,59 @@ exports.getProject = function getProject(req, res) {
       DB.partners.find({"partnerships.name": req.params.project}).sort( { brand: 1 } ).toArray(function(e, result) {
         var sez = req.url.split(req.params.project)[1].split("/").join("");
         console.log(sez);
-        res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+        if (result.length) {
+          console.log(sez);
+          res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+        } else {
+          helpers.getPartners(function(result){
+            //console.log(result);
+            DB.insert_partner(result,function() {
+              res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+            });
+          });
+        }
       });
-      /*
-       DB.partners.find({}).sort( { name: 1 } ).toArray(function(e, result) {
-       res.render('partners', {  locals: { title: __("Partners"), result : result, msg: msg, udata : req.session.user } });
-       });
-       */
+    } else {
+      res.redirect('/?from='+req.url);
+    }
+  });
+};
+*/
+
+exports.getPartner = function getPartner(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+      var msg = {};
+      if (req.query.id && req.query.del) {
+        DB.delete_partner(req.query.id, function(err, obj){
+          if (obj){
+            msg.c = [];
+            msg.c.push({name:"",m:__("Partner deleted successfully")});
+          } else {
+            msg.e = [];
+            msg.e.push({name:"",m:__("Partner not found")});
+          }
+        });
+      }
+      //var query = {"channels.0":{ $exists:true }};
+      var query = {};
+      if (req.params.project) query["partnerships.name"] = req.params.project;
+      query._id = new ObjectID(req.params.partner);
+      DB.partners.findOne(query, function(e, result) {
+        var pug = req.url.split(req.params.partner)[1].split("/").join("") == "edit" ?  "partners_new" : "partners_dett";
+        res.render(pug, { title: __("Partners"), project:req.params.project, result : result, countries : CT, country : global._config.company.country, msg: msg, udata : req.session.user, js:'/js/partners.js'  });
+      });
+    } else {
+      res.redirect('/?from='+req.url);
+    }
+  });
+};
+
+exports.newPartner = function newPartner(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+      var msg = {};
+      res.render('partners_new', { title: __("Partners"), project:req.params.project, result : {}, countries : CT, country : global._config.company.country, msg: msg, udata : req.session.user, js:'/js/partners.js' });
     } else {
       res.redirect('/?from='+req.url);
     }
@@ -140,53 +185,7 @@ exports.setPartner = function setPartner(req, res) {
   });
 };
 
-exports.getPartners = function getPartners(req, res) {
-  helpers.canIseeThis(req, function (auth) {
-    if (auth) {
-      var msg = {};
-      if (req.query.id && req.query.del) {
-        DB.delete_partner(req.query.id, function(err, obj){
-          if (obj){
-            msg.c = [];
-            msg.c.push({name:"",m:__("Partner deleted successfully")});
-          } else {
-            msg.e = [];
-            msg.e.push({name:"",m:__("Partner not found")});
-          }
-        });
-      }
-      if (req.params.partner == "new") {
-        res.render('partners_new', { title: __("Partners"), project:req.params.project, result : {}, msg: msg, udata : req.session.user, js:'/js/partners.js' });
-      } else {
-        var query = {};
-        if (req.params.project) query["partnerships.name"] = req.params.project;
-        if (req.params.partner) {
-          query._id = new ObjectID(req.params.partner);
-          console.log(query);
-          DB.partners.findOne(query, function(e, result) {
-            var pug = req.url.split(req.params.partner)[1].split("/").join("") == "edit" ?  "partners_new" : "partners_dett";
-            res.render(pug, { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js'  });
-          });
-        } else {
-          DB.partners.find(query).sort({brand: 1}).toArray(function (e, result) {
-            var sez = "";
-            if (req.params.project) sez = req.url.split(req.params.project)[1].split("/").join("");
-            console.log(sez);
-            res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
-          });
-        }
-      }
-
-      /*
-       DB.partners.find({}).sort( { name: 1 } ).toArray(function(e, result) {
-       res.render('partners', {  locals: { title: __("Partners"), result : result, msg: msg, udata : req.session.user } });
-       });
-       */
-    } else {
-      res.redirect('/?from='+req.url);
-    }
-  });
-};
+/* ACTIONS */
 
 exports.getActions = function getActions(req, res) {
   helpers.canIseeThis(req, function (auth) {
@@ -196,35 +195,77 @@ exports.getActions = function getActions(req, res) {
         DB.delete_action(req.query.id, function(err, obj){
           if (obj){
             msg.c = [];
-            msg.c.push({name:"",m:__("Partner deleted successfully")});
+            msg.c.push({name:"",m:__("Action deleted successfully")});
           } else {
             msg.e = [];
-            msg.e.push({name:"",m:__("Partner not found")});
+            msg.e.push({name:"",m:__("Action not found")});
           }
         });
       }
-      if (req.params.action == "new") {
-        res.render('partners_actions_new', { title: __("Partners"), project:req.params.project, result : {}, msg: msg, udata : req.session.user, js:'/js/partners.js' });
-      } else {
-        var query = {"project": req.params.project};
-        if (req.params.action) {
-          query._id = new ObjectID(req.params.action);
-          DB.actions.findOne(query, function(e, result) {
-            console.log(result);
-            var pug = req.url.split(req.params.action)[1].split("/").join("") == "edit" ?  "partners_actions_new" : "partners_actions_dett";
-            res.render(pug, { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
-          });
-        } else {
-          DB.actions.find(query).sort( { date: 1 } ).toArray(function(e, result) {
-            res.render('partners_actions', { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:false  });
-          });
-        }
+      var query = {"project": req.params.project};
+      DB.actions.find(query).sort( { date: 1 } ).toArray(function(e, results) {
+        res.render('partners_actions', { title: __("Actions"), project:req.params.project, results : results, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:false  });
+      });
+    } else {
+      res.redirect('/?from='+req.url);
+    }
+  });
+};
+
+exports.getAction = function getAction(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+      var msg = {};
+      if (req.query.id && req.query.del) {
+        DB.delete_action(req.query.id, function(err, obj){
+          if (obj){
+            msg.c = [];
+            msg.c.push({name:"",m:__("Action deleted successfully")});
+          } else {
+            msg.e = [];
+            msg.e.push({name:"",m:__("Action not found")});
+          }
+        });
       }
-      /*
-       DB.partners.find({}).sort( { name: 1 } ).toArray(function(e, result) {
-       res.render('partners', {  locals: { title: __("Partners"), result : result, msg: msg, udata : req.session.user } });
-       });
-       */
+      var query = {"project": req.params.project};
+      query._id = new ObjectID(req.params.action);
+      DB.actions.findOne(query, function(e, result) {
+        DB.partners.find({"partnerships.name": req.params.project,"partnerships.status":"ACTIVE"}).sort( { brand: 1 } ).toArray(function(e, partners) {
+          result.partners_channels = helpers.getChannels(partners,req.params.project);
+          result.dbName = global.settings.dbName;
+          var pug = req.url.split(req.params.action)[1].split("/").join("") == "edit" ?  "partners_actions_new" : "partners_actions_dett";
+          if (result.fbgroups) {
+            DB.extras.find({"type":"FB-Group"}).sort( { name: 1 } ).toArray(function(e, extras) {
+              result.extras = extras;
+              res.render(pug, { title: __("Actions"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners_social_api.js', bootstraptable:true  });
+            });
+          } else {
+            res.render(pug, { title: __("Actions"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners_social_api.js', bootstraptable:true  });
+          }
+        });
+      });
+    } else {
+      res.redirect('/?from='+req.url);
+    }
+  });
+};
+
+exports.newAction = function newAction(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+      var msg = {};
+      if (req.query.id && req.query.del) {
+        DB.delete_action(req.query.id, function(err, obj){
+          if (obj){
+            msg.c = [];
+            msg.c.push({name:"",m:__("Action deleted successfully")});
+          } else {
+            msg.e = [];
+            msg.e.push({name:"",m:__("Action not found")});
+          }
+        });
+      }
+      res.render('partners_actions_new', { title: __("Actions"), project:req.params.project, result : {}, msg: msg, udata : req.session.user, js:'/js/partners.js' });
     } else {
       res.redirect('/?from='+req.url);
     }
@@ -243,8 +284,11 @@ exports.setAction = function setAction(req, res) {
             res.render('partners_actions_new', { title: __("Action"), project:req.params.project, result : o, msg: {e:e}, udata : req.session.user, js:'/js/partners.js' });
           }
         } else {
-          if (req.body.id) {
-            var id = req.body.id;
+          delete o.ajax;
+          delete o.dbName;
+
+          if (req.body._id) {
+            //var id = req.body.id;
             DB.update_action(o, function(o){
               var e = [];
               if (!o) e.push({name:"", m:__("Error updating action")});
@@ -252,7 +296,6 @@ exports.setAction = function setAction(req, res) {
                 if (req.body.ajax) {
                   res.status(200).send({msg:{e:e}});
                 } else {
-                  o._id = o.id;
                   res.render('partners_actions_new', { title: __("Action"), project:req.params.project, result : o, msg: {e:e}, udata : req.session.user, js:'/js/partners.js' });
                 }
               } else {
@@ -285,11 +328,6 @@ exports.setAction = function setAction(req, res) {
                   res.status(200).send({msg:{c:e,redirect:"/"+global.settings.dbName+"/actions/"+o._id+"/edit/"}});
                 } else {
                   res.redirect("/" + global.settings.dbName + "/partners/"+req.params.project+"/actions/"+o._id+"/edit/")
-                  /*
-                  DB.actions.findOne({_id:o._id},function(err, result) {
-                    res.render('partners_actions_new', { title: __("Action"), project:req.params.project, result : result, msg: {c:e}, udata : req.session.user, js:'/js/partners.js' });
-                  });
-                  */
                 }
               }
             });

@@ -243,47 +243,6 @@ function checkGroups() {
   });
 }
 
-function getFBSocialActivities(post_author_name, post_id, accessToken, callback) {
-  var results = {
-    user_data:{},
-    sharedposts: [],
-    likes: []
-  };
-  FB.api('/'+post_author_name, 'get', {access_token:accessToken}, function (user_data) {
-    results.user_data = user_data;
-    FB.api('/'+user_data.id+'_'+post_id+'/sharedposts', 'get', {access_token:accessToken,limit:9999}, function (sharedposts) {
-      console.log(sharedposts);
-      if (sharedposts && !sharedposts.error) {
-        sharedposts.data.forEach(function(element, index, array){
-          var sharetor = sharedposts.data[index].id.split("_")[0];
-          FB.api('/'+sharetor, 'get', {access_token:accessToken}, function (sharetor_data) {
-            sharedposts.data[index].user = sharetor_data;
-            FB.api('/'+sharedposts.data[index].id+"/likes", 'get', {access_token:accessToken}, function (likes) {
-              sharedposts.data[index].likes = likes;
-              results.sharedposts.push(sharedposts.data[index]);
-              if (index == array.length-1) {
-                FB.api('/'+user_data.id+'_'+post_id+'/likes', 'get', {access_token:accessToken}, function (likes) {
-                  if (likes && !likes.error) {
-                    likes.data.forEach(function(element2, index2, array2){
-                      var liketor = likes.data[index2].id;
-                      FB.api('/'+liketor, 'get', {access_token:accessToken}, function (liketor_data) {
-                        likes.data[index2].user = liketor_data;
-                        results.likes.push(likes.data[index2]);
-                        if (index2 == array2.length-1) {
-                          callback(results);
-                        }
-                      });
-                    });
-                  }
-                });
-              }
-            });
-          });
-        });
-      }
-    });
-  });
-}
 
 
 

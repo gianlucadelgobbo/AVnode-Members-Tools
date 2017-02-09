@@ -13,5 +13,5 @@ block content
                 !=" "
                 a.btn.btn-danger(href="/" + global.settings.dbName + "/partners/partner/" + result._id + "/?del=1")=__("Delete")
         hr
-        pre=JSON.stringify(result)
+        pre=JSON.stringify(result, null, '\t')
 

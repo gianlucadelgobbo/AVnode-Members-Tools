@@ -13,11 +13,10 @@ block content
                 - if (result._id)
                   button#account-form-btn2.btn.btn-success(type='submit')=__("Update")
                   !=" "
-                  a(href="/" + global.settings.dbName + "/customers/?id=" + result._id + "&del=" + 1)#account-form-btn1.btn.btn-danger=__("Delete")
+                  a(href="/" + global.settings.dbName + "/partners/" + project + "/actions/?id=" + result._id + "&del=" + 1)#account-form-btn1.btn.btn-danger=__("Delete")
                 - else
                   button(type='submit')#account-form-btn1.btn.btn-success=__("Save")
 
-                input(type="hidden", name="id", value=result._id)
           hr
           - if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
             .alert.alert-danger
@@ -46,14 +45,19 @@ block content
           .form-group
             label(for='fbgroups').control-label=__("Include Facebook groups")
             input(type="checkbox", name="fbgroups", value=1, checked=result.fbgroups ? "checked" : undefined)#fbgroups.form-control
+
             input(type="hidden", name="project", value=project)
+            input(type="hidden", name="date", value=result.date)
+            - if (result._id)
+              input(type="hidden", name="_id", value=result._id)
+
 
           .form-actions.pull-right
             .clearfix
               - if (result._id)
                 button(type='submit')#account-form-btn2.btn.btn-success=__("Update")
                 !=" "
-                a(href="/" + global.settings.dbName + "/customers/?id=" + result._id + "&del=" + 1)#account-form-btn1.btn.btn-danger=__("Delete")
+                a(href="/" + global.settings.dbName + "/partners/" + project + "/actions/?id=" + result._id + "&del=" + 1)#account-form-btn1.btn.btn-danger=__("Delete")
               - else
                 button(type='submit')#account-form-btn1.btn.btn-success=__("Save")
 

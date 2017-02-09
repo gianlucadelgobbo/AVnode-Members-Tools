@@ -32,38 +32,49 @@ block content
                 th(data-field="date" data-sortable="true")=__("Date")
                 th(data-field="name" data-sortable="true")=__("Name")
                 th(data-field="lastanalysis" data-sortable="true")=__("Last analysis")
-                th(data-field="facebook" data-sortable="true")=__("Facebook")
-                th(data-field="twitter" data-sortable="true")=__("Twitter")
-                th(data-field="instagram" data-sortable="true")=__("Instagram")
+                th(data-field="posts" data-sortable="true")=__("Posts")
                 th(data-field="performance" data-sortable="true")=__("Performance")
 
             tbody
-              if result
+              if results
                 - var index = 0
-                each x in result
+                each result in results
                   tr
                     td
                       .btn-group
-                        a.btn.btn-primary(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+x._id+"/analysis/")=(index+1)+" "+__("Analysis")
+                        a.btn.btn-primary(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+result._id+"/")=(index+1)+" "+__("Analysis")
                         button.btn.btn-primary.dropdown-toggle(data-toggle="dropdown")
                           span.caret
                         ul.dropdown-menu
                           li
-                            a(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+x._id+"/analysis/")=__("Analysis")
+                            a(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+result._id+"/")=__("Analysis")
                           li
-                            a(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+x._id+"/")=__("Edit")
+                            a(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+result._id+"/edit/")=__("Edit")
                           li
-                            a(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+x._id+"/?del=1")=__("Delete")
-                    td=x.date
+                            a(href="/" + global.settings.dbName + "/partners/"+project+"/actions/?id="+result._id+"&del=1")=__("Delete")
                     td
-                      a(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+x._id+"/")=x.name
-                    td=x.lastanalysis
+                      - d = new Date(result.date);
+                      if d
+                        !=d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear()
                     td
-                      if x.facebook
-                        a(href=x.facebook, target="_blank")
-                          i.icon-facebook-squared
-                    td=x.twitter
-                    td=x.instagram
-                    td=x.performance
+                      a(href="/" + global.settings.dbName + "/partners/"+project+"/actions/"+result._id+"/")=result.name
+                    td
+                      if result.analysis && result.analysis.length
+                        !=result.analysis[result.analysis.length-1].date
+                      else
+                        !=__("NO ANALISIS PERFORMED")
+                    td
+                      if result.facebook
+                        a(href=result.facebook, target="_blank")
+                          i.icon-fontello-facebook-squared
+                        !=" "
+                      if result.twitter
+                        a(href=result.twitter, target="_blank")
+                          i.icon-fontello-twitter-squared
+                        !=" "
+                      if result.instagram
+                        a(href=result.instagram, target="_blank")
+                          i.icon-fontello-instagram
+                    td=result.performance
 
                   - index++

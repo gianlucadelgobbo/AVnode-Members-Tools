@@ -27,6 +27,34 @@ exports.canIseeThis = function canIseeThis(req,callback) {
     callback(false);
   }
 };
+exports.getChannels = function getChannels(result, project) {
+  var channels = [];
+  if (result) {
+    for(var x in result) {
+      //console.log(x);
+
+      var pp;
+      for (var partnership in result[x].partnerships) {
+        if (result[x].partnerships[partnership].name == project) pp = result[x].partnerships[partnership];
+        //console.log(result[x].partnerships[partnership].name + " - " + project);
+      }
+      //console.log(pp);
+      for (var channel in result[x].channels) {
+        var channel_ins = {};
+        channel_ins._id = result[x]._id;
+        channel_ins.brand = result[x].brand;
+        channel_ins.group = pp.group;
+        channel_ins.status = pp.status;
+        channel_ins.type = result[x].channels[channel].type;
+        channel_ins.profilename = result[x].channels[channel].profilename;
+        channel_ins.id = result[x].channels[channel].id;
+        channel_ins.url = result[x].channels[channel].url;
+        channels.push(channel_ins);
+      }
+    }
+  }
+  return channels;
+};
 
 exports.generateDBs = function generateDBs(o) {
   var res = [];
@@ -210,7 +238,7 @@ exports.getPartners = function getPartners(callback) {
     if (!error && response.statusCode == 200) {
       var mainList = JSON.parse(body);
       console.log("getData");
-      console.log(mainList);
+      console.log(mainList.feed.entry.length);
       var partners = [];
       var status = "ACTIVE";
       for (var row in mainList.feed.entry) {
@@ -225,8 +253,8 @@ exports.getPartners = function getPartners(callback) {
           avnode : mainList.feed.entry[row].gsx$avnode.$t=="X" ? true : false,
           websites : []
         };
-        if (mainList.feed.entry[row].gsx$lpm.$t=="X") partner.partnerships.push({name:"LPM",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
-        if (mainList.feed.entry[row].gsx$lcf.$t=="X") partner.partnerships.push({name:"LCF",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
+        if (mainList.feed.entry[row].gsx$lpm.$t=="X") partner.partnerships.push({name:"LPM-2017",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
+        if (mainList.feed.entry[row].gsx$lcf.$t=="X") partner.partnerships.push({name:"LCF-2017",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
         if (mainList.feed.entry[row].gsx$website.$t) partner.websites = [mainList.feed.entry[row].gsx$website.$t];
         var contact = {};
         if (mainList.feed.entry[row].gsx$name.$t) contact.name = mainList.feed.entry[row].gsx$name.$t;
@@ -253,15 +281,14 @@ exports.getPartners = function getPartners(callback) {
         }
         partners.push(partner);
       }
-      console.log("Partners");
-      console.log(partners);
+      console.log(partners.length);
       //var subList = loadJsonFileAjaxSync("https://spreadsheets.google.com/feeds/list/13VxuoM3TK6kWoDq313pgpJkPdK0GpoIiGIM5vToHfhY/1/public/values?alt=json", "application/json", 0);
       request("https://spreadsheets.google.com/feeds/list/1sAqX96AjK69cTkZPkKBXG29dMNVSULnzntoTwCdJ2no/2/public/values?alt=json", function (error, response, body) {
         //console.log(error);
         if (!error && response.statusCode == 200) {
           var mainList = JSON.parse(body);
           console.log("getData");
-          console.log(mainList);
+          console.log(mainList.feed.entry.length);
           var status = "NEW";
           for (var row in mainList.feed.entry) {
             var partner = {
@@ -277,8 +304,8 @@ exports.getPartners = function getPartners(callback) {
               avnode : mainList.feed.entry[row].gsx$avnode.$t=="X" ? true : false,
               websites : []
             };
-            if (mainList.feed.entry[row].gsx$lpm.$t=="X") partner.partnerships.push({name:"LPM",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
-            if (mainList.feed.entry[row].gsx$lcf.$t=="X") partner.partnerships.push({name:"LCF",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
+            if (mainList.feed.entry[row].gsx$lpm.$t=="X") partner.partnerships.push({name:"LPM-2017",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
+            if (mainList.feed.entry[row].gsx$lcf.$t=="X") partner.partnerships.push({name:"LCF-2017",status:status, group:mainList.feed.entry[row].gsx$group.$t, notes:mainList.feed.entry[row].gsx$notes.$t});
             if (mainList.feed.entry[row].gsx$website.$t) partner.websites = [mainList.feed.entry[row].gsx$website.$t];
             var contact = {};
             if (mainList.feed.entry[row].gsx$name.$t) contact.name = mainList.feed.entry[row].gsx$name.$t;
@@ -305,22 +332,24 @@ exports.getPartners = function getPartners(callback) {
             }
             partners.push(partner);
           }
-          console.log("Partners");
-          console.log(partners);
+          console.log(partners.length);
           //var subList = loadJsonFileAjaxSync("https://spreadsheets.google.com/feeds/list/13VxuoM3TK6kWoDq313pgpJkPdK0GpoIiGIM5vToHfhY/1/public/values?alt=json", "application/json", 0);
           request("https://spreadsheets.google.com/feeds/list/13VxuoM3TK6kWoDq313pgpJkPdK0GpoIiGIM5vToHfhY/1/public/values?alt=json", function (error, response, body) {
             console.log("getData");
             var subList = JSON.parse(body);
-            console.log(subList);
+            //console.log(subList);
             for (var row in subList.feed.entry) {
-              console.log(subList.feed.entry[row].gsx$partner.$t);
+              //console.log(subList.feed.entry[row].gsx$partner.$t);
               var index = 0;
               for (var item in partners) {
+                //console.log("confronto");
+                //console.log("##"+subList.feed.entry[row].gsx$partner.$t+"## - ##"+partners[item].brand+"##");
                 if (partners[item].brand == subList.feed.entry[row].gsx$partner.$t) {
                   partners[item].channels.push({
                     profilename: subList.feed.entry[row].gsx$profilename.$t,
                     type: subList.feed.entry[row].gsx$type.$t,
-                    url: subList.feed.entry[row].gsx$url.$t
+                    url: subList.feed.entry[row].gsx$url.$t,
+                    id: subList.feed.entry[row].gsx$id.$t
 
                   });
                   //console.log("TROVATO"+index);

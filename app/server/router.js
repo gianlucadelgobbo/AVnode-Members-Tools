@@ -17,11 +17,18 @@ var offerRoutes = require('./routes/offer');
 var offersRoutes = require('./routes/offers');
 var apiRoutes = require('./routes/api');
 var errorsRoutes = require('./routes/errors');
+var ajaxRoutes = require('./routes/ajax');
 
 module.exports = function(app) {
   // Log In //
   app.get('/', indexRoutes.get);
   app.post('/', indexRoutes.post);
+
+  // AJAX
+  app.get('/ajax/drawFBPostActivities', ajaxRoutes.drawFBPostActivities);
+  app.post('/ajax/drawFBPostActivities', ajaxRoutes.drawFBPostActivities);
+  app.get('/ajax/drawTWPostActivities', ajaxRoutes.drawTWPostActivities);
+  app.post('/ajax/drawTWPostActivities', ajaxRoutes.drawTWPostActivities);
 
   // Log Out //
   app.get('/logout', logoutRoutes.get);
@@ -61,22 +68,23 @@ module.exports = function(app) {
 
   // Partners //
   app.get('/:dbname/partners', partnersRoutes.getPartners);
-  //app.get('/:dbname/partners/partner/new', partnersRoutes.getPartners);
-  app.get('/:dbname/partners/partner/:partner', partnersRoutes.getPartners);
+  app.get('/:dbname/partners/partner/new', partnersRoutes.newPartner);
   app.post('/:dbname/partners/partner/new', partnersRoutes.setPartner);
-  app.get('/:dbname/partners/partner/:partner/edit', partnersRoutes.getPartners);
+  app.get('/:dbname/partners/partner/:partner', partnersRoutes.getPartner);
+  app.get('/:dbname/partners/partner/:partner/edit', partnersRoutes.getPartner);
   app.post('/:dbname/partners/partner/:partner/edit', partnersRoutes.setPartner);
 
-  app.get('/:dbname/partners/:project', partnersRoutes.getProject);
+  app.get('/:dbname/partners/:project', partnersRoutes.getPartners);
+  app.get('/:dbname/partners/:project/channels', partnersRoutes.getPartners);
 
   app.get('/:dbname/partners/:project/actions', partnersRoutes.getActions);
   //app.get('/:dbname/partners/:project/actions/new', partnersRoutes.getActions);
-  app.get('/:dbname/partners/:project/actions/:action', partnersRoutes.getActions);
+  app.get('/:dbname/partners/:project/actions/new', partnersRoutes.newAction);
   app.post('/:dbname/partners/:project/actions/new', partnersRoutes.setAction);
-  app.get('/:dbname/partners/:project/actions/:action/edit', partnersRoutes.getActions);
+  app.get('/:dbname/partners/:project/actions/:action', partnersRoutes.getAction);
+  app.get('/:dbname/partners/:project/actions/:action/edit', partnersRoutes.getAction);
   app.post('/:dbname/partners/:project/actions/:action/edit', partnersRoutes.setAction);
 
-  app.get('/:dbname/partners/:project/channels', partnersRoutes.getProject);
 
   // Customers //
   app.get('/:dbname/accounting/customers', customersRoutes.getAll);

@@ -34,7 +34,7 @@ DB.init = function(callback) {
         DB.invoices = DB.db.collection('invoices');
         DB.offers = DB.db.collection('offers');
         DB.partners = DB.db.collection('partners');
-        DB.fbgroups = DB.db.collection('fbgroups');
+        DB.extras = DB.db.collection('extras');
         DB.actions = DB.db.collection('actions');
         DB.settings = DB.db.collection('settings');
         callback();
@@ -189,16 +189,13 @@ DB.delete_customer = function(id, callback) {
 };
 
 DB.insert_action = function(newData, callback) {
-  delete newData.id;
   newData.date = new Date();
   DB.actions.insert(newData, {safe: true}, function(err, records){
     callback(err, records.ops[0]);
   });
 };
 DB.update_action = function(newData, callback) {
-  DB.actions.findOne({_id:new ObjectID(newData.id)}, function(e, o){
-    newData._id = o._id;
-    delete newData.id;
+  DB.actions.findOne({_id:new ObjectID(newData._id)}, function(e, o){
     DB.actions.save(newData);
     callback(newData);
   });

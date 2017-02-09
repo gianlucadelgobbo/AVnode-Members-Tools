@@ -37,9 +37,7 @@ block content
                 th(data-field="website" data-sortable="true")=__("Website")
                 th(data-field="contacts" data-sortable="true")=__("Contacts")
                 th(data-field="channels" data-sortable="true")=__("Channels")
-                th(data-field="project" data-sortable="true")=__("Project")
-                th(data-field="status" data-sortable="true")=__("Status")
-                th(data-field="notes" data-sortable="true")=__("Notes")
+                th(data-field="projects" data-sortable="true")=__("Projects")
 
             tbody
               if result
@@ -54,9 +52,9 @@ block content
                           li
                             a(href="/" + global.settings.dbName + "/partners/partner/"+x._id+"/")=__("View")
                           li
-                            a(href="/" + global.settings.dbName + "/partners/partner/"+x._id+"/")=__("Edit")
+                            a(href="/" + global.settings.dbName + "/partners/partner/"+x._id+"/edit/")=__("Edit")
                           li
-                            a(href="/"+global.settings.dbName+"/partners/partner/"+x._id+"/?del=1")=__("Delete")
+                            a(href="/"+global.settings.dbName+"/partners/partner/"+x._id+"/edit/?del=1")=__("Delete")
                     td=x.delegate
                     td
                       a(href="/" + global.settings.dbName + "/partners/partner/"+x._id+"/")=x.brand
@@ -81,9 +79,6 @@ block content
                           if channel.type == "FB-Page"
                             i.icon-fontello-facebook-squared
                             b!=" Page "
-                            !=channel.profilename + " "
-                            !=" "
-                            a(href=channel.url,target="_blank")=channel.url
                           else if channel.type == "FB-Group"
                             i.icon-fontello-facebook-squared
                             b!=" Group "
@@ -105,9 +100,16 @@ block content
                           !=channel.profilename + " "
                           !=" "
                           a(href=channel.url,target="_blank")=channel.url
-                    each partnership in x.partnerships
-                      if partnership.name == project
-                        td=partnership.group
-                        td=partnership.status
-                        td=partnership.notes
+                    td
+                      each partnership in x.partnerships
+                        //if partnership.name == project
+                        - console.log(partnership)
+                        p
+                          b=partnership.name
+                          !=" | "
+                          !=partnership.status
+                          br
+                          !=partnership.group
+                          br
+                          !=partnership.notes
 
