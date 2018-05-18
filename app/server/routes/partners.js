@@ -3,6 +3,48 @@ var DB = require('./../helpers/db-manager');
 var helpers = require('./../helpers/helpers');
 var CT = require('../helpers/country-list');
 
+/* EXTRAS */
+
+exports.getExtras = function getExtras(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+      var msg = {};
+      if (req.query.id && req.query.del) {
+        DB.delete_partner(req.query.id, function(err, obj){
+          if (obj){
+            msg.c = [];
+            msg.c.push({name:"",m:__("Partner deleted successfully")});
+          } else {
+            msg.e = [];
+            msg.e.push({name:"",m:__("Partner not found")});
+          }
+        });
+      }
+      //var query = {"channels.0":{ $exists:true }};
+      var query = {};
+      DB.extras.find(query)/*.sort({brand: 1})*/.toArray(function (e, result) {
+        var sez = "";
+        console.log("sto qui");
+        //console.log(result);
+        if (req.params.import) {
+          console.log("importing spreadsheets");
+          /*helpers.getPartners(function(result){
+            //console.log(result);
+            DB.insert_partner(result,function() {
+              res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+            });
+          });*/
+        } else {
+          console.log(sez);
+          res.render('partners_extras', { title: __("Channels"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+        }
+      });
+    } else {
+      res.redirect('/?from='+req.url);
+    }
+  });
+};
+
 /* PARTNERS */
 
 exports.getPartners = function getPartners(req, res) {
@@ -28,8 +70,20 @@ exports.getPartners = function getPartners(req, res) {
         console.log("sto qui");
         //console.log(result);
         if (req.params.project) sez = req.url.split(req.params.project)[1].split("/").join("");
-        console.log(sez);
-        res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+        console.log(result.length);
+        //console.log(req);
+        if (req.query.import) {
+          console.log("importing spreadsheets");
+          helpers.getPartners(function(result){
+            //console.log(result);
+            DB.insert_partner(result,function() {
+              res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+            });
+          });
+        } else {
+          console.log(sez);
+          res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
+        }
       });
     } else {
       res.redirect('/?from='+req.url);
@@ -204,7 +258,7 @@ exports.getActions = function getActions(req, res) {
       }
       var query = {"project": req.params.project};
       DB.actions.find(query).sort( { date: 1 } ).toArray(function(e, results) {
-        res.render('partners_actions', { title: __("Actions"), project:req.params.project, results : results, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:false  });
+        res.render('partners_actions', { title: __("Actions"), project:req.params.project, results : results, msg: msg, udata : req.session.user, bootstraptable:true  });
       });
     } else {
       res.redirect('/?from='+req.url);
@@ -284,9 +338,6 @@ exports.setAction = function setAction(req, res) {
             res.render('partners_actions_new', { title: __("Action"), project:req.params.project, result : o, msg: {e:e}, udata : req.session.user, js:'/js/partners.js' });
           }
         } else {
-          delete o.ajax;
-          delete o.dbName;
-
           if (req.body._id) {
             //var id = req.body.id;
             DB.update_action(o, function(o){
@@ -301,9 +352,11 @@ exports.setAction = function setAction(req, res) {
               } else {
                 e.push({m:__("Action saved with success")});
                 if (req.body.ajax) {
+                  console.log("req.body.ajax");
                   res.status(200).send({msg:{c:e}});
                 } else {
-                  DB.actions.findOne({_id:new ObjectID(id)},function(err, result) {
+                  console.log("req.body. no   ajax");
+                  DB.actions.findOne({_id:new ObjectID(req.body._id)},function(err, result) {
                     res.render('partners_actions_new', { title: __("Action"), project:req.params.project, result : result, msg: {c:e}, udata : req.session.user, js:'/js/partners.js' });
                   });
                 }

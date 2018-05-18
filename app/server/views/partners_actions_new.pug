@@ -4,13 +4,15 @@ block content
     include sidebar_partners
     #main
       .col-md-12
-        form(method="post", action="/" + global.settings.dbName + "/partners/"+project+"/actions/new/")#customer-form
+        form(method="post", action="/" + global.settings.dbName + "/partners/"+project+"/actions/"+(result._id ? result._id+"/edit/" : "new/"))#customer-form
           .row
             .col-sm-6
               h1.page-title=(result._id ? __("Action") + ": " + result.name : __("New action")+": "+project)
             .col-sm-6
               .pull-right
                 - if (result._id)
+                  a.btn.btn-success(href="/" + global.settings.dbName + "/partners/" + project + "/actions/" + result._id + "/")=__("Analize")
+                  !=" "
                   button#account-form-btn2.btn.btn-success(type='submit')=__("Update")
                   !=" "
                   a(href="/" + global.settings.dbName + "/partners/" + project + "/actions/?id=" + result._id + "&del=" + 1)#account-form-btn1.btn.btn-danger=__("Delete")
@@ -42,9 +44,11 @@ block content
           .form-group
             label(for='instagram').control-label=__("Instagram post")
             input(type="text", name="instagram", value=result.instagram)#instagram.form-control
-          .form-group
-            label(for='fbgroups').control-label=__("Include Facebook groups")
-            input(type="checkbox", name="fbgroups", value=1, checked=result.fbgroups ? "checked" : undefined)#fbgroups.form-control
+          .checkbox
+            label(for='fbgroups')
+              input(type="checkbox", name="fbgroups", value=1, checked=result.fbgroups ? "checked" : undefined)#fbgroups
+              !=" "
+              !=__("Include Facebook groups")
 
             input(type="hidden", name="project", value=project)
             input(type="hidden", name="date", value=result.date)
@@ -55,6 +59,8 @@ block content
           .form-actions.pull-right
             .clearfix
               - if (result._id)
+                a.btn.btn-success(href="/" + global.settings.dbName + "/partners/" + project + "/actions/" + result._id + "/")=__("Analize")
+                !=" "
                 button(type='submit')#account-form-btn2.btn.btn-success=__("Update")
                 !=" "
                 a(href="/" + global.settings.dbName + "/partners/" + project + "/actions/?id=" + result._id + "&del=" + 1)#account-form-btn1.btn.btn-danger=__("Delete")

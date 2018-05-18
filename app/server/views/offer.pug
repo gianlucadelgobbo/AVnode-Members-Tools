@@ -55,7 +55,7 @@ block content
                     .input-group
                       label.input-group-addon(for='to_client')=__("Customer")
                       input(type="text", name="to_client[name]", value=result.to_client.name).form-control#to_client
-                      a(href="/"+global.settings.dbName+"/accounting/customer").btn.input-group-addon=__("Insert new customer")
+                      a(href="/"+global.settings.dbName+"/accounting/customer/new/").btn.input-group-addon=__("Insert new customer")
                       input(type="hidden", name="to_client[_id]", value=result.to_client._id)#customer_id
               .row
                 .col-sm-12
@@ -227,11 +227,11 @@ block content
                 input(type="submit", value=__("SAVE")).btn.btn-success
                 - if (result._id)
                   span!="&nbsp;"
-                  input(type="button", value=__("MAKE INVOICE"), onclick="window.location='/" + global.settings.dbName + "/invoice/?offer=" + result._id + "'").btn.btn-primary
+                  input(type="button", value=__("MAKE INVOICE"), onclick="window.location='/"+global.settings.dbName+"/accounting/invoice/?offer=" + result._id + "'").btn.btn-primary
                   span!="&nbsp;"
-                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/" + global.settings.dbName + "/offer/?dup=" + result._id + "'").btn.btn-primary
+                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/offer/?dup=" + result._id + "'").btn.btn-primary
                   span!="&nbsp;"
-                  input(type="button", value=__("PRINT"), onclick="window.location='/" + global.settings.dbName + "/print/offer/?id=" + result._id + "'").btn.btn-primary
+                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/offer/?id=" + result._id + "'").btn.btn-primary
 
 
         - if (result.revisions)

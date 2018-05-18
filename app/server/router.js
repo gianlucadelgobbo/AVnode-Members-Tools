@@ -68,6 +68,7 @@ module.exports = function(app) {
 
   // Partners //
   app.get('/:dbname/partners', partnersRoutes.getPartners);
+  app.get('/:dbname/partners/extras/', partnersRoutes.getExtras);
   app.get('/:dbname/partners/partner/new', partnersRoutes.newPartner);
   app.post('/:dbname/partners/partner/new', partnersRoutes.setPartner);
   app.get('/:dbname/partners/partner/:partner', partnersRoutes.getPartner);
@@ -88,8 +89,10 @@ module.exports = function(app) {
 
   // Customers //
   app.get('/:dbname/accounting/customers', customersRoutes.getAll);
+  app.get('/:dbname/accounting/customers/new', customersRoutes.get);
+  app.post('/:dbname/accounting/customers/new', customersRoutes.post);
   app.get('/:dbname/accounting/customers/:customer', customersRoutes.get);
-  app.post('/:dbname/accounting/customers', customersRoutes.post);
+  app.post('/:dbname/accounting/customers/:customer', customersRoutes.post);
 
   // Invoices //
   app.get('/:dbname/accounting/invoices', invoicesRoutes.get);
