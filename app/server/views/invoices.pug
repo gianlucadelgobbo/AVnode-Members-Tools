@@ -71,7 +71,7 @@ block content
                   - dd = new Date(x.invoice_date)
                   td=dd.getDate()+"/"+(dd.getMonth()+1)+"/"+dd.getFullYear()
                   td
-                    a(href="/"+global.settings.dbName+"/customer/?id="+x.to_client._id)=x.to_client.name
+                    a(href="/"+global.settings.dbName+"/accounting/customers/"+x.to_client._id)=x.to_client.name
                   td=x.payment
                   td=x.destination
                   td=x.offer_number
