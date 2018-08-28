@@ -47,12 +47,12 @@ block content
                           li
                             a(href="/" + global.settings.dbName + "/offers/?year=ALL%20Years&customer=" + x._id)=__("Offers")
                           li
-                            a(href="/" + global.settings.dbName + "/customer/?id=" + x._id)=__("Edit")
+                            a(href="/" + global.settings.dbName + "/customers/" + x._id)=__("Edit")
                           li
-                            a(href="/"+global.settings.dbName+"/customers/?id="+x._id+"&del="+1)=__("Delete")
+                            a(href="/"+global.settings.dbName+"/customers/"+x._id+"&del="+1)=__("Delete")
                     td=x.delegate
                     td
-                      a(href="/" + global.settings.dbName + "/customer/?id=" + x._id)=x.brand
+                      a(href="/" + global.settings.dbName + "/customers/" + x._id)=x.brand
                     td=x.type
                     td=x.avnode
                     td=x.country
