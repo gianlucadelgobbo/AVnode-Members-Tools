@@ -14,7 +14,7 @@
     "html-pdf": "^2.1.0",
     "i18n": "^0.8.3",
     "method-override": "^2.3.6",
-    "moment": "~2.15.1",
+    "moment": "~2.19.3",
     "mongodb": "~2.2.10",
     "pug": "^2.0.0-beta6",
     "request": "^2.79.0",
