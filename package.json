@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "jenkins": "NODE_ENV=production forever --uid 'avnode-members-tools' start --append app.js",
+    "jenkins": "NODE_ENV=production forever --uid 'avnode-members-tools' start --append app.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
