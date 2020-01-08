@@ -21,11 +21,11 @@ window.fbAsyncInit = function() {
         data: data
       });
       FB.api('/me', 'get', {access_token:res.authResponse.accessToken}, function (user_data) {
-        console.log("user_data");
-        console.log(user_data);
+        //console.log("user_data");
+        //console.log(user_data);
         jQuery("#username").html(user_data.name);
       });
-      console.log(res);
+      //console.log(res);
       jQuery("#FB-loggedin").show();
       jQuery("#FB-login").hide();
     }
@@ -52,8 +52,8 @@ jQuery(function() {
 });
 function getData() {
   var config = loadJsonFileAjaxSync("https://spreadsheets.google.com/feeds/list/1sAqX96AjK69cTkZPkKBXG29dMNVSULnzntoTwCdJ2no/1/public/values?alt=json", "application/json", 0);
-  console.log("getData");
-  console.log(config);
+  //console.log("getData");
+  //console.log(config);
   var partners = [];
   for (var row in config.feed.entry) {
     var partner = {
@@ -93,13 +93,13 @@ function getData() {
     }
     partners.push(partner);
   }
-  console.log("Partners");
-  console.log(partners);
+  //console.log("Partners");
+  //console.log(partners);
   var config = loadJsonFileAjaxSync("https://spreadsheets.google.com/feeds/list/13VxuoM3TK6kWoDq313pgpJkPdK0GpoIiGIM5vToHfhY/1/public/values?alt=json", "application/json", 0);
-  console.log("getData");
-  console.log(config);
+  //console.log("getData");
+  //console.log(config);
   for (var row in config.feed.entry) {
-    console.log(config.feed.entry[row].gsx$partner.$t);
+    //console.log(config.feed.entry[row].gsx$partner.$t);
     var index=0;
     for (var item in partners) {
       if (partners[item].brand == config.feed.entry[row].gsx$partner.$t) {
@@ -119,35 +119,35 @@ function getData() {
   /*for (var row in config.feed.entry) {
     for (var item in partners) {
       if (partners[item].brand == config.feed.entry[row].gsx$partner.$t) {
-        console.log("TROVATO " + partners[item].brand);
+        //console.log("TROVATO " + partners[item].brand);
       } else {
-        console.log("NON TROVATO "+partners[item].brand);
+        //console.log("NON TROVATO "+partners[item].brand);
       }
     }
   }*/
 
-  console.log("Partners");
-  console.log(partners);
+  //console.log("Partners");
+  //console.log(partners);
 }
 
 function FBlogin() {
   FB.login(function(response) {
     if (response.authResponse) {
-      console.log('Welcome!  Fetching your information.... ');
+      //console.log('Welcome!  Fetching your information.... ');
       FB.api('/me', function(response) {
-        console.log('Good to see you, ' + response.name + '.');
+        //console.log('Good to see you, ' + response.name + '.');
         jQuery("#FB-loggedin").show();
         jQuery("#FB-login").hide();
       });
     } else {
-      console.log('User cancelled login or did not fully authorize.');
+      //console.log('User cancelled login or did not fully authorize.');
     }
   }, {scope: 'user_groups,user_likes'});
 }
 
 function OurPostSorter(a,b){
-  console.log("OurPostSorter");
-  console.log(a.created_time);
+  //console.log("OurPostSorter");
+  //console.log(a.created_time);
   if(!a.created_time) return -1;
   if(!b.created_time) return 1;
   // Turn your strings into dates, and then subtract them
@@ -201,16 +201,16 @@ function checkGroups() {
         groups.data.forEach(function(val,index,array){
           FB.api('/'+val.id+'/members', 'get', {access_token:accessToken,limit:1500}, function (group) {
             if (!group || group.error) {
-              console.log('Error occured');
+              //console.log('Error occured');
               val.members = "+1500";
             } else {
               val.members = group.data ? group.data.length==1500 ? "+"+group.data.length : group.data.length : "UNDEFINED";
             }
-            console.log(val.members);
+            //console.log(val.members);
             FB.api('/'+val.id+'/feed?fields=created_time,parent_id,likes', 'get', {access_token:accessToken}, function (posts) {
               if (!posts || posts.error) {
-                console.log('Error occured');
-                console.log(posts.error);
+                //console.log('Error occured');
+                //console.log(posts.error);
                 created_time = "Error occured";
               } else {
                 var check_post = jQuery("#check_post").val().split("/");
@@ -250,7 +250,7 @@ function checkGroups() {
 function checkPages() {
   FB.getLoginStatus(function(res) {
     if (res.status === 'connected') {
-      console.log(res.status);
+      //console.log(res.status);
       jQuery('#loading').show();
       accessToken = res.authResponse.accessToken;
       jQuery('#table').bootstrapTable('removeAll');
@@ -277,8 +277,8 @@ function checkPages() {
 function restartPages() {
   jQuery('#loading').show();
   jQuery('#restart').hide();
-  console.log("restartPages");
-  console.log(lastNext);
+  //console.log("restartPages");
+  //console.log(lastNext);
   getLikes(lastNext,accessToken, check_post_id, sharer, liker, 0);
 }
 function getLikes(next,accessToken, check_post_id, sharer, liker, try_number) {
@@ -286,8 +286,8 @@ function getLikes(next,accessToken, check_post_id, sharer, liker, try_number) {
   FB.api(next, 'get', {access_token:accessToken, limit:20}, function (likes) {
     //console.log(likes);
     if (!likes || likes.error) {
-      console.log('Error occured');
-      if (likes.error) console.log(likes.error);
+      //console.log('Error occured');
+      if (likes.error) //console.log(likes.error);
       if (try_number<2) {
         setTimeout(function() {
           getLikes(next, accessToken, check_post_id, sharer, liker, try_number+1);
@@ -312,18 +312,18 @@ function getLikes(next,accessToken, check_post_id, sharer, liker, try_number) {
               //console.log(val.posts.data[a]);
               var getparent = loadJsonFileAjaxSync("https://graph.facebook.com/v2.0/"+val.posts.data[a].id+"?fields=parent_id&access_token="+accessToken, "application/json", 0);
               if (getparent && getparent.parent_id	) {
-                console.log(getparent.parent_id);
+                //console.log(getparent.parent_id);
                 val.posts.data[a].parent_id = getparent.parent_id;
                 if(val.posts.data[a].parent_id && val.posts.data[a].parent_id.split("_")[1] == check_post_id) {
                   our_post = val.posts.data[a];
                 }
               }
             }
-            console.log("Ha condiviso ");
+            //console.log("Ha condiviso ");
           }
           if (liker.indexOf(val.id)!=-1){
             our_post.liked = true;
-            console.log("Ha likato ");
+            //console.log("Ha likato ");
           }
         }
         jQuery('#table').bootstrapTable('insertRow', {
@@ -335,11 +335,11 @@ function getLikes(next,accessToken, check_post_id, sharer, liker, try_number) {
 
           if (likes.paging.next) {
             setTimeout(function() {
-              console.log("LOADING NEXT "+likes.paging.next);
+              //console.log("LOADING NEXT "+likes.paging.next);
               getLikes(likes.paging.next, accessToken, check_post_id, sharer, liker, 0);
             }, 2000);
           } else {
-            console.log("FINITO");
+            //console.log("FINITO");
             jQuery('#loading').hide();
           }
         }

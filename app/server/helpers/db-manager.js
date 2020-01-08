@@ -22,9 +22,9 @@ DB.init = function(callback) {
   DB.db.open(function(e, d){
     var e;
     if (e) {
-      console.log(e);
+      //console.log(e);
     } else {
-      console.log('connected to database: ' + global.settings.dbName);
+      //console.log('connected to database: ' + global.settings.dbName);
       DB.db.collection('settings').findOne({}, function(e, o){
         if (!o) o = require('./../config.js')._config;
         global._config = o;

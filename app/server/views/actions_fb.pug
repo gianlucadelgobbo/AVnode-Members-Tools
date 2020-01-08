@@ -26,7 +26,7 @@
         - var comments = 0
         - var likes = 0
         each item in results.sharedposts.data
-          -console.log(item)
+          -//console.log(item)
           - shares+=item.shares && item.shares.count ? parseInt(item.shares.count) : 0
           - comments+=item.comments && item.comments.data ? item.comments.data.length : 0
           - likes+=item.likes && item.likes.data ? item.likes.data.length : 0

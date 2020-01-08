@@ -7,15 +7,15 @@ exports.post = function post(req, res) {
 			if (o) {
 				res.status(200).send('ok');
 				EM.dispatchResetPasswordLink(o, req.headers.host, function (e, m) {
-					console.log(req);
-					console.log(req.headers.host);
+					//console.log(req);
+					//console.log(req.headers.host);
 					// this callback takes a moment to return //
 					// should add an ajax loader to give user feedback //
 					if (!e) {
 						//  res.status(200).send('ok');
 					} else {
 						res.status(400).send('email-server-error');
-						for (var k in e) console.log('error : ', k, e[k]);
+						for (var k in e) //console.log('error : ', k, e[k]);
 					}
 				});
 			} else {

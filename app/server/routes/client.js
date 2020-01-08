@@ -9,11 +9,11 @@ exports.get = function get(req, res) {
   } else {
     if (req.query.id) {
       DB.clients.findOne({_id:new ObjectID(req.query.id)}, function(e, result) {
-        console.log(global._config);
+        //console.log(global._config);
         res.render('client', {  locals: { title: __("Client"), countries : CT, country : global._config.company.country, result : result , udata : req.session.user } });
       });
     } else {
-      console.log(global._config);
+      //console.log(global._config);
       res.render('client', {  locals: { title: __("Client"), countries : CT, country : global._config.company.country, result : {address:{}}, udata : req.session.user } });
     }
   }
@@ -29,7 +29,7 @@ exports.post = function post(req, res) {
           res.send({msg:{e:e}}, 200);
         } else {
           o._id = o.id;
-          console.log(global._config);
+          //console.log(global._config);
           res.render('client', {  locals: { title: __("Client"), countries : CT, country : global._config.company.country, result : o, msg:{e:e}, udata : req.session.user } });
         }
       } else {
@@ -43,7 +43,7 @@ exports.post = function post(req, res) {
                 res.send({msg:{e:e}}, 200);
               } else {
                 o._id = o.id;
-                console.log(global._config.company.country);
+                //console.log(global._config.company.country);
                 res.render('client', {  locals: { title: __("Client"), countries : CT, country : global._config.company.country, result : o, msg:{e:e}, udata : req.session.user } });
               }
             } else {
@@ -52,7 +52,7 @@ exports.post = function post(req, res) {
                 res.send({msg:{c:e}}, 200);
               } else {
                 DB.clients.findOne({_id:new ObjectID(id)},function(err, result) {
-                  console.log(global._config.company.country);
+                  //console.log(global._config.company.country);
                   res.render('client', {  locals: { title: __("Client"), countries : CT, country : global._config.company.country, result : result, msg:{c:e}, udata : req.session.user } });
                 });
               }
@@ -69,7 +69,7 @@ exports.post = function post(req, res) {
               if (req.body.ajax) {
                 res.send({msg:{e:e}}, 200);
               } else {
-                console.log(global._config.company.country);
+                //console.log(global._config.company.country);
                 res.render('client', {  locals: { title: __("Client"), countries : CT, country : global._config.company.country, result : o[0], msg:{e:e}, udata : req.session.user } });
               }
             } else {
@@ -78,7 +78,7 @@ exports.post = function post(req, res) {
                 res.send({msg:{c:e}}, 200);
               } else {
                 DB.clients.findOne({_id:o[0]._id},function(err, result) {
-                  console.log(global._config.company.country);
+                  //console.log(global._config.company.country);
                   res.render('client', {  locals: { title: __("Client"), countries : CT, country : global._config.company.country, result : result, msg:{c:e}, udata : req.session.user } });
                 });
               }

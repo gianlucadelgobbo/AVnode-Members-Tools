@@ -61,9 +61,9 @@
 								- each b,index in result.companies
 									- if (result.companies[index] && result.companies[index].dbname)
 										- userdbs.push(result.companies[index].dbname)
-							- console.log(userdbs)
+							- //console.log(userdbs)
 							- each b,index in udata.companies
-								- console.log(udata.companies[index].dbname)
+								- //console.log(udata.companies[index].dbname)
 								.checkbox
 									label
 										input(checked=userdbs.indexOf(udata.companies[index].dbname) >= 0 ? "checked" : undefined, type='checkbox', name='companies[' + index + '][dbname]', value=udata.companies[index].dbname)

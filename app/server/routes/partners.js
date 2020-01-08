@@ -24,10 +24,10 @@ exports.getExtras = function getExtras(req, res) {
       var query = {};
       DB.extras.find(query)/*.sort({brand: 1})*/.toArray(function (e, result) {
         var sez = "";
-        console.log("sto qui");
+        //console.log("sto qui");
         //console.log(result);
         if (req.params.import) {
-          console.log("importing spreadsheets");
+          //console.log("importing spreadsheets");
           /*helpers.getPartners(function(result){
             //console.log(result);
             DB.insert_partner(result,function() {
@@ -35,7 +35,7 @@ exports.getExtras = function getExtras(req, res) {
             });
           });*/
         } else {
-          console.log(sez);
+          //console.log(sez);
           res.render('partners_extras', { title: __("Channels"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
         }
       });
@@ -67,13 +67,13 @@ exports.getPartners = function getPartners(req, res) {
       if (req.params.project) query["partnerships.name"] = req.params.project;
       DB.partners.find(query).sort({brand: 1}).toArray(function (e, result) {
         var sez = "";
-        console.log("sto qui");
+        //console.log("sto qui");
         //console.log(result);
         if (req.params.project) sez = req.url.split(req.params.project)[1].split("/").join("");
-        console.log(result.length);
+        //console.log(result.length);
         //console.log(req);
         if (req.query.import) {
-          console.log("importing spreadsheets");
+          //console.log("importing spreadsheets");
           helpers.getPartners(function(result){
             //console.log(result);
             DB.insert_partner(result,function() {
@@ -81,7 +81,7 @@ exports.getPartners = function getPartners(req, res) {
             });
           });
         } else {
-          console.log(sez);
+          //console.log(sez);
           res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
         }
       });
@@ -108,9 +108,9 @@ exports.getProjectPartners = function getProjectPartners(req, res) {
       }
       DB.partners.find({"partnerships.name": req.params.project}).sort( { brand: 1 } ).toArray(function(e, result) {
         var sez = req.url.split(req.params.project)[1].split("/").join("");
-        console.log(sez);
+        //console.log(sez);
         if (result.length) {
-          console.log(sez);
+          //console.log(sez);
           res.render('partners'+(sez ? "_"+sez : ""), { title: __("Partners"), project:req.params.project, result : result, msg: msg, udata : req.session.user, js:'/js/partners.js', bootstraptable:true  });
         } else {
           helpers.getPartners(function(result){
@@ -176,7 +176,7 @@ exports.setPartner = function setPartner(req, res) {
           if (req.body.ajax) {
             res.status(200).send({msg:{e:e}});
           } else {
-            console.log(e);
+            //console.log(e);
             res.render('partners_new', { title: __("Partner"), project:req.params.project, result : o, msg: {e:e}, udata : req.session.user, js:'/js/partners.js' });
           }
         } else {
@@ -216,7 +216,7 @@ exports.setPartner = function setPartner(req, res) {
                   res.render('partners_new', { title: __("Partner"), project:req.params.project, result : o[0], msg: {e:e}, udata : req.session.user, js:'/js/partners.js' });
                 }
               } else {
-                console.log(o);
+                //console.log(o);
                 e.push({name:"",m:__("Partner saved with success")});
                 if (req.body.ajax) {
                   res.status(200).send({msg:{c:e,redirect:"/" + global.settings.dbName + "/partners/partner/"+o._id+"/edit/"}});
@@ -334,7 +334,7 @@ exports.setAction = function setAction(req, res) {
           if (req.body.ajax) {
             res.status(200).send({msg:{e:e}});
           } else {
-            console.log(e);
+            //console.log(e);
             res.render('partners_actions_new', { title: __("Action"), project:req.params.project, result : o, msg: {e:e}, udata : req.session.user, js:'/js/partners.js' });
           }
         } else {
@@ -352,10 +352,10 @@ exports.setAction = function setAction(req, res) {
               } else {
                 e.push({m:__("Action saved with success")});
                 if (req.body.ajax) {
-                  console.log("req.body.ajax");
+                  //console.log("req.body.ajax");
                   res.status(200).send({msg:{c:e}});
                 } else {
-                  console.log("req.body. no   ajax");
+                  //console.log("req.body. no   ajax");
                   DB.actions.findOne({_id:new ObjectID(req.body._id)},function(err, result) {
                     res.render('partners_actions_new', { title: __("Action"), project:req.params.project, result : result, msg: {c:e}, udata : req.session.user, js:'/js/partners.js' });
                   });
@@ -375,7 +375,7 @@ exports.setAction = function setAction(req, res) {
                   res.render('partners_actions_new', { title: __("Action"), project:req.params.project, result : o[0], msg: {e:e}, udata : req.session.user, js:'/js/partners.js' });
                 }
               } else {
-                console.log(o);
+                //console.log(o);
                 e.push({name:"",m:__("Action saved with success")});
                 if (req.body.ajax) {
                   res.status(200).send({msg:{c:e,redirect:"/"+global.settings.dbName+"/actions/"+o._id+"/edit/"}});

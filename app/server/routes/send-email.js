@@ -14,7 +14,7 @@ exports.post = function post(req, res) {
         password    : global._config.emailDispatcher.password,
         ssl: true
       });
-      console.log(server);
+      //console.log(server);
       server.send({
         text: req.body.text,
         from: global._config.emailDispatcher.sendername+' <'+ global._config.emailDispatcher.senderemail + ">",
@@ -26,8 +26,8 @@ exports.post = function post(req, res) {
           {path:req.body.folderfile, type:"application/pdf", name:req.body.file}
         ]
       }, function (err, message) {
-        console.log(err);
-        console.log(message);
+        //console.log(err);
+        //console.log(message);
         if (err) {
           res.status(200).send(err.smtp);
         } else {

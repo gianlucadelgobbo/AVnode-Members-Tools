@@ -56,7 +56,7 @@ function resetItemNamesAndIDs(){
 /*
 function validateForm(formData, jqForm, options) { 
     var form = $(jqForm[0]).formParams();
-    console.log(form);
+    //console.log(form);
     errors = [];
   if (!Validators.validateStringLength(form.name, 3, 50)){
     errors.push('Please enter a valid Customer');
@@ -77,7 +77,7 @@ function validateForm(formData, jqForm, options) {
   }
   if (errors.length){
     str = "<ul>";
-    console.log(errors);
+    //console.log(errors);
     for (error in errors) str+="<li>"+errors[error]+"</li>";
     str+= "</ul>";
     showModalError('Whoops!', str);

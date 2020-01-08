@@ -2,7 +2,7 @@ var DB = require('../helpers/db-manager');
 var helpers = require('../helpers/helpers');
 
 exports.getCustomers = function getCustomers(req, res) {
-  console.log(req.session.user);
+  //console.log(req.session.user);
     if (req.session.user == null) {
       res.redirect('/?from='+req.url);
     } else {

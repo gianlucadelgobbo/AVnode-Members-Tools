@@ -241,8 +241,8 @@ exports.getPartners = function getPartners(callback) {
     //console.log(error);
     if (!error && response.statusCode == 200) {
       var mainList = JSON.parse(body);
-      console.log("getData");
-      console.log(mainList.feed.entry.length);
+      //console.log("getData");
+      //console.log(mainList.feed.entry.length);
       var partners = [];
       var status = "ACTIVE";
       for (var row in mainList.feed.entry) {
@@ -322,13 +322,13 @@ exports.getPartners = function getPartners(callback) {
         });
         partners.push(partner);
       }
-      console.log(partners.length);
+      //console.log(partners.length);
       request("https://spreadsheets.google.com/feeds/list/1UfH2Dzk1lcUqW2kTds-OAWzFswHZKaqHN0MaGr7xVOY/2/public/values?alt=json", function (error, response, body) {
-        console.log("getData");
+        //console.log("getData");
         var subList = JSON.parse(body);
         //console.log(subList);
         for (var row in subList.feed.entry) {
-          console.log(subList.feed.entry[row].gsx$partner.$t);
+          //console.log(subList.feed.entry[row].gsx$partner.$t);
           var trovato = false;
           for (var item in partners) {
             //console.log("confronto");
@@ -344,20 +344,20 @@ exports.getPartners = function getPartners(callback) {
               trovato = true;
             }
           }
-          console.log((trovato ? "TROVATO: " : "NON TROVATO: ")+subList.feed.entry[row].gsx$partner.$t);
+          //console.log((trovato ? "TROVATO: " : "NON TROVATO: ")+subList.feed.entry[row].gsx$partner.$t);
         }
         /*for (var row in subList.feed.entry) {
          for (var item in partners) {
          if (partners[item].brand == subList.feed.entry[row].gsx$partner.$t) {
-         console.log("TROVATO " + partners[item].brand);
+         //console.log("TROVATO " + partners[item].brand);
          } else {
-         console.log("NON TROVATO "+partners[item].brand);
+         //console.log("NON TROVATO "+partners[item].brand);
          }
          }
          }*/
 
-        console.log("Partners");
-        console.log(partners);
+        //console.log("Partners");
+        //console.log(partners);
         callback(partners);
       });
     }

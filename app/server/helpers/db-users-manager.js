@@ -20,9 +20,9 @@ DBUsers.init = function(callback) {
 	DBUsers.db.open(function(e, d){
 		var e;
 		if (e) {
-			console.log(e);
+			//console.log(e);
 		} else {
-			console.log('Connected to database of Users: ' + global.settings.dbUsersName);
+			//console.log('Connected to database of Users: ' + global.settings.dbUsersName);
 			DBUsers.users = DBUsers.db.collection('users');
 			i18nAdmin.init(function() {
 				callback();
@@ -83,7 +83,7 @@ DBUsers.update_settings = function(newData, userData, callback) {
 		newData._id = o._id;
 		DBUsers.settings.save(newData);
 		DBUsers.settings.findOne({_id:newData._id}, function(e, o){
-			console.log(o);
+			//console.log(o);
 			global._config = o;
 			if (!global._config.roles) global._config.roles = require('./../config.js')._config.roles;
 			DBUsers.i18n.setLocale(o.defaultLocale);

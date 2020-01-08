@@ -47,7 +47,7 @@ $(function() {
 		},
 		minLength:3,
 		select: function(event, ui) {
-			console.log(ui);
+			//console.log(ui);
 		}
 	});
 
@@ -146,7 +146,7 @@ function setBinds(){
 		},
 		minLength:3,
 		select: function(event, ui) {
-			console.log(ui);
+			//console.log(ui);
 		}
 	});
 
