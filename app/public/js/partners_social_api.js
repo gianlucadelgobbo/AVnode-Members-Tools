@@ -165,7 +165,7 @@ function drawFBPostActivities(){
 function getFBNext(o, accessToken, callback){
   //console.log("getFBNext");
   var obj = o;
-  if (obj) //console.log(obj.data);
+  //if (obj) console.log(obj.data);
   if (obj && obj.paging && obj.paging.next) {
     FB.api(obj.paging.next, 'get', {access_token:accessToken}, function (results) {
       //console.log(results);

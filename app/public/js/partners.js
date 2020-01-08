@@ -287,7 +287,7 @@ function getLikes(next,accessToken, check_post_id, sharer, liker, try_number) {
     //console.log(likes);
     if (!likes || likes.error) {
       //console.log('Error occured');
-      if (likes.error) //console.log(likes.error);
+      //if (likes.error) console.log(likes.error);
       if (try_number<2) {
         setTimeout(function() {
           getLikes(next, accessToken, check_post_id, sharer, liker, try_number+1);

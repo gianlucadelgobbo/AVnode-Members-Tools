@@ -15,7 +15,7 @@ exports.post = function post(req, res) {
 						//  res.status(200).send('ok');
 					} else {
 						res.status(400).send('email-server-error');
-						for (var k in e) //console.log('error : ', k, e[k]);
+						//for (var k in e) console.log('error : ', k, e[k]);
 					}
 				});
 			} else {
