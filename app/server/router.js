@@ -99,6 +99,7 @@ module.exports = function(app) {
   app.get('/:dbname/accounting/invoice', invoiceRoutes.get);
   app.post('/:dbname/accounting/invoice', invoiceRoutes.post);
   app.get('/:dbname/accounting/print/invoice', invoiceRoutes.print);
+  app.get('/:dbname/accounting/xml/invoice', invoiceRoutes.xml);
 
   // Offers //
   app.get('/:dbname/accounting/offers', offersRoutes.get);

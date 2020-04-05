@@ -28,6 +28,7 @@ DB.init = function(callback) {
       DB.db.collection('settings').findOne({}, function(e, o){
         if (!o) o = require('./../config.js')._config;
         global._config = o;
+        console.log(o)
         accounting.settings =     global._config.accountingSettings;
         i18nAdmin.setLocale(o.defaultLocale);
         DB.customers = DB.db.collection('clients');
@@ -52,7 +53,6 @@ DB.insert_settings = function(newData, userData, callback) {
   });
 };
 DB.update_settings = function(newData, userData, callback) {
-
   DB.settings.findOne({_id:new ObjectID(newData.id)}, function(e, o){
     newData._id = o._id;
     if (!newData.emailDispatcher.password && o.emailDispatcher && o.emailDispatcher.password) newData.emailDispatcher.password = o.emailDispatcher.password;

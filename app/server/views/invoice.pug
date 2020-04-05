@@ -16,6 +16,9 @@ block content
                   input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/invoice/?dup="+result._id+"'").btn.btn-primary
                   span!="&nbsp;"
                   input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/invoice/?id="+result._id+"'").btn.btn-primary
+                  span(style=(_config.company.address.country=="Italy" ? "" : "display:none;"))
+                    span!="&nbsp;"
+                    a(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.invoice_number).slice(-5))+".xml", href="window.location='/"+global.settings.dbName+"/accounting/xml/invoice/?id="+result._id+"'").btn.btn-primary=__("XML")
                   span!="&nbsp;"
                   input(type="button", value=__("DELETE"), onclick="window.location='/" + global.settings.dbName + "/accounting//invoices/?id=" + result._id + "&del=1'").btn.btn-danger
                   input(type="hidden", name="id", value=result._id)
@@ -62,34 +65,53 @@ block content
                       label.input-group-addon(for='address')=__("Address")
                       input(type="text", name="to_client[address][street]", value=result.to_client.address.street, disabled).street.form-control#street
               .row
-                .col-sm-4
+                .col-sm-3
                   .form-group
                     .input-group
                       label.input-group-addon(for='zipcode')=__("ZIP code")
                       input(type="text", name="to_client[address][zipcode]", value=result.to_client.address.zipcode, disabled).zipcode.form-control#zipcode
-                .col-sm-4
+                .col-sm-3
                   .form-group
                     .input-group
                       label.input-group-addon(for='city')=__("City")
                       input(type="text", name="to_client[address][city]", value=result.to_client.address.city, disabled).city.form-control#city
-                .col-sm-4
+                .col-sm-3
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='province')=__("Province")
+                      input(type="text", name="to_client[address][province]", value=result.to_client.address.province, disabled).province.form-control#province
+                .col-sm-3
                   .form-group
                     .input-group
                       label.input-group-addon(for='country')=__("Country")
                       input(type="text", name="to_client[address][country]", value=result.to_client.address.country, disabled).country.form-control#country
+                      input(type="hidden", name="to_client[address][countrycode]", value=result.to_client.address.countrycode).countrycode.form-control#countrycode
+                      span.input-group-addon.countrycode_visible#countrycode_visible=result.to_client.address.countrycode
+                      //(type="text", name="to_client[address][countrycode]", value=result.to_client.address.countrycode, disabled).country.form-control#countrycode
               .row
                 .col-sm-12
                   .form-group
                     .input-group
                       label.input-group-addon(for='vat_number')=__("VAT number")
                       input(type="text", name="to_client[vat_number]", value=result.to_client.vat_number, disabled).vat_number.form-control#vat_number
-              - if(country=="Italy")
+              #italyonly(style=(result.to_client.address.country=="Italy" ? "" : "display:none;"))
                 .row
                   .col-sm-12
                     .form-group
                       .input-group
                         label.input-group-addon(for='fiscal_code')=__("Fiscal code")
                         input(type="text", name="to_client[fiscal_code]", value=result.to_client.fiscal_code, disabled).fiscal_code.form-control#fiscal_code
+                .row
+                  .col-sm-6
+                    .form-group
+                      .input-group
+                        label.input-group-addon(for='unique_code')=__("Unique code")
+                        input(type="text", name="to_client[unique_code]", value=result.to_client.unique_code, disabled).unique_code.form-control#unique_code
+                  .col-sm-6
+                    .form-group
+                      .input-group
+                        label.input-group-addon(for='pec')=__("PEC")
+                        input(type="text", name="to_client[pec]", value=result.to_client.pec, disabled).pec.form-control#pec
             .col-sm-5
               .row
                 .col-sm-12

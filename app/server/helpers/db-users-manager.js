@@ -48,7 +48,9 @@ DBUsers.update_user = function(newData, callback) {
 		o.name 		= newData.name;
 		o.role 		= newData.role;
 		o.email 	= newData.email;
+		o.fiscal_code 	= newData.fiscal_code;
 		o.country 	= newData.country;
+		o.countrycode 	= newData.countrycode;
 		o.companies = newData.companies;
 		if (newData.pass == ''){
 			DBUsers.users.save(o);

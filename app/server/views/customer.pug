@@ -46,17 +46,42 @@ block content
             label(for='city').control-label=__("City")
             input(type="text", name="address[city]", value=result.address.city)#city.form-control
           .form-group
-            label(for='country').control-label=__("Country")
-            select(name="address[country]",onchange=country=='Italy' ? "$('#fiscal_code').parent().toggle($(this).val()=='Italy')" : undefined)#country.form-control
-                option(value="")= __("Please select a country")
-                each item in countries
-                  option(selected=item.name == result.address.country, value=item.name)=item.name
+            label(for='province').control-label=__("Province")
+            input(type="text", name="address[province]", value=result.address.province)#province.form-control
+          .form-group
+            .row
+              .col-sm-10
+                label(for='country').control-label=__("Country")
+                select(name="address[country]",onchange="if (this.value=='Italy') {$('#italyonly').show()} else {$('#italyonly').hide()};setCode(this.value);")#country.form-control
+                  option(value="")= __("Please select a country")
+                  each item in countries
+                    option(selected=item.name == result.address.country, value=item.name)=item.name
+              .col-sm-2
+                label(for='countrycode').control-label=__("Country code")
+                input(type="hidden", name="address[countrycode]", value=result.address.countrycode)#countrycode
+                input(type="text", value=result.address.countrycode, disabled="disabled")#countrycode_view.form-control
+            script.
+              var countries = !{JSON.stringify(countries)};
+              var countries2 = countries.map(item => {return item.name});
+              var shorts = countries.map(item => {return item.short});
+              setCode = (country) => {
+                $("#countrycode").val(shorts[countries2.indexOf(country)])
+                $("#countrycode_view").val(shorts[countries2.indexOf(country)])
+              }
+
           .form-group
             label(for='vat_number').control-label=__("VAT number")
             input(type="text", name="vat_number", value=result.vat_number)#vat_number.form-control
-          .form-group(style=(country=="Italy" && result.address.country=="Italy" ? "" : "display:none;"))
-            label(for='fiscal_code').control-label=__("Fiscal code")
-            input(type="text", name="fiscal_code", value=result.fiscal_code)#fiscal_code.form-control
+          #italyonly(style=(result.address.country=="Italy" ? "" : "display:none;"))
+            .form-group
+              label(for='fiscal_code').control-label=__("Fiscal code")
+              input(type="text", name="fiscal_code", value=result.fiscal_code)#fiscal_code.form-control
+            .form-group
+              label(for='unique_code').control-label=__("Unique code")
+              input(type="text", name="unique_code", value=result.unique_code)#code.form-control
+            .form-group
+              label(for='pec').control-label=__("PEC")
+              input(type="text", name="pec", value=result.pec)#pec.form-control
           - if (!result.contacts.length) result.contacts.push({name:"", email:""})
       
           .form-group

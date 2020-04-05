@@ -173,3 +173,17 @@ exports.print = function print(req, res) {
     }
   });
 };
+
+exports.xml = function get(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+      DB.invoices.findOne({_id:new ObjectID(req.query.id)},function(e, result) {
+        result = helpers.formatMoney(result);
+        res.set('Content-Type', 'text/xml');
+        res.render('invoice_xml', { title: __("Invoice"), country:global._config.company.country, result : result, udata : req.session.user });
+      });
+    } else {
+      res.redirect('/?from='+req.url);
+    }
+  });
+};

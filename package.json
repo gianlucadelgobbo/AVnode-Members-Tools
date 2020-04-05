@@ -13,6 +13,7 @@
     "express-session": "^1.14.1",
     "html-pdf": "^2.1.0",
     "i18n": "^0.8.3",
+    "jstoxml": "^1.6.5",
     "method-override": "^2.3.6",
     "moment": "~2.19.3",
     "mongodb": "~2.2.10",
@@ -21,6 +22,7 @@
     "stylus": "~0.54.5"
   },
   "scripts": {
+    "dev": "NODE_ENV=development nodemon app",
     "start": "node app.js",
     "jenkins": "NODE_ENV=production forever --uid 'avnode-members-tools' start --append app.js ",
     "pm2start": "pm2 start app.js --name avnode-members-tools --env production --watch --log logs.log --time",

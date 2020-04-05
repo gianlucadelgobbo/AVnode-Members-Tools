@@ -8,9 +8,15 @@ $(function() {
 			$(".street").val("");
 			$(".zipcode").val("");
 			$(".city").val("");
+			$(".province").val("");
 			$(".country").val("");
+			$(".countrycode").val("");
+			$(".countrycode_visible").html("");
 			$(".vat_number").val("");
 			$(".fiscal_code").val("");
+			$(".unique_code").val("");
+			$(".pec").val("");
+			$("#italyonly").hide();
 		}
 	});
 	
@@ -31,9 +37,19 @@ $(function() {
 			$(".street").val(queryResult[i].address.street);
 			$(".zipcode").val(queryResult[i].address.zipcode);
 			$(".city").val(queryResult[i].address.city);
+			$(".province").val(queryResult[i].address.province);
 			$(".country").val(queryResult[i].address.country);
+			$(".countrycode").val(queryResult[i].address.countrycode);
+			$(".countrycode_visible").html(queryResult[i].address.countrycode);
 			$(".vat_number").val(queryResult[i].vat_number);
 			$(".fiscal_code").val(queryResult[i].fiscal_code);
+			$(".unique_code").val(queryResult[i].unique_code);
+			$(".pec").val(queryResult[i].pec);
+			if (queryResult[i].address.country == "Italy") {
+				$("#italyonly").show();
+			} else {
+				$("#italyonly").hide();
+			} 
 		}
 	});
 	$('#payment').autocomplete({

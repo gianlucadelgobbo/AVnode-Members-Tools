@@ -1,0 +1,61 @@
+doctype xml
+ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2')
+  FatturaElettronicaHeader
+    DatiTrasmissione
+      IdTrasmittente
+        IdPaese=udata.countrycode
+        IdCodice=udata.fiscal_code.toUpperCase()
+      ProgressivoInvio=result.invoice_number
+      FormatoTrasmissione="FPR12"
+      //valori ammessi: [FPA12] = fattura verso PA [FPR12] = fattura verso privati
+      CodiceDestinatario=result.to_client.unique_code
+      PECDestinatario=result.to_client.pec
+    CedentePrestatore
+      DatiAnagrafici
+        IdFiscaleIVA
+          IdPaese=_config.company.address.countrycode
+          IdCodice=_config.company.vat_number
+        CodiceFiscale=_config.company.fiscal_code
+        Anagrafica
+          Denominazione=_config.company.name.toUpperCase()
+        RegimeFiscale="RF01"
+      Sede
+        Indirizzo=_config.company.address.street.toUpperCase()
+        //numerocivico=_config.company.address.street
+        CAP=_config.company.address.zipcode.toUpperCase()
+        Comune=_config.company.address.city.toUpperCase()
+        Provincia=_config.company.address.province.toUpperCase()
+        Nazione=_config.company.address.countrycode
+    CessionarioCommittente
+      DatiAnagrafici
+        IdFiscaleIVA
+          IdPaese=result.to_client.address.countrycode
+          IdCodice=result.to_client.vat_number.toUpperCase()
+        CodiceFiscale=result.to_client.fiscal_code.toUpperCase()
+        Anagrafica
+          Denominazione=result.to_client.name.toUpperCase()
+      Sede
+        Indirizzo=result.to_client.address.street.toUpperCase()
+        CAP=result.to_client.address.zipcode.toUpperCase()
+        Comune=result.to_client.address.city.toUpperCase()
+        Provincia=result.to_client.address.province.toUpperCase()
+        Nazione=result.to_client.address.countrycode
+  FatturaElettronicaBody
+    DatiGenerali
+      DatiGeneraliDocumento
+        TipoDocumento="TD01"
+        // TD04 nota di credito
+        Divisa="EUR"
+        - d = result.invoice_date;                      
+        Data=d.getFullYear()+"-"+(("0" + (d.getMonth()+1)).slice(-2))+"-"+(("0" + (d.getDate())).slice(-2))
+        Numero=result.invoice_number
+        ImportoTotaleDocumento=result.total
+    DatiBeniServizi
+      - for(a=0;a<result.items.length;a++)
+        DettaglioLinee
+          NumeroLinea=(a+1)
+          descrizione=result.items[a].description.toUpperCase()
+          Quantita=result.items[a].quantity
+          PrezzoUnitario=result.items[a].price
+          PrezzoTotale=result.items[a].amount
+          AliquotaIVA=result.vat_perc

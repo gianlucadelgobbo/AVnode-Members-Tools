@@ -49,12 +49,69 @@ block content
             .col-sm-10
               input#company-name.form-control(type='text', name='company[name]', value=result.company.name)
           .form-group
+            label.control-label.col-sm-2(for='company-vat_number')=__("Company VAT number")
+            .col-sm-10
+              input#company-vat_number.form-control(type='text', name='company[vat_number]', value=result.company.vat_number)
+          .form-group
+            label.control-label.col-sm-2(for='company-fiscal_code')=__("Company fiscal code")
+            .col-sm-10
+              input#company-fiscal_code.form-control(type='text', name='company[fiscal_code]', value=result.company.fiscal_code)
+          - if (!result.company.address) result.company.address = {}
+          .form-group
+            label.control-label.col-sm-2(for='company-address-street')=__("Company Street")
+            .col-sm-10
+              input#company-address-street.form-control(type='text', name='company[address][street]', value=result.company.address.street)
+          .form-group
+            label.control-label.col-sm-2(for='company-address-zipcode')=__("Company zip code")
+            .col-sm-10
+              input#company-address-zipcode.form-control(type='text', name='company[address][zipcode]', value=result.company.address.zipcode)
+          .form-group
+            label.control-label.col-sm-2(for='company-address-city')=__("Company city")
+            .col-sm-10
+              input#company-address-city.form-control(type='text', name='company[address][city]', value=result.company.address.city)
+          .form-group
+            label.control-label.col-sm-2(for='company-address-province')=__("Company province")
+            .col-sm-10
+              input#company-address-province.form-control(type='text', name='company[address][province]', value=result.company.address.province)
+          //.form-group
             label.control-label.col-sm-2(for='country')=__("Country")
             .col-sm-10
-              select(name="company[country]")#country.form-control
+              select#company-country(name="company[address][country]").form-control
                 option(value="")= __("Please select a country")
                 each item in countries
-                  option(selected=item.name == result.company.country, value=item.name)=item.name
+                  option(selected=item.name == company[address][country], value=item.name)=item.name
+          .form-group
+            label.control-label.col-sm-2(for='country')=__("Country")
+            .col-sm-10
+              .row
+                .col-sm-10
+                  select(name="company[address][country]",onchange="setCode(this.value);")#country-list.form-control
+                    option(value="")= __("Please select a country")
+                    each item in countries
+                      option(selected=item.name == result.company.address.country, value=item.name)=item.name
+                .col-sm-2
+                  input(type="hidden", name="company[address][countrycode]", value=result.company.address.countrycode)#countrycode
+                  input(type="text", value=result.company.address.countrycode, disabled="disabled")#countrycode_view.form-control
+              script.
+                var countries = !{JSON.stringify(countries)};
+                var countries2 = countries.map(item => {return item.name});
+                var shorts = countries.map(item => {return item.short});
+                setCode = (country) => {
+                  $("#countrycode").val(shorts[countries2.indexOf(country)])
+                  $("#countrycode_view").val(shorts[countries2.indexOf(country)])
+                }
+          .form-group
+            label.control-label.col-sm-2(for='company-unique_code')=__("Company Unique CODE")
+            .col-sm-10
+              input#company-unique_code.form-control(type='text', name='company[unique_code]', value=result.company.unique_code)
+          .form-group
+            label.control-label.col-sm-2(for='company-email')=__("Company email")
+            .col-sm-10
+              input#company-email.form-control(type='text', name='company[email]', value=result.company.email)
+          .form-group
+            label.control-label.col-sm-2(for='company-pec')=__("Company pec")
+            .col-sm-10
+              input#company-pec.form-control(type='text', name='company[pec]', value=result.company.pec)
           .form-group
             label.control-label.col-sm-2(for='company-row1')=__("Company row1")
             .col-sm-10

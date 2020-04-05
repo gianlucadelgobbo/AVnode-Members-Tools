@@ -61,7 +61,35 @@ block content
                 label.control-label.col-sm-2(for='email-tf')=__("Email")
                 .col-sm-10
                   input#email-tf.form-control(type='text', name='email', value=result.email)
+              #fiscal_code-cg.form-group
+                label.control-label.col-sm-2(for='fiscal_code-tf')=__("Fiscal code")
+                .col-sm-10
+                  input#fiscal_code-tf.form-control(type='text', name='fiscal_code', value=result.fiscal_code)
+
               #country-cg.form-group
+                label.control-label.col-sm-2(for='country-list')=__("Country")
+                .col-sm-10
+                  .row
+                    .col-sm-10
+                      select(name="country",onchange="if (this.value=='Italy') {$('#italyonly').show()} else {$('#italyonly').hide()};setCode(this.value);")#country-list.form-control
+                        option(value="")= __("Please select a country")
+                        each item in countries
+                          option(selected=item.name == result.country, value=item.name)=item.name
+                    .col-sm-2
+                      input(type="hidden", name="countrycode", value=result.countrycode)#countrycode
+                      input(type="text", value=result.countrycode, disabled="disabled")#countrycode_view.form-control
+                  script.
+                    var countries = !{JSON.stringify(countries)};
+                    var countries2 = countries.map(item => {return item.name});
+                    var shorts = countries.map(item => {return item.short});
+                    setCode = (country) => {
+                      $("#countrycode").val(shorts[countries2.indexOf(country)])
+                      $("#countrycode_view").val(shorts[countries2.indexOf(country)])
+                    }
+
+
+
+              //#country-cg.form-group
                 label.control-label.col-sm-2(for='country-list')=__("Country")
                 .col-sm-10
                   select#country-list.form-control(name='country')
