@@ -28,7 +28,7 @@ DB.init = function(callback) {
       DB.db.collection('settings').findOne({}, function(e, o){
         if (!o) o = require('./../config.js')._config;
         global._config = o;
-        console.log(o)
+        //console.log(o)
         accounting.settings =     global._config.accountingSettings;
         i18nAdmin.setLocale(o.defaultLocale);
         DB.customers = DB.db.collection('clients');
