@@ -8,8 +8,10 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
       ProgressivoInvio=result.invoice_number
       FormatoTrasmissione="FPR12"
       //valori ammessi: [FPA12] = fattura verso PA [FPR12] = fattura verso privati
-      CodiceDestinatario=result.to_client.unique_code
-      PECDestinatario=result.to_client.pec
+      if result.to_client.unique_code
+        CodiceDestinatario=result.to_client.unique_code
+      if result.to_client.pec
+        PECDestinatario=result.to_client.pec
     CedentePrestatore
       DatiAnagrafici
         IdFiscaleIVA
