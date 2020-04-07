@@ -303,5 +303,6 @@
 	"IBAN": "IBAN",
 	"CAB": "CAB",
 	"ABI": "ABI",
-	"Condizioni Pagamento": "Condizioni Pagamento"
+	"Condizioni Pagamento": "Condizioni Pagamento",
+	"days": "giorni"
 }

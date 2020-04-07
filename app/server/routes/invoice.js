@@ -165,10 +165,12 @@ exports.print = function print(req, res) {
             if (!to_client.contacts) to_client.contacts = [];
             res.render('accounts/'+global.settings.dbName+"/style_print", {layout: false}, function (error_style, style) {
               res.render('invoice_preview', {  title: __("Invoice"), country:global._config.company.country, result : result, udata : req.session.user, file:folder+filename, style:style, js:"/js/sendemail.js", to_client:to_client}, function (error1, html1) {
+                console.log(error1);
                 // PDF START
                 var pdf = require('html-pdf');
                 var options = { format: 'A4',"header": {"height": "75mm"},"footer": {"height": "30mm"}};
                 res.render('invoice_pdf', { layout: 'layout_pdf.pug' ,  title: __("Invoice"), country:global._config.company.country, result : result, udata : req.session.user, style:style }, function (error, html) {
+                  console.log(error);
                   if (!error) {
                     pdf.create(html, options).toFile('./warehouse'+folder+filename, function(pdferr, pdfres) {
                       res.status(200).send(html1);

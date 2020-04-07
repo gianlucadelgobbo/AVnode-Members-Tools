@@ -114,10 +114,13 @@ block content
                         .pull-right.muted=__("TOTAL")
                       td.price
                           div=_config.currency[0]+" "+result.total
-            footer#pageFooter
-              b=__("Bank")
-              br
-              - for (a=0;a<_config.banks.length;a++)
-                - if (_config.banks[a]==result.bank)
-                  span=_config.banks[a]
+              footer#pageFooter
+                - console.log(result.bank)
+                if result.bank && result.bank.name
+                  p
+                    b=__("Bank")
+                    !="<br />"+result.bank.name
+                    !="<br />"+__("IBAN")+": "+result.bank.IBAN
+                    !=" | "+__("CAB")+": "+result.bank.CAB
+                    !=" | "+__("ABI")+": "+result.bank.ABI
           include modals/sendbyemail

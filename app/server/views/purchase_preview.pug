@@ -138,19 +138,24 @@ block content
                 if result.DatiPagamento && result.DatiPagamento.DettaglioPagamento
                   p
                     b=__("Payment")
-                    !="<br />"+result.DatiPagamento.DettaglioPagamento.Beneficiario
+                    if result.DatiPagamento.DettaglioPagamento.Beneficiario
+                      !="<br />"+result.DatiPagamento.DettaglioPagamento.Beneficiario
                     !="<br />"+__("Importo Pagamento")+": € "+result.DatiPagamento.DettaglioPagamento.ImportoPagamento
                     !="<br />"+__("Modalita Pagamento")+": "+_config.ModalitaPagamento[result.DatiPagamento.DettaglioPagamento.ModalitaPagamento]
                     !="<br />"+__("Condizioni Pagamento")+": "+_config.CondizioniPagamento[result.DatiPagamento.CondizioniPagamento]
-                    - var d = result.DatiPagamento.DettaglioPagamento.DataRiferimentoTerminiPagamento
-                    !="<br />"+__("Data Riferimento Termini Pagamento")+": "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
-                    !="<br />"+__("Giorni Termini Pagamento")+": "+result.DatiPagamento.DettaglioPagamento.GiorniTerminiPagamento
-                    - var d = result.DatiPagamento.DettaglioPagamento.DataScadenzaPagamento
-                    !="<br />"+__("Data Scadenza Pagamento")+": "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
-                  p
-                    b=__("Bank")
-                    !="<br />"+result.DatiPagamento.DettaglioPagamento.IstitutoFinanziario
-                    !="<br />"+__("IBAN")+": "+result.DatiPagamento.DettaglioPagamento.IBAN
-                    !="<br />"+__("CAB")+": "+result.DatiPagamento.DettaglioPagamento.CAB
-                    !="<br />"+__("ABI")+": "+result.DatiPagamento.DettaglioPagamento.ABI
+                    if result.DatiPagamento.DettaglioPagamento.DataRiferimentoTerminiPagamento
+                      - var d = result.DatiPagamento.DettaglioPagamento.DataRiferimentoTerminiPagamento
+                      !="<br />"+__("Data Riferimento Termini Pagamento")+": "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                    if result.DatiPagamento.DettaglioPagamento.GiorniTerminiPagamento
+                      !="<br />"+__("Giorni Termini Pagamento")+": "+result.DatiPagamento.DettaglioPagamento.GiorniTerminiPagamento
+                    if result.DatiPagamento.DettaglioPagamento.DataScadenzaPagamento
+                      - var d = result.DatiPagamento.DettaglioPagamento.DataScadenzaPagamento
+                      !="<br />"+__("Data Scadenza Pagamento")+": "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                  if result.DatiPagamento.DettaglioPagamento.IBAN
+                    p
+                      b=__("Bank")
+                      !="<br />"+result.DatiPagamento.DettaglioPagamento.IstitutoFinanziario
+                      !="<br />"+__("IBAN")+": "+result.DatiPagamento.DettaglioPagamento.IBAN
+                      !="<br />"+__("CAB")+": "+result.DatiPagamento.DettaglioPagamento.CAB
+                      !="<br />"+__("ABI")+": "+result.DatiPagamento.DettaglioPagamento.ABI
           include modals/sendbyemail
