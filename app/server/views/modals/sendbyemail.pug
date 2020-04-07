@@ -1,4 +1,5 @@
 .modal-sendbyemail.modal.fade
+  - var send_to = to_client ? to_client : from_customer
   .modal-dialog
     .modal-content
       div.modal-header
@@ -16,43 +17,43 @@
                 .col-sm-6=__("To")
                 .col-sm-6
                   .text-right
-                    - if(to_client.contacts && to_client.contacts.length)
+                    - if(send_to.contacts && send_to.contacts.length)
                       select.form-control(onchange="$('#to_name').val(this.value.split(',')[0]);$('#to_email').val(this.value.split(',')[1])")
 
-                          - for (var item in to_client.contacts)
-                            - if(to_client.contacts[item].name && to_client.contacts[item].email)
-                              option(value=to_client.contacts[item].name+","+to_client.contacts[item].email)=to_client.contacts[item].name
+                          - for (var item in send_to.contacts)
+                            - if(send_to.contacts[item].name && send_to.contacts[item].email)
+                              option(value=send_to.contacts[item].name+","+send_to.contacts[item].email)=send_to.contacts[item].name
                     - else
                       small
                         small
                           small=__("No Customer contacts, please add")+ " "
-                            a(href="/"+global.settings.dbName+"/accounting/customers/"+to_client._id)=__("Edit")
+                            a(href="/"+global.settings.dbName+"/accounting/customers/"+send_to._id)=__("Edit")
             .row
               .col-sm-6
                 .form-group.form-group-sm
                   label(for="to_name")=__("Name")
-                  input(type="text", name="to_name", value=to_client.contacts && to_client.contacts.length && to_client.contacts[item].name ? to_client.contacts[0].name : "").form-control#to_name
+                  input(type="text", name="to_name", value=send_to.contacts && send_to.contacts.length && send_to.contacts[item].name ? send_to.contacts[0].name : "").form-control#to_name
               .col-sm-6
                 .form-group.form-group-sm
                   label(for="to_email")=__("Email")
-                  input(type="text", name="to_email", value=to_client.contacts && to_client.contacts.length && to_client.contacts[item].email ? to_client.contacts[0].email : "").form-control#to_email
+                  input(type="text", name="to_email", value=send_to.contacts && send_to.contacts.length && send_to.contacts[item].email ? send_to.contacts[0].email : "").form-control#to_email
           - var msg = {}
-          - var client_name = to_client.contacts && to_client.contacts.length && to_client.contacts[0].name ? to_client.contacts[0].name : result.to_client.name;
+          - var client_name = send_to.contacts && send_to.contacts.length && send_to.contacts[0] && send_to.contacts[0].name ? send_to.contacts[0].name : send_to.name;
           - for (var item in global.settings.defaultLocales)
             - msg[global.settings.defaultLocales[item]] = {}
             - msg[global.settings.defaultLocales[item]].label = global.settings.defaultLocales[item]
-            - if (result.invoice_number)
-              - d = result.invoice_date;
-              - msg[global.settings.defaultLocales[item]].subject = __({phrase: "{{result.to_client.name}} • Invoice number {{result.invoice_number}} - {{date}}",    locale: global.settings.defaultLocales[item]}, {result:result, date:d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()})+ " " + global.settings.companyName
+            - if (result.purchase_number)
+              - d = result.purchase_date;
+              - msg[global.settings.defaultLocales[item]].subject = __({phrase: "{{send_to.name}} • Invoice number {{result.purchase_number}} - {{date}}",    locale: global.settings.defaultLocales[item]}, {result:result, date:d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()})+ " " + global.settings.companyName
               - msg[global.settings.defaultLocales[item]].text    = __({phrase: "Dear {{client_name}}",                              locale: global.settings.defaultLocales[item]}, {client_name:client_name})
               - msg[global.settings.defaultLocales[item]].text    += ",\n"
-              - msg[global.settings.defaultLocales[item]].text    += __({phrase: "in attach you find the invoice number {{result.invoice_number}} of the {{date}}",    locale: global.settings.defaultLocales[item]}, {result:result, date:d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()})
+              - msg[global.settings.defaultLocales[item]].text    += __({phrase: "in attach you find the purchase number {{result.purchase_number}} of the {{date}}",    locale: global.settings.defaultLocales[item]}, {result:result, date:d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()})
               - msg[global.settings.defaultLocales[item]].text    += "\n\n"
               - msg[global.settings.defaultLocales[item]].text    += __({phrase: "Best Regards",                                      locale: global.settings.defaultLocales[item]})
               - msg[global.settings.defaultLocales[item]].text    += (global._config.emailDispatcher.signature ? "\n\n"+global._config.emailDispatcher.signature : "")
             - else
               - d = result.offer_date;
-              - msg[global.settings.defaultLocales[item]].subject = __({phrase: "{{result.to_client.name}} | Offer number {{result.offer_number}} - {{date}}",  locale: global.settings.defaultLocales[item]}, {result:result, date:d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()})+ " " + global.settings.companyName
+              - msg[global.settings.defaultLocales[item]].subject = __({phrase: "{{send_to.name}} | Offer number {{result.offer_number}} - {{date}}",  locale: global.settings.defaultLocales[item]}, {result:result, date:d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()})+ " " + global.settings.companyName
               - msg[global.settings.defaultLocales[item]].text     = __({phrase: "Dear {{client_name}}",                          locale: global.settings.defaultLocales[item]}, {result:result})
               - msg[global.settings.defaultLocales[item]].text    += ",\n"
               - msg[global.settings.defaultLocales[item]].text    += __({phrase: "in attach you find the offer number {{result.offer_number}} of the {{date}}",   locale: global.settings.defaultLocales[item]}, {result:result, date:d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()})
@@ -79,7 +80,7 @@
             textarea(rows="10", name="text", id="text").form-control=text
           .form-group.form-group-sm
             label(for="file")=__("Attachment")
-            - d = result.invoice_date;
+            - d = result.purchase_date;
             input(type="text", name="file", value=file.substring(file.lastIndexOf("/") + 1)).form-control#file
             - attach = global.settings.root_path+'/warehouse'+file
             input(type="hidden", name="folderfile", value=attach).form-control#file

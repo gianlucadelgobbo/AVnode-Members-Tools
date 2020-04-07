@@ -1,7 +1,7 @@
 extends layout
 block content
   .row-offcanvas.row-offcanvas-left.cnt
-    include sidebar_settings
+    include accounting_sidebar
     #main
       .col-md-12
         //.container-fluid.cnt
@@ -125,14 +125,18 @@ block content
             .col-sm-10
               #banks
                 each b,index in result.banks
+                  - last = index
                   div
                     .input-group
-                      input.form-control(type='text', name='banks[]', value=b)
+                      input.form-control(type='text', name='banks['+index+'][name]', value=b.name)
+                      input.form-control(type='text', name='banks['+index+'][IBAN]', value=b.IBAN)
+                      input.form-control(type='text', name='banks['+index+'][CAB]', value=b.CAB)
+                      input.form-control(type='text', name='banks['+index+'][ABI]', value=b.ABI)
                       span.input-group-btn
                         button.btn.btn-default(disabled=(index==0 ? "disabled" : undefined), type="button",onclick="$(this).parent().parent().parent().remove()")
                           i.glyphicon.glyphicon-minus
                     br
-              button.btn.btn-default(type="button",onclick="var c = $($('#banks').children()[0]).clone();c.find('input').val('');c.find('button').removeAttr('disabled');$('#banks').append(c);")
+              button.btn.btn-default(type="button",onclick="var last=$('#banks').children().length-1;var c = $($('#banks').children()[last]).clone();c.find('input').val('');c.find('input').attr('name', c.find('input').attr('name').replace('['+last+']','['+(last+1)+']'));c.find('button').removeAttr('disabled');$('#banks').append(c);last++;")
                 i.glyphicon.glyphicon-plus
           p.subheading=__("Currency")
           hr

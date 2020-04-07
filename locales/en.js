@@ -144,5 +144,7 @@
 	"{{client_name}} | Invoice number {{result.invoice_number}} - {{date}}": "{{client_name}} | Invoice number {{result.invoice_number}} - {{date}}",
 	"Dear {{client_name}}": "Dear {{client_name}}",
 	"{{result.to_client.name}} xxx Invoice number {{result.invoice_number}} - {{date}}": "{{result.to_client.name}} xxx Invoice number {{result.invoice_number}} - {{date}}",
-	"{{result.to_client.name}} • Invoice number {{result.invoice_number}} - {{date}}": "{{result.to_client.name}} • Invoice number {{result.invoice_number}} - {{date}}"
+	"{{result.to_client.name}} • Invoice number {{result.invoice_number}} - {{date}}": "{{result.to_client.name}} • Invoice number {{result.invoice_number}} - {{date}}",
+	"{{send_to.name}} • Invoice number {{result.purchase_number}} - {{date}}": "{{send_to.name}} • Invoice number {{result.purchase_number}} - {{date}}",
+	"in attach you find the purchase number {{result.purchase_number}} of the {{date}}": "in attach you find the purchase number {{result.purchase_number}} of the {{date}}"
 }

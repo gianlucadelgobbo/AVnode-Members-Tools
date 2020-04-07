@@ -1,7 +1,7 @@
 extends layout
 block content
   .row-offcanvas.row-offcanvas-left.cnt
-    include sidebar_accounting
+    include accounting_sidebar
     #main
       .col-md-12
         form(method="post", action="/"+global.settings.dbName+"/accounting/offer/?id="+result._id, onsubmit='$("[disabled]").removeAttr("disabled")')#offer

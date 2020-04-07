@@ -110,6 +110,45 @@ Validators.checkInvoiceDate = function(invoiceDate){
   return errors;
 };
 
+Validators.checkCreditNoteNumber = function(creditnoteNumber){
+  var errors = [];
+  if (!creditnoteNumber) errors.push({name:"creditnote_number",m:__("No credit note number")});
+  return errors;
+};
+Validators.checkPaymentDays = function(payment_days){
+  var errors = [];
+  if (!payment_days) errors.push({name:"payment_days",m:__("No payment days")});
+  if (payment_days && (isNaN(parseFloat(payment_days)) || !isFinite(payment_days))) errors.push({name:"payment_days",m:__("Payment days have to be a number")});
+  return errors;
+};
+Validators.checkCreditNoteDate = function(creditnoteDate){
+  var errors = [];
+  if (!creditnoteDate) {
+    errors.push({name:"creditnote_date",m:__("No credit note date")});
+  } else {
+    var d = creditnoteDate.split("/");
+    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"creditnote_date",m:__("Credit Note date is not date")});
+  }
+  return errors;
+};
+
+Validators.checkPurchaseNumber = function(purchaseNumber){
+  var errors = [];
+  if (!purchaseNumber) errors.push({name:"purchase_number",m:__("No purchase number")});
+  return errors;
+};
+
+Validators.checkPurchaseDate = function(purchaseDate){
+  var errors = [];
+  if (!purchaseDate) {
+    errors.push({name:"purchase_date",m:__("No purchase date")});
+  } else {
+    var d = purchaseDate.split("/");
+    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"purchase_date",m:__("Purchase date is not date")});
+  }
+  return errors;
+};
+
 Validators.checkDeliveryDate = function(deliveryDate){
   var errors = [];
   if(deliveryDate){

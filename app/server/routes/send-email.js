@@ -26,8 +26,8 @@ exports.post = function post(req, res) {
           {path:req.body.folderfile, type:"application/pdf", name:req.body.file}
         ]
       }, function (err, message) {
-        console.log(err);
-        console.log(message);
+        //console.log(err);
+        //console.log(message);
         if (err) {
           res.status(200).send(err.smtp);
         } else {

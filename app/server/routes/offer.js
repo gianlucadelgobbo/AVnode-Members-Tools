@@ -9,8 +9,16 @@ exports.get = function get(req, res) {
     if (auth) {
       if (req.query.id) {
         DB.offers.findOne({_id:new ObjectID(req.query.id)},function(e, result) {
-          result = helpers.formatMoney(result);
-          res.render('offer', {  title: __("Offer"), country:global._config.company.country, result : result, udata : req.session.user });
+          if (result) {
+            if (req.query.api==1) {
+              res.send(result);
+            } else {
+              result = helpers.formatMoney(result);
+              res.render('offer', {  title: __("Offer"), country:global._config.company.country, result : result, udata : req.session.user });
+            }
+          } else {
+            res.render('404', { title: "Page Not Found", udata : req.session.user});
+          }
         });
       } else {
         var dd = new Date();

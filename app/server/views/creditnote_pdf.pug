@@ -12,10 +12,10 @@ block content
 		section.print_data.clearfix
 			table.print_data_col1
 				tr
-					td.nowrap.muted=__("Invoice number")
-					td.nowrap.paddingright.paddingleft=result.invoice_number
-					td.nowrap.muted=__("Invoice date")
-					- d = result.invoice_date;
+					td.nowrap.muted=__("Credit Note number")
+					td.nowrap.paddingright.paddingleft=result.creditnote_number
+					td.nowrap.muted=__("Credit Note date")
+					- d = result.creditnote_date;
 					td=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
 				tr
 					td(colspan="2").nowrap.muted=__("Customer")
@@ -32,8 +32,8 @@ block content
 						td(colspan="2")=result.to_client.fiscal_code
 			table.print_data_col2
 				tr
-					td.nowrap.muted=__("Payment days")
-					td=result.payment_days+" "+__("days")
+					td.nowrap.muted=__("Payment")
+					td=result.payment
 				- if (typeof result.destination!=="undefined")
 					tr
 						td.nowrap.muted=__("Shipped to")

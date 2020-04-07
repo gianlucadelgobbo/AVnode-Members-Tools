@@ -1,7 +1,7 @@
 extends layout
 block content
   .row-offcanvas.row-offcanvas-left.cnt
-    include sidebar_accounting
+    include accounting_sidebar
     #main
       .col-md-12
         h1.page-title=__("Customers")
@@ -49,7 +49,7 @@ block content
                           li
                             a(href="/" + global.settings.dbName+"/accounting/customers/" + x._id+"/")=__("Edit")
                           li
-                            a(href="/"+global.settings.dbName+"/accounting/customers/?id="+x._id+"&del="+1)=__("Delete")
+                            a(href="/"+global.settings.dbName+"/accounting/customers/?id="+x._id+"&del=1")=__("Delete")
                     td
                       a(href="/"+global.settings.dbName+"/accounting/customers/"+x._id+"/")=x.name
                     td.text-center=x.invoicesCount

@@ -147,6 +147,7 @@ exports.formatMoney = function formatMoney(result) {
   result.vat_amount=accounting.formatMoney(result.vat_amount);
   result.shipping_costs=accounting.formatMoney(result.shipping_costs);
   result.total=accounting.formatMoney(result.total);
+  if (result.DatiPagamento && result.DatiPagamento.DettaglioPagamento && result.DatiPagamento.DettaglioPagamento.ImportoPagamento) result.DatiPagamento.DettaglioPagamento.ImportoPagamento = accounting.formatMoney(result.DatiPagamento.DettaglioPagamento.ImportoPagamento);
   for (var item in result.items) {
     if (result.items[item]) {
       result.items[item].price=accounting.formatMoney(result.items[item].price);

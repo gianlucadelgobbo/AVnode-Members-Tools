@@ -27,6 +27,8 @@ exports.get = function get(req, res) {
 exports.post = function post(req, res) {
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
+      console.log("req.body")
+      console.log(req.body)
       var errors = [];
 
       if (req.body.id) {

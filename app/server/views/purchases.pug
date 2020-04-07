@@ -6,22 +6,22 @@ block content
       .col-md-12
         .row
           .col-sm-6
-            h1.page-title=__("Invoices")+" "+__(year)+(typeof customer != "undefined" ? " "+customer.name : "")
+            h1.page-title=__("Purchases")+" "+__(year)+(typeof customer != "undefined" ? " "+customer.name : "")
           .col-sm-6
             .pull-right.page-title
               label(for="changeyear")
                 =__("Change year")
                 !="&nbsp;&nbsp;"
               .btn-group(style="display:inline-block")
-                a.btn.btn-primary(href="/"+global.settings.dbName+"/accounting/invoices/?year="+year + (typeof customer != "undefined" ? "&customer=" + customer.id : ""))=__(year)
+                a.btn.btn-primary(href="/"+global.settings.dbName+"/accounting/purchases/?year="+year + (typeof customer != "undefined" ? "&customer=" + customer.id : ""))=__(year)
                 button.btn.btn-primary.dropdown-toggle(data-toggle="dropdown")#changeyear
                   span.caret
                 ul.dropdown-menu
                   li
-                    a(href="/"+global.settings.dbName+"/accounting/invoices/?year=ALL Years" + (typeof customer != "undefined" ? "&customer=" + customer.id : ""))=__("ALL Years")
+                    a(href="/"+global.settings.dbName+"/accounting/purchases/?year=ALL Years" + (typeof customer != "undefined" ? "&customer=" + customer.id : ""))=__("ALL Years")
                   each year in years
                     li
-                      a(href="/"+global.settings.dbName+"/accounting/invoices/?year="+year+(typeof customer != "undefined" ? "&customer="+customer.id : ""))=year
+                      a(href="/"+global.settings.dbName+"/accounting/purchases/?year="+year+(typeof customer != "undefined" ? "&customer="+customer.id : ""))=year
         div
           - if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
             .alert.alert-danger
@@ -40,8 +40,8 @@ block content
             thead
               tr
                 th.tabActions=__("Actions")
-                th=__("Invoice number")
-                th=__("Invoice date")
+                th=__("Purchase number")
+                th=__("Purchase date")
                 th=__("Customer")
                 th=__("Payment")
                 th=__("Shipped to")
@@ -56,22 +56,22 @@ block content
                 tr
                   td
                     div.btn-group
-                      a.btn.btn-primary(href="/"+global.settings.dbName+"/accounting/invoice/?id="+x._id)=__("Edit")
+                      a.btn.btn-primary(href="/" + global.settings.dbName + "/accounting/print/purchase/?id=" + x._id)=__("Print")
                       button.btn.btn-primary.dropdown-toggle(data-toggle="dropdown")
                         span.caret
                       ul.dropdown-menu
                         li
-                          a(href="/"+global.settings.dbName+"/accounting/invoice/?id="+x._id)=__("Edit")
-                          a(href="/"+global.settings.dbName+"/accounting/invoice/?dup="+x._id)=__("Duplicate")
-                          a(href="/" + global.settings.dbName + "/accounting/print/invoice/?id=" + x._id)=__("Print")
-                          a(href="/" + global.settings.dbName + "/accounting/invoices/?id=" + x._id + "&del=1"+(year ? "&year="+year : ""))=__("Delete")
+                          //a(href="/"+global.settings.dbName+"/accounting/purchase/?id="+x._id)=__("Edit")
+                          //a(href="/"+global.settings.dbName+"/accounting/purchase/?dup="+x._id)=__("Duplicate")
+                          a(href="/" + global.settings.dbName + "/accounting/print/purchase/?id=" + x._id+(year ? "&year="+year : ""))=__("Print")
+                          a(href="/" + global.settings.dbName + "/accounting/purchases/?id=" + x._id + "&del=1"+(year ? "&year="+year : ""))=__("Delete")
                   td
                     span.h3(style="margin-top:2px;display:inline-block;")
-                      span(class=" label label-"+(typeof customer != "undefined" || parseInt(year)!=year ? "info" : x.invoice_number==result.length-index ? "success" : "danger"))=x.invoice_number
-                  - dd = new Date(x.invoice_date)
+                      span(class=" label label-"+(typeof customer != "undefined" || parseInt(year)!=year ? "info" : x.purchase_number==result.length-index ? "success" : "danger"))=x.purchase_number
+                  - dd = new Date(x.purchase_date)
                   td=dd.getDate()+"/"+(dd.getMonth()+1)+"/"+dd.getFullYear()
                   td
-                    a(href="/"+global.settings.dbName+"/accounting/customers/"+x.to_client._id)=x.to_client.name
+                    a(href="/"+global.settings.dbName+"/accounting/customers/"+x.from_customer._id)=x.from_customer.name
                   td=x.payment
                   td=x.destination
                   td=x.offer_number

@@ -33,6 +33,8 @@ DB.init = function(callback) {
         i18nAdmin.setLocale(o.defaultLocale);
         DB.customers = DB.db.collection('clients');
         DB.invoices = DB.db.collection('invoices');
+        DB.creditnotes = DB.db.collection('creditnotes');
+        DB.purchases = DB.db.collection('purchases');
         DB.offers = DB.db.collection('offers');
         DB.partners = DB.db.collection('partners');
         DB.extras = DB.db.collection('extras');
@@ -121,6 +123,118 @@ DB.delete_invoice = function(id, callback) {
     callback(err, records);
   });
 };
+DB.insert_purchase = function(newData, userData, callback) {
+  delete newData.id;
+  var d = newData.purchase_date.split("/");
+  newData.purchase_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+  if(newData.delivery_date!=""){
+    d = newData.delivery_date.split("/");
+    newData.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+  }
+  if(newData.offer.offer_date!=""){
+    d = newData.offer.offer_date.split("/");
+    newData.offer.offer_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+  }
+  newData.purchase_number = parseInt(newData.purchase_number);
+  newData.vat_perc = parseInt(newData.vat_perc);
+  unformatPrices(newData);
+  //revisions
+  newData.revisions = [];
+  newData.revisions.push({userID : userData._id,username: userData.name,time : new Date()});
+  DB.purchases.insert(newData, {safe: true}, function(err, records){
+    callback(err, records.ops[0]);
+  });
+};
+DB.update_purchase = function(newData, userData, callback) {
+  DB.purchases.findOne({_id:new ObjectID(newData.id)}, function(e, o){
+    newData._id = o._id;
+    var d = newData.purchase_date.split("/");
+    newData.purchase_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+    //console.log((d[2])+"-"+((d[1]))+"-"+(d[0]));
+    //console.log(parseInt(d[2], 10)+"-"+(parseInt(d[1], 10))+"-"+parseInt(d[0], 10));
+    if(newData.delivery_date!=""){
+      d = newData.delivery_date.split("/");
+      newData.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+    }
+    if(newData.offer.offer_date!=""){
+      d = newData.offer.offer_date.split("/");
+      newData.offer.offer_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+    }
+    newData.purchase_number=parseInt(newData.purchase_number);
+    newData.vat_perc=parseInt(newData.vat_perc);
+    unformatPrices(newData);
+    if (!newData.revisions)  newData.revisions = [];
+    newData.revisions.push({userID : userData._id,username: userData.name,time : new Date()});
+    delete newData.id;
+    //console.log(newData.purchase_date);
+    DB.purchases.save(newData);
+    DB.purchases.findOne({_id:newData._id}, function(e, o){
+      callback(e, o);
+    });
+  });
+};
+DB.delete_purchase = function(id, callback) {
+  DB.purchases.remove({_id: new ObjectID(id)},{safe: true}, function(err, records){
+    callback(err, records);
+  });
+};
+
+DB.insert_creditnote = function(newData, userData, callback) {
+  delete newData.id;
+  var d = newData.creditnote_date.split("/");
+  newData.creditnote_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+  if(newData.delivery_date!=""){
+    d = newData.delivery_date.split("/");
+    newData.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+  }
+  if(newData.invoice.invoice_date!=""){
+    d = newData.invoice.invoice_date.split("/");
+    newData.invoice.invoice_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+  }
+  newData.creditnote_number = parseInt(newData.creditnote_number);
+  newData.vat_perc = parseInt(newData.vat_perc);
+  unformatPrices(newData);
+  //revisions
+  newData.revisions = [];
+  newData.revisions.push({userID : userData._id,username: userData.name,time : new Date()});
+  DB.creditnotes.insert(newData, {safe: true}, function(err, records){
+    callback(err, records.ops[0]);
+  });
+};
+DB.update_creditnote = function(newData, userData, callback) {
+  DB.creditnotes.findOne({_id:new ObjectID(newData.id)}, function(e, o){
+    newData._id = o._id;
+    var d = newData.creditnote_date.split("/");
+    newData.creditnote_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+    //console.log((d[2])+"-"+((d[1]))+"-"+(d[0]));
+    //console.log(parseInt(d[2], 10)+"-"+(parseInt(d[1], 10))+"-"+parseInt(d[0], 10));
+    if(newData.delivery_date!=""){
+      d = newData.delivery_date.split("/");
+      newData.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+    }
+    if(newData.invoice.invoice_date!=""){
+      d = newData.invoice.invoice_date.split("/");
+      newData.invoice.invoice_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+    }
+    newData.creditnote_number=parseInt(newData.creditnote_number);
+    newData.vat_perc=parseInt(newData.vat_perc);
+    unformatPrices(newData);
+    if (!newData.revisions)  newData.revisions = [];
+    newData.revisions.push({userID : userData._id,username: userData.name,time : new Date()});
+    delete newData.id;
+    //console.log(newData.creditnote_date);
+    DB.creditnotes.save(newData);
+    DB.creditnotes.findOne({_id:newData._id}, function(e, o){
+      callback(e, o);
+    });
+  });
+};
+DB.delete_creditnote = function(id, callback) {
+  DB.creditnotes.remove({_id: new ObjectID(id)},{safe: true}, function(err, records){
+    callback(err, records);
+  });
+};
+
 
 DB.insert_offer = function(newData, userData, callback) {
   delete newData.id;

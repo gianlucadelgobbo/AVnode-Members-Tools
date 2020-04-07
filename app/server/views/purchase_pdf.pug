@@ -1,6 +1,6 @@
 extends layout_pdf
 block content
-	header#pageHeader
+	//header#pageHeader
 		.logo
 			- if(_config.company.logo)
 				img(src='file://' + global.settings.root_path+'/warehouse/accounts/' + global.settings.dbName + '/' + _config.company.logo, alt=_config.company.name)
@@ -10,30 +10,38 @@ block content
 		.company_row2!=_config.company.row2
 	.cntPadd
 		section.print_data.clearfix
-			table.print_data_col1
+			table
 				tr
-					td.nowrap.muted=__("Invoice number")
-					td.nowrap.paddingright.paddingleft=result.invoice_number
+					td.nowrap.muted=__("Invoice n°")
+					td(colspan="3").nowrap.paddingleft=result.purchase_number
+				tr
 					td.nowrap.muted=__("Invoice date")
-					- d = result.invoice_date;
-					td=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+					- d = result.purchase_date;
+					td(colspan="3").paddingleft.paddingright=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
 				tr
-					td(colspan="2").nowrap.muted=__("Customer")
-					td(colspan="2")
-						b=(result.to_client.name+" ")
+					td.nowrap.muted=__("From")
+					td.paddingleft.paddingright
+						b=(result.from_customer.name+" ")
 						br
-						span=result.to_client.address.street+" "+result.to_client.address.city+" "+result.to_client.address.country
+						span=result.from_customer.address.street+" "+result.from_customer.address.city+" "+result.from_customer.address.country
+					td.paddingleft.nowrap.muted=__("To")
+					td.paddingleft
+						b=(_config.company.name+" ")
+						br
+						span=_config.company.address.street+" "+_config.company.address.city+" "+_config.company.address.country
 				tr
-					td(colspan="2").nowrap.muted=__("VAT number")
-					td(colspan="2")=result.to_client.vat_number
+					td.nowrap.muted=__("VAT number")
+					td.paddingleft=result.from_customer.vat_number
+					td.paddingleft.nowrap.muted=__("VAT number")
+					td.paddingleft=_config.company.vat_number
 				- if(country=="Italy")
 					tr
 						td(colspan="2").nowrap.muted=__("Fiscal code")
-						td(colspan="2")=result.to_client.fiscal_code
-			table.print_data_col2
+						td(colspan="2")=result.from_customer.fiscal_code
+			//table.print_data_col2
 				tr
-					td.nowrap.muted=__("Payment days")
-					td=result.payment_days+" "+__("days")
+					td.nowrap.muted=__("Payment")
+					td=result.payment
 				- if (typeof result.destination!=="undefined")
 					tr
 						td.nowrap.muted=__("Shipped to")
@@ -59,40 +67,56 @@ block content
 						th.muted=__("Description")
 						th.muted=__("Price")
 						th.muted=__("Amount")
+						th.muted=__("VAT %")
 				tbody
 					- var a = 0
 					- for(a=0;a<result.items.length;a++)
 						tr
 							td.quantity=result.items[a].quantity
-							- if (result.items[a].description)
-								td.description(id="description_"+a)!=result.items[a].description.replace(/\n/g,'<br />')
-							- else
-								td.description(id="description_"+a)
+							td.description(id="description_"+a)
+								if result.items[a].description
+									!=result.items[a].description.replace(/\n/g,"<br />")
+								!="<br />"
+								if result.items[a].DataInizioPeriodo
+									- var d = result.items[a].DataInizioPeriodo;
+									!=__("FROM")+" "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+								if result.items[a].DataFinePeriodo
+									if result.items[a].DataInizioPeriodo
+										!=" > "
+									- var d = result.items[a].DataFinePeriodo;
+									!=__("TO")+" "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
 							td.price
 								div=_config.currency[0]+" "+result.items[a].price
 							td.price
 								div=_config.currency[0]+" "+result.items[a].amount
+							td.price
+								div=result.items[a].vat_perc+"%"
 				tfoot
 					tr
 						td(colspan="3")
 							.pull-right.muted=__("Subtotal")
 						td.price
 								div=_config.currency[0]+" "+result.subtotal
+						td
 					tr
 						td(colspan="3")
-							.pull-right.muted=__("VAT")+" "+result.vat_perc+" %"
+							.pull-right.muted=__("VAT")
 						td.price
 								div=_config.currency[0]+" "+result.vat_amount
-					tr
-						td(colspan="3")
-							.pull-right.muted=__("Shipping costs")
-						td.price
-								div=_config.currency[0]+" "+result.shipping_costs
+						td
+					if result.shipping_costs!="0,00"
+						tr
+							td(colspan="3")
+								.pull-right.muted=__("Shipping costs")
+							td.price
+									div=_config.currency[0]+" "+result.shipping_costs
+							td
 					tr
 						td(colspan="3")
 							.pull-right.muted=__("TOTAL")
 						td.price
 								div=_config.currency[0]+" "+result.total
+						td
 	footer#pageFooter
 		b=__("Bank")
 		br

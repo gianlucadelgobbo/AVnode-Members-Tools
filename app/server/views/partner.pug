@@ -11,7 +11,7 @@ block content
 						button(type='submit')#account-form-btn2.btn.btn-success=__("Update")
 						- if (global.settings.roles[user.role].admin && user._id!=result._id)
 							!=" "
-							a(href="/" + global.settings.dbName + "/customers/?id=" + result._id + "&del=" + 1)#account-form-btn1.btn.btn-danger=__("Delete")
+							a(href="/" + global.settings.dbName + "/customers/?id=" + result._id + "&del=1")#account-form-btn1.btn.btn-danger=__("Delete")
 					- else
 						button(type='submit')#account-form-btn1.btn.btn-success=__("Save")
 
@@ -76,7 +76,7 @@ block content
 					button(type='submit')#account-form-btn2.btn.btn-success=__("Update")
 					- if (global.settings.roles[user.role].admin && user._id!=result._id)
 						!=" "
-						a(href="/"+global.settings.dbName+"/customers/?id="+result._id+"&del="+1)#account-form-btn1.btn.btn-danger=__("Delete")
+						a(href="/"+global.settings.dbName+"/customers/?id="+result._id+"&del=1")#account-form-btn1.btn.btn-danger=__("Delete")
 				- else
 					button(type='submit')#account-form-btn1.btn.btn-success=__("Save")
 

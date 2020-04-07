@@ -18,7 +18,8 @@
     "mongodb": "~2.2.10",
     "pug": "^2.0.0-beta6",
     "request": "^2.79.0",
-    "stylus": "~0.54.5"
+    "stylus": "~0.54.5",
+    "xml2js": "^0.4.23"
   },
   "scripts": {
     "dev": "NODE_ENV=development nodemon app",

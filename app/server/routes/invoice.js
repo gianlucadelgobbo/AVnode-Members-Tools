@@ -9,8 +9,16 @@ exports.get = function get(req, res) {
     if (auth) {
       if (req.query.id) {
         DB.invoices.findOne({_id:new ObjectID(req.query.id)},function(e, result) {
-          result = helpers.formatMoney(result);
-          res.render('invoice', { title: __("Invoice"), country:global._config.company.country, result : result, udata : req.session.user });
+          if (result) {
+            if (req.query.api==1) {
+              res.send(result);
+            } else {
+              result = helpers.formatMoney(result);
+              res.render('invoice', { title: __("Invoice"), country:global._config.company.country, result : result, udata : req.session.user });
+            }
+          } else {
+            res.render('404', { title: "Page Not Found", udata : req.session.user});
+          }
         });
       } else {
         var dd = new Date();
@@ -50,8 +58,13 @@ exports.post = function post(req, res) {
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
       var errors = [];
+      if (req.body.bank==0) delete req.body.bank;
+      if (req.body.bank) req.body.bank = JSON.parse(req.body.bank);
+      console.log("req.body.bank");
+      console.log(req.body.bank);
       errors = errors.concat(Validators.checkCustomerID(req.body.to_client._id));
       errors = errors.concat(Validators.checkInvoiceNumber(req.body.invoice_number));
+      if (req.body.bank || req.body.payment_days) errors = errors.concat(Validators.checkPaymentDays(req.body.payment_days));
       errors = errors.concat(Validators.checkInvoiceDate(req.body.invoice_date));
       errors = errors.concat(Validators.checkDeliveryDate(req.body.delivery_date));
       var d = req.body.invoice_date.split("/");
@@ -62,6 +75,8 @@ exports.post = function post(req, res) {
             d = req.body.invoice_date.split("/");
             var date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
             var q = {invoice_date:{$gt: date},invoice_number:(req.body.invoice_number-1).toString() };
+            console.log("req.body.bank");
+            console.log(req.body.bank);
             DB.invoices.find(q).toArray(function(e, result) {
               if(errors.length === 0){
                 if (req.body.id) {

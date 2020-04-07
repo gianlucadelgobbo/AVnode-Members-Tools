@@ -4,23 +4,23 @@ block content
     include accounting_sidebar
     #main
       .col-md-12
-        form(method="post", action="/"+global.settings.dbName+"/accounting/invoice/?id="+result._id,onsubmit='$("[disabled]").removeAttr("disabled")')#invoice
+        form(method="post", action="/"+global.settings.dbName+"/accounting/creditnote/?id="+result._id,onsubmit='$("[disabled]").removeAttr("disabled")')#creditnote
           .row
             .col-sm-6
-              h1.page-title=(result.invoice_number ? __("Invoice")+": "+result.invoice_number : __("New invoice"))
+              h1.page-title=(result.creditnote_number ? __("Credit Note")+": "+result.creditnote_number : __("New creditnote"))
             .col-sm-6
               .pull-right
                 input(type="submit", value=__("SAVE")).btn.btn-success
                 - if (result._id)
                   span!="&nbsp;"
-                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/invoice/?dup="+result._id+"'").btn.btn-primary
+                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/creditnote/?dup="+result._id+"'").btn.btn-primary
                   span!="&nbsp;"
-                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/invoice/?id="+result._id+"'").btn.btn-primary
+                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/creditnote/?id="+result._id+"'").btn.btn-primary
                   span(style=(_config.company.address.country=="Italy" ? "" : "display:none;"))
                     span!="&nbsp;"
-                    a(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.invoice_number).slice(-5))+".xml", href="window.location='/"+global.settings.dbName+"/accounting/xml/invoice/?id="+result._id+"'").btn.btn-primary=__("XML")
+                    a(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.creditnote_number).slice(-5))+".xml", href="window.location='/"+global.settings.dbName+"/accounting/xml/creditnote/?id="+result._id+"'").btn.btn-primary=__("XML")
                   span!="&nbsp;"
-                  input(type="button", value=__("DELETE"), onclick="window.location='/" + global.settings.dbName + "/accounting//invoices/?id=" + result._id + "&del=1").btn.btn-danger
+                  input(type="button", value=__("DELETE"), onclick="window.location='/" + global.settings.dbName + "/accounting//creditnotes/?id=" + result._id + "&del=1").btn.btn-danger
                   input(type="hidden", name="id", value=result._id)
           hr
           - if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
@@ -41,15 +41,15 @@ block content
                 .col-sm-6
                   .form-group
                     .input-group
-                      label.input-group-addon(for='invoice_number')=__("Invoice number")
-                      input(type="text", name="invoice_number", value=result.invoice_number, disabled).form-control#invoice_number
-                      a.input-group-addon.btn(href='#', onclick='$("#invoice_number").removeAttr("disabled")')=__("Edit")
+                      label.input-group-addon(for='creditnote_number')=__("Credit Note number")
+                      input(type="text", name="creditnote_number", value=result.creditnote_number, disabled).form-control#creditnote_number
+                      a.input-group-addon.btn(href='#', onclick='$("#creditnote_number").removeAttr("disabled")')=__("Edit")
                 .col-sm-6
                   .form-group
                     .input-group
-                      label.input-group-addon(for='invoice_date')=__("Invoice date")
-                      - d = result.invoice_date;
-                      input(type="text", name="invoice_date", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()).form-control.date#invoice_date
+                      label.input-group-addon(for='creditnote_date')=__("Credit Note date")
+                      - d = result.creditnote_date;
+                      input(type="text", name="creditnote_date", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()).form-control.date#creditnote_date
               .row
                 .col-sm-12
                   .form-group
@@ -117,8 +117,8 @@ block content
                 .col-sm-12
                   .form-group
                     .input-group
-                      label.input-group-addon(for='payment_days')=__("Payment days")
-                      input(type="text", name="payment_days", value=result.payment_days).form-control#payment_days
+                      label.input-group-addon(for='payment')=__("Payment")
+                      input(type="text", name="payment", value=result.payment).form-control#payment
               .row
                 .col-sm-12
                   .form-group
@@ -129,23 +129,23 @@ block content
                 .col-sm-12
                   .form-group
                     .input-group
-                      label.input-group-addon(for='offer_number')=__("Offer number")
-                      input(type="text", name="offer[offer_number]", value=result.offer.offer_number, disabled).form-control#offer_number
-                      a.input-group-addon.btn.btn-default(onclick='showOffers()')=__("Select")
-                      a.input-group-addon.btn(href='#', disabled)#offer_url
+                      label.input-group-addon(for='invoice_number')=__("Invoice number")
+                      input(type="text", name="invoice[invoice_number]", value=result.invoice.invoice_number, disabled).form-control#invoice_number
+                      a.input-group-addon.btn.btn-default(onclick='showInvoices()')=__("Select")
+                      a.input-group-addon.btn(href='#', disabled)#invoice_url
                         i.glyphicon.glyphicon-eye-open
                         .sr-only=__("View")
-                  input(type="hidden", name="offer[offer_id]", value=result.offer.offer_id)#offer_id
+                  input(type="hidden", name="invoice[invoice_id]", value=result.invoice.invoice_id)#invoice_id
               .row
                 .col-sm-12
                   .form-group
                     .input-group
-                      label.input-group-addon(for='offer_date')=__("Offer date")
-                      - if (result.offer.offer_date)
-                        - d = result.offer.offer_date;
-                        input(type="text", name="offer[offer_date]", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear(), disabled).form-control.date#offer_date
+                      label.input-group-addon(for='invoice_date')=__("Invoice date")
+                      - if (result.invoice.invoice_date)
+                        - d = result.invoice.invoice_date;
+                        input(type="text", name="invoice[invoice_date]", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear(), disabled).form-control.date#invoice_date
                       - else
-                        input(type="text", name="offer[offer_date]", disabled).form-control.date#offer_date
+                        input(type="text", name="invoice[invoice_date]", disabled).form-control.date#invoice_date
               .row
                 .col-sm-12
                   .form-group
@@ -235,9 +235,13 @@ block content
           hr.clearfix
           label.add-on(for='bank')=__("Bank")
           select(id="bank",name="bank").form-control
-            option(value=0)=__("Select a bank account")
+            option=__("Select a bank account")
             - for (a=0;a<_config.banks.length;a++)
-              option(value=JSON.stringify(_config.banks[a]), selected=(result.bank && _config.banks[a].IBAN==result.bank.IBAN ? "selected" : undefined))=_config.banks[a].name+" "+ _config.banks[a].IBAN
+              - var b = _config.banks[a]
+              - if (_config.banks[a]==result.bank)
+                option(value=_config.banks[a], selected="selected")=_config.banks[a]
+              - else
+                option(value=_config.banks[a])=_config.banks[a]
           div.row
             .col-sm-6
             .col-sm-6
@@ -246,9 +250,9 @@ block content
                 input(type="submit", value=__("SAVE")).btn.btn-success
                 - if (result._id)
                   span!="&nbsp;"
-                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/invoice/?dup=" + result._id + "'").btn.btn-primary
+                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/creditnote/?dup=" + result._id + "'").btn.btn-primary
                   span!="&nbsp;"
-                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/invoice/?id=" + result._id + "'").btn.btn-primary
+                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/creditnote/?id=" + result._id + "'").btn.btn-primary
       
         - if (result.revisions)
           br
@@ -260,4 +264,4 @@ block content
                 li!="<b>"+x.username+"</b> "+x.time
       
         br
-        - js = '/js/invoice.js'
+        - js = '/js/creditnote.js'

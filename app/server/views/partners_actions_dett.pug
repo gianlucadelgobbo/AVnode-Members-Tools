@@ -1,7 +1,7 @@
 extends layout
 block content
   .row-offcanvas.row-offcanvas-left.cnt
-    include sidebar_partners
+    include partners_sidebar
     #main
       pre#test.hide=JSON.stringify(result, null, '\t')
       script(type='text/javascript').
@@ -199,7 +199,7 @@ block content
                 - if (result._id)
                   button(type='submit')#account-form-btn2.btn.btn-success=__("Update")
                   !=" "
-                  a(href="/" + global.settings.dbName + "/customers/?id=" + result._id + "&del=" + 1)#account-form-btn1.btn.btn-danger=__("Delete")
+                  a(href="/" + global.settings.dbName + "/customers/?id=" + result._id + "&del=1")#account-form-btn1.btn.btn-danger=__("Delete")
                 - else
                   button(type='submit')#account-form-btn1.btn.btn-success=__("Save")
 

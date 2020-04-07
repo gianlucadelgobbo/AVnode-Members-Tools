@@ -1,0 +1,83 @@
+extends layout
+block content
+  style.
+    #progress_bar {
+      margin: 10px 0;
+      padding: 3px;
+      border: 1px solid #000;
+      font-size: 14px;
+      clear: both;
+      opacity: 0;
+      -moz-transition: opacity 1s linear;
+      -o-transition: opacity 1s linear;
+      -webkit-transition: opacity 1s linear;
+    }
+    #progress_bar.loading {
+      opacity: 1.0;
+    }
+    #progress_bar .percent {
+      background-color: #99ccff;
+      height: auto;
+      width: 0;
+    }
+    #drop_zone div{
+      background-color: #e8e8e8;
+      height:300px;
+      text-align:center;
+    }
+    #drop_zone > div > div{
+      display: table-cell;
+    }
+    #drop_zone{
+      border: 1px dotted #333;
+      padding: 15px;
+    }
+
+  .row-offcanvas.row-offcanvas-left.cnt
+    include accounting_sidebar
+    #main
+      .col-md-12
+        h1.page-title=title
+        #alert.alert.hidden
+          - if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
+            .alert.alert-danger
+              h4=__("There are some errors")
+              ul
+                - for(var a=0;a<msg.e.length;a++)
+                  li=msg.e[a].m
+          - if (typeof msg !== "undefined" && typeof msg.c !== "undefined" && msg.c.length)
+            .alert.alert-success
+              h4=__("There are some messages")
+              ul
+                - for(var a=0;a<msg.c.length;a++)
+                  li=msg.c[a].m
+        .container_overflow.container_overflow_margin
+          .droparea
+            p
+              input#files.form-control(type='file', name='files[]', multiple='')
+            p!=__("OR")
+            #drop_zone
+              div
+                div Drop files here
+            ul#list
+            #progress_bar
+              .percent 0%
+          .dropresults.hidden
+            table.table
+              thead
+                tr
+                  th.tabActions=__("Actions")
+                  th=__("Purchase date")
+                  th=__("Purchase number")
+                  th=__("Customer")
+                  th.text-right=__("TOTAL")
+                  th=__("File name")
+                  th=__("File size")
+                  th=__("File size check")
+              tbody#tbody
+            .text-right
+              form(method="post")
+                input#imports(type="hidden" name="imports")
+                button#import.btn.btn-primary(type="submit")="IMPORT"
+            br
+

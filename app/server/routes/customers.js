@@ -49,7 +49,7 @@ exports.get = function get(req, res) {
     if (auth) {
       if (req.params.customer && req.params.customer!="new") {
         DB.customers.findOne({_id:new ObjectID(req.params.customer)}, function(e, result) {
-          if (!result.contacts) result.contacts = [];
+          if (result && !result.contacts) result.contacts = [];
           res.render('customer', { title: __("Customer"), countries : CT, country : global._config.company.country, result : result , udata : req.session.user });
         });
       } else {

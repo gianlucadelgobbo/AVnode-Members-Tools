@@ -1,0 +1,156 @@
+extends layout
+block content
+  .row-offcanvas.row-offcanvas-left.cnt
+    include accounting_sidebar
+    #main
+      .col-md-12
+        .noprint
+          div.row
+            .col-sm-7
+              h1.page-title=__("Print")
+            .col-sm-5
+              .pull-right
+                - var filename = file.substring(file.lastIndexOf("/")+1);
+                a.btn.btn-primary(href=file, download=filename)=__("DOWNLOAD")
+                span!="&nbsp;"
+                input(type="button", value=__("PRINT"), onclick="window.location='" + file + "'").btn.btn-primary
+                //span!="&nbsp;"
+                  input(type="button", value=__("EDIT"), onclick="window.location='/"+global.settings.dbName+"/accounting/purchase/?id=" + result._id + "'").btn.btn-primary
+                span!="&nbsp;"
+                input(type="button", value=__("SEND"), onclick="$('.modal-sendbyemail .alert').hide();showModal('sendbyemail');").btn.btn-primary
+          hr.clearfix
+        .container_overflow
+          .print_container
+            //header#pageHeader
+              .logo=_config.company.name
+              .company_row1!=_config.company.row1
+              .company_row2!=_config.company.row2
+            .cntPadd
+              section.print_data.clearfix
+                table
+                  tr
+                    td.nowrap.muted=__("Invoice n°")
+                    td(colspan="3").nowrap.paddingleft=result.purchase_number
+                  tr
+                    td.nowrap.muted=__("Invoice date")
+                    - d = result.purchase_date;
+                    td(colspan="3").paddingleft.paddingright=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                  tr
+                    td.nowrap.muted=__("From")
+                    td.paddingleft.paddingright
+                      b=(result.from_customer.name+" ")
+                      br
+                      span=result.from_customer.address.street+" "+result.from_customer.address.city+" "+result.from_customer.address.country
+                    td.paddingleft.nowrap.muted=__("To")
+                    td.paddingleft
+                      b=(_config.company.name+" ")
+                      br
+                      span=_config.company.address.street+" "+_config.company.address.city+" "+_config.company.address.country
+                  tr
+                    td.nowrap.muted=__("VAT number")
+                    td.paddingleft=result.from_customer.vat_number
+                    td.paddingleft.nowrap.muted=__("VAT number")
+                    td.paddingleft=_config.company.vat_number
+                  - if(country=="Italy")
+                    tr
+                      td(colspan="2").nowrap.muted=__("Fiscal code")
+                      td(colspan="2")=result.from_customer.fiscal_code
+                //table
+                  tr
+                    td.nowrap.muted=__("Payment")
+                    td=result.payment
+                  - if (typeof result.destination!=="undefined")
+                    tr
+                      td.nowrap.muted=__("Shipped to")
+                      td=result.destination
+                  - if (typeof result.offer!=="undefined")
+                    tr
+                      td.nowrap.muted=__("Offer number")
+                      td=result.offer.offer_number
+                    tr
+                      td.nowrap.muted=__("Offer date")
+                      - d = result.offer.offer_date;
+                      td=(d ? d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear() :"")
+                  - if (typeof result.delivery_date!=="undefined")
+                    tr
+                      td.nowrap.muted=__("Delivery date")
+                      - d = result.delivery_date;
+                      td=(d ? d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear() :"")
+              section.print_items
+                table.table
+                  thead
+                    tr
+                      th.muted=__("Quantity")
+                      th.muted=__("Description")
+                      th.muted=__("Price")
+                      th.muted=__("Amount")
+                      th.muted=__("VAT %")
+                  tbody
+                    - var a = 0
+                    - for(a=0;a<result.items.length;a++)
+                      tr
+                        td.quantity=result.items[a].quantity
+                        td.description(id="description_"+a)
+                          if result.items[a].description
+                            !=result.items[a].description.replace(/\n/g,"<br />")
+                          !="<br />"
+                          if result.items[a].DataInizioPeriodo
+                            - var d = result.items[a].DataInizioPeriodo;
+                            !=__("FROM")+" "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                          if result.items[a].DataFinePeriodo
+                            if result.items[a].DataInizioPeriodo
+                              !=" > "
+                            - var d = result.items[a].DataFinePeriodo;
+                            !=__("TO")+" "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                        td.price
+                          div=_config.currency[0]+" "+result.items[a].price
+                        td.price
+                          div=_config.currency[0]+" "+result.items[a].amount
+                        td.price
+                          div=result.items[a].vat_perc+"%"
+                  tfoot
+                    tr
+                      td(colspan="3")
+                        .pull-right.muted=__("Subtotal")
+                      td.price
+                          div=_config.currency[0]+" "+result.subtotal
+                      td
+                    tr
+                      td(colspan="3")
+                        .pull-right.muted=__("VAT")
+                      td.price
+                          div=_config.currency[0]+" "+result.vat_amount
+                      td
+                    if result.shipping_costs!="0,00"
+                      tr
+                        td(colspan="3")
+                          .pull-right.muted=__("Shipping costs")
+                        td.price
+                            div=_config.currency[0]+" "+result.shipping_costs
+                        td
+                    tr
+                      td(colspan="3")
+                        .pull-right.muted=__("TOTAL")
+                      td.price
+                          div=_config.currency[0]+" "+result.total
+                      td
+              footer#pageFooter
+                if result.DatiPagamento && result.DatiPagamento.DettaglioPagamento
+                  p
+                    b=__("Payment")
+                    !="<br />"+result.DatiPagamento.DettaglioPagamento.Beneficiario
+                    !="<br />"+__("Importo Pagamento")+": € "+result.DatiPagamento.DettaglioPagamento.ImportoPagamento
+                    !="<br />"+__("Modalita Pagamento")+": "+_config.ModalitaPagamento[result.DatiPagamento.DettaglioPagamento.ModalitaPagamento]
+                    !="<br />"+__("Condizioni Pagamento")+": "+_config.CondizioniPagamento[result.DatiPagamento.CondizioniPagamento]
+                    - var d = result.DatiPagamento.DettaglioPagamento.DataRiferimentoTerminiPagamento
+                    !="<br />"+__("Data Riferimento Termini Pagamento")+": "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                    !="<br />"+__("Giorni Termini Pagamento")+": "+result.DatiPagamento.DettaglioPagamento.GiorniTerminiPagamento
+                    - var d = result.DatiPagamento.DettaglioPagamento.DataScadenzaPagamento
+                    !="<br />"+__("Data Scadenza Pagamento")+": "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                  p
+                    b=__("Bank")
+                    !="<br />"+result.DatiPagamento.DettaglioPagamento.IstitutoFinanziario
+                    !="<br />"+__("IBAN")+": "+result.DatiPagamento.DettaglioPagamento.IBAN
+                    !="<br />"+__("CAB")+": "+result.DatiPagamento.DettaglioPagamento.CAB
+                    !="<br />"+__("ABI")+": "+result.DatiPagamento.DettaglioPagamento.ABI
+          include modals/sendbyemail

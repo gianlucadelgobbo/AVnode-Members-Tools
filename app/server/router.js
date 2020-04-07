@@ -13,6 +13,10 @@ var customersRoutes = require('./routes/customers');
 var partnersRoutes = require('./routes/partners');
 var invoicesRoutes = require('./routes/invoices');
 var invoiceRoutes = require('./routes/invoice');
+var creditnotesRoutes = require('./routes/creditnotes');
+var creditnoteRoutes = require('./routes/creditnote');
+var purchasesRoutes = require('./routes/purchases');
+var purchaseRoutes = require('./routes/purchase');
 var offerRoutes = require('./routes/offer');
 var offersRoutes = require('./routes/offers');
 var apiRoutes = require('./routes/api');
@@ -38,6 +42,8 @@ module.exports = function(app) {
   app.get('/api/accounting/customers', apiRoutes.getCustomers);
   app.get('/api/accounting/payments', apiRoutes.getPayments);
   app.get('/api/accounting/invoices', apiRoutes.getInvoices);
+  app.get('/api/accounting/purchases', apiRoutes.getPurchases);
+  app.get('/api/accounting/creditnotes', apiRoutes.getCreditnotes);
   app.get('/api/accounting/products', apiRoutes.getProducts);
   app.get('/api/accounting/offers', apiRoutes.getOffers);
 
@@ -100,6 +106,22 @@ module.exports = function(app) {
   app.post('/:dbname/accounting/invoice', invoiceRoutes.post);
   app.get('/:dbname/accounting/print/invoice', invoiceRoutes.print);
   app.get('/:dbname/accounting/xml/invoice', invoiceRoutes.xml);
+
+  // Purchases //
+  app.get('/:dbname/accounting/purchases', purchasesRoutes.get);
+  app.get('/:dbname/accounting/purchase', purchaseRoutes.get);
+  app.post('/:dbname/accounting/purchase', purchaseRoutes.post);
+  app.get('/:dbname/accounting/print/purchase', purchaseRoutes.print);
+  app.get('/:dbname/accounting/xml/purchase', purchaseRoutes.xml);
+  app.get('/:dbname/accounting/import/purchases', purchasesRoutes.my_import);
+  app.post('/:dbname/accounting/import/purchases', purchasesRoutes.my_import_act);
+
+  // Credit Note //
+  app.get('/:dbname/accounting/creditnotes', creditnotesRoutes.get);
+  app.get('/:dbname/accounting/creditnote', creditnoteRoutes.get);
+  app.post('/:dbname/accounting/creditnote', creditnoteRoutes.post);
+  app.get('/:dbname/accounting/print/creditnote', creditnoteRoutes.print);
+  app.get('/:dbname/accounting/xml/creditnote', creditnoteRoutes.xml);
 
   // Offers //
   app.get('/:dbname/accounting/offers', offersRoutes.get);

@@ -1,18 +1,17 @@
 doctype xml
 ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2')
-  - var d = result.invoice_date;                      
   FatturaElettronicaHeader
     DatiTrasmissione
       IdTrasmittente
         IdPaese=udata.countrycode
         IdCodice=udata.fiscal_code.toUpperCase()
-      ProgressivoInvio=result.invoice_number
+      ProgressivoInvio=result.purchase_number
       FormatoTrasmissione="FPR12"
       //valori ammessi: [FPA12] = fattura verso PA [FPR12] = fattura verso privati
-      if result.to_client.unique_code
-        CodiceDestinatario=result.to_client.unique_code
-      if result.to_client.pec
-        PECDestinatario=result.to_client.pec
+      if result.from_customer.unique_code
+        CodiceDestinatario=result.from_customer.unique_code
+      if result.from_customer.pec
+        PECDestinatario=result.from_customer.pec
     CedentePrestatore
       DatiAnagrafici
         IdFiscaleIVA
@@ -32,25 +31,26 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
     CessionarioCommittente
       DatiAnagrafici
         IdFiscaleIVA
-          IdPaese=result.to_client.address.countrycode
-          IdCodice=result.to_client.vat_number.toUpperCase()
-        CodiceFiscale=result.to_client.fiscal_code.toUpperCase()
+          IdPaese=result.from_customer.address.countrycode
+          IdCodice=result.from_customer.vat_number.toUpperCase()
+        CodiceFiscale=result.from_customer.fiscal_code.toUpperCase()
         Anagrafica
-          Denominazione=result.to_client.name.toUpperCase()
+          Denominazione=result.from_customer.name.toUpperCase()
       Sede
-        Indirizzo=result.to_client.address.street.toUpperCase()
-        CAP=result.to_client.address.zipcode.toUpperCase()
-        Comune=result.to_client.address.city.toUpperCase()
-        Provincia=result.to_client.address.province.toUpperCase()
-        Nazione=result.to_client.address.countrycode
+        Indirizzo=result.from_customer.address.street.toUpperCase()
+        CAP=result.from_customer.address.zipcode.toUpperCase()
+        Comune=result.from_customer.address.city.toUpperCase()
+        Provincia=result.from_customer.address.province.toUpperCase()
+        Nazione=result.from_customer.address.countrycode
   FatturaElettronicaBody
     DatiGenerali
       DatiGeneraliDocumento
         TipoDocumento="TD01"
         // TD04 nota di credito
         Divisa="EUR"
+        - d = result.purchase_date;                      
         Data=d.getFullYear()+"-"+(("0" + (d.getMonth()+1)).slice(-2))+"-"+(("0" + (d.getDate())).slice(-2))
-        Numero=result.invoice_number
+        Numero=result.purchase_number
         ImportoTotaleDocumento=result.total
     DatiBeniServizi
       - for(a=0;a<result.items.length;a++)
@@ -61,23 +61,3 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
           PrezzoUnitario=result.items[a].price
           PrezzoTotale=result.items[a].amount
           AliquotaIVA=result.vat_perc
-    if result.bank && result.bank.name
-      DatiPagamento
-        CondizioniPagamento="TP02"
-          // [TP01]: pagamento a rate
-          // [TP02]: pagamento completo
-          // [TP03]: anticipo
-          DettaglioPagamento
-            Beneficiario=_config.company.name.toUpperCase()
-            ModalitaPagamento="MP05"
-            DataRiferimentoTerminiPagamento=d.getFullYear()+"-"+(("0" + (d.getMonth()+1)).slice(-2))+"-"+(("0" + (d.getDate())).slice(-2))
-            - var d2 = new Date(d.getTime()+(60*24*60*60*1000))
-            GiorniTerminiPagamento=result.payment_days
-            DataScadenzaPagamento=d2.getFullYear()+"-"+(("0" + (d2.getMonth()+1)).slice(-2))+"-"+(("0" + (d2.getDate())).slice(-2))
-            ImportoPagamento=result.total
-            IstitutoFinanziario=result.bank.name
-            IBAN=result.bank.IBAN
-            CAB=result.bank.CAB
-            ABI=result.bank.ABI
-          
-          

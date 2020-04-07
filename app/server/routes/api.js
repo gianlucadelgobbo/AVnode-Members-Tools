@@ -30,10 +30,21 @@ exports.getPayments = function getPayments(req, res) {
 };
 
 exports.getInvoices = function getInvoices(req, res) {
-  var d = req.query.invoice_date.split("/");
-  var q = {invoice_date:{$gt:  new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10))},invoice_number:(req.query.invoice_number-1).toString() };
-  console.dir(q);
-  DB.invoices.find(q).toArray(function(e, result) {
+  DB.invoices.find({},{invoice_number:1,invoice_date:1,to_client:1,description:1}).sort({invoice_number:-1}).toArray(function(e, result) {
+    console.dir(result);
+    res.status(200).send({result:result});
+  });
+};
+
+exports.getCreditnotes = function getCreditnotes(req, res) {
+  DB.creditnotes.find({},{creditnote_number:1,creditnote_date:1,to_client:1,description:1}).sort({creditnote_number:-1}).toArray(function(e, result) {
+    console.dir(result);
+    res.status(200).send({result:result});
+  });
+};
+
+exports.getPurchases = function getPurchases(req, res) {
+  DB.purchases.find({},{purchase_number:1,purchase_date:1,to_client:1,description:1}).sort({purchase_number:-1}).toArray(function(e, result) {
     console.dir(result);
     res.status(200).send({result:result});
   });

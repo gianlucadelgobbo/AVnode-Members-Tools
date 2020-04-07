@@ -1,7 +1,7 @@
 extends layout
 block content
   .row-offcanvas.row-offcanvas-left.cnt
-    include sidebar_settings
+    include accounting_sidebar
     #main
       .col-md-12
         h1.page-title=__("Accounts")
@@ -39,7 +39,7 @@ block content
                         span.caret
                       ul.dropdown-menu
                         li
-                          a#dett_customere(href="/"+global.settings.dbName+"/accounts/?id="+x._id+"&del="+1)=__("Delete")
+                          a#dett_customere(href="/"+global.settings.dbName+"/accounts/?id="+x._id+"&del=1")=__("Delete")
                   td
                     a(href="/"+global.settings.dbName+"/account/?id="+x._id)=x.name
                   td=x.email
