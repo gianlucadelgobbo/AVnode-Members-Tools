@@ -3,6 +3,8 @@ var DB = require('./../helpers/db-manager');
 var helpers = require('./../helpers/helpers');
 var CT = require('../helpers/country-list');
 
+var types = ["GEN", "LPM", "LCF", "FNT", "WEB", "PRD", "OTR"];
+
 exports.get = function get(req, res) {
 	helpers.canIseeThis(req, function (auth) {
 		if (auth) {
@@ -40,12 +42,12 @@ exports.get = function get(req, res) {
 				if (req.query.customer){
 					DB.customers.findOne({_id:new ObjectID(req.query.customer)}, function(e, customer) {
 						DB.purchases.find(query).sort({purchase_date:-1,purchase_number:-1}).toArray(function(e, result) {
-							res.render('purchases', { title: __("Purchases"), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years,year:year,customer:{id:req.query.customer,name:customer.name }});
+							res.render('purchases', { title: __("Purchases"), accounting: require('accounting'), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years, types:types,year:year,customer:{id:req.query.customer,name:customer.name }});
 						});
 					});
 				} else {
 					DB.purchases.find(query).sort({purchase_date:-1,purchase_number:-1}).toArray(function(e, result) {
-						res.render('purchases', { title: __("Purchases"), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years,year:year });
+						res.render('purchases', { title: __("Purchases"), accounting: require('accounting'), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years, types:types,year:year });
 					});
 				}
 			});
@@ -243,3 +245,19 @@ exports.my_import_act = function my_import_act(req, res) {
     }
   });
 };
+exports.post = function post(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+			DB[req.body.req.col].updateOne({_id:ObjectID(req.body.req.id)}, {$set: req.body.set}, function(e, o){
+				if (e) {
+					res.status("400").send(e);
+				} else {
+					res.send(o);
+				}
+			});
+    } else {
+			res.status("400").send("Please login");
+    }
+  });
+};
+

@@ -125,17 +125,13 @@ block content
                     .input-group
                       label.input-group-addon(for='destination')=__("Shipped to")
                       input(type="text", name="destination", value=result.destination).form-control#destination
+              - if (!result.offer) result.offer = {}
               .row
                 .col-sm-12
                   .form-group
                     .input-group
                       label.input-group-addon(for='offer_number')=__("Offer number")
-                      input(type="text", name="offer[offer_number]", value=result.offer.offer_number, disabled).form-control#offer_number
-                      a.input-group-addon.btn.btn-default(onclick='showOffers()')=__("Select")
-                      a.input-group-addon.btn(href='#', disabled)#offer_url
-                        i.glyphicon.glyphicon-eye-open
-                        .sr-only=__("View")
-                  input(type="hidden", name="offer[offer_id]", value=result.offer.offer_id)#offer_id
+                      input(type="text", name="offer[offer_number]", value=result.offer.offer_number).form-control#offer_number
               .row
                 .col-sm-12
                   .form-group
@@ -143,9 +139,9 @@ block content
                       label.input-group-addon(for='offer_date')=__("Offer date")
                       - if (result.offer.offer_date)
                         - d = result.offer.offer_date;
-                        input(type="text", name="offer[offer_date]", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear(), disabled).form-control.date#offer_date
+                        input(type="text", name="offer[offer_date]", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()).form-control.date#offer_date
                       - else
-                        input(type="text", name="offer[offer_date]", disabled).form-control.date#offer_date
+                        input(type="text", name="offer[offer_date]").form-control.date#offer_date
               .row
                 .col-sm-12
                   .form-group
@@ -154,6 +150,28 @@ block content
                       - var dd=""
                       - if (result.delivery_date) dd = result.delivery_date.getDate()+"/"+(result.delivery_date.getMonth()+1)+"/"+result.delivery_date.getFullYear()
                       input(type="text", name="delivery_date", value=dd).form-control.date#delivery_date
+              .internal
+                .internal_title=__("Internal usage")
+                .row
+                  .col-sm-2
+                    .form-group
+                      label(for='type')=__("Paid")
+                      br
+                      input.form-control#type(type='checkbox' name="paid" checked=(result.paid=="true" ? "checked" : undefined))                      
+                  .col-sm-5
+                    .form-group
+                      label(for='type')=__("Type")
+                      select.form-control#type(name="type")
+                        option(value="")="unset"
+                        each t in types
+                          option(value=t selected=(result.type==t ? "selected" : (!result.type && "GEN"==t ? "selected" : undefined)))=t
+                  .col-sm-5
+                    .form-group
+                      label(for='type_year')=__("Type year")
+                      select.form-control#type_year(name="type_year")
+                        option(value="")="unset"
+                        each t in years
+                          option(value=t selected=(result.type_year==t ? "selected" : (!result.type_year && new Date().getFullYear()==t ? "selected" : undefined)))=t
           hr
           .container_overflow
             table.table.tabCnt
@@ -233,15 +251,6 @@ block content
                       input(type="text", name="total", value=result.total, disabled).form-control.total#total.input-medium
                   td
           hr.clearfix
-          label.add-on(for='bank')=__("Bank")
-          select(id="bank",name="bank").form-control
-            option=__("Select a bank account")
-            - for (a=0;a<_config.banks.length;a++)
-              - var b = _config.banks[a]
-              - if (_config.banks[a]==result.bank)
-                option(value=_config.banks[a], selected="selected")=_config.banks[a]
-              - else
-                option(value=_config.banks[a])=_config.banks[a]
           div.row
             .col-sm-6
             .col-sm-6

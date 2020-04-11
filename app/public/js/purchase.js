@@ -1,8 +1,8 @@
 var queryResult;
 $(function() {
 	$(".disabled").attr('disabled', 'disabled');
-	var to_client = $("#to_client");
-	to_client.bind("keypress", function(event) {
+	var from_customer = $("#from_customer");
+	from_customer.bind("keypress", function(event) {
 		if ($("#customer_id").val()!="" &&  event.keyCode != 13) {
 			$("#customer_id").val("");
 			$(".street").val("");
@@ -21,7 +21,7 @@ $(function() {
 	});
 	
 	//autocomplete
-	to_client.autocomplete({
+	from_customer.autocomplete({
 		source: function(req,res){
 			getAutoCompleteList(req,"/api/accounting/customers");
 			var x = [];
@@ -124,7 +124,7 @@ function showOffers() {
 			for(var a=0;a<data.result.length;a++){
 				var d = new Date(data.result[a].offer_date);
 				var date = d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
-				str+="<a href=\"#\" onclick=\"setOffer('"+data.result[a]._id+"','"+date+"','"+data.result[a].offer_number+"');\" class=\"list-group-item\"><h4 class=\"list-group-item-heading\"><span class=\"label label-default\">"+data.result[a].offer_number+"</span> "+date+" "+data.result[a].to_client.name+"</h4><p class=\"list-group-item-text\">"+data.result[a].description+"</p></a>"
+				str+="<a href=\"#\" onclick=\"setOffer('"+data.result[a]._id+"','"+date+"','"+data.result[a].offer_number+"');\" class=\"list-group-item\"><h4 class=\"list-group-item-heading\"><span class=\"label label-default\">"+data.result[a].offer_number+"</span> "+date+" "+data.result[a].from_customer.name+"</h4><p class=\"list-group-item-text\">"+data.result[a].description+"</p></a>"
 			}
 			str+= "</div>";
 			$('.modal-alert .modal-body').html(str);
@@ -388,8 +388,10 @@ function handleDragOver(evt) {
 	evt.preventDefault();
 	evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
 }
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
-// Setup the dnd listeners.
-var dropZone = document.getElementById('drop_zone');
-dropZone.addEventListener('dragover', handleDragOver, false);
-dropZone.addEventListener('drop', handleFileSelect, false);
+if (document.getElementById('files')) {
+	document.getElementById('files').addEventListener('change', handleFileSelect, false);
+	// Setup the dnd listeners.
+	var dropZone = document.getElementById('drop_zone');
+	dropZone.addEventListener('dragover', handleDragOver, false);
+	dropZone.addEventListener('drop', handleFileSelect, false);
+}

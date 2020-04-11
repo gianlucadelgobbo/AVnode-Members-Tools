@@ -2,6 +2,8 @@ var ObjectID = require('mongodb').ObjectID;
 var DB = require('./../helpers/db-manager');
 var helpers = require('./../helpers/helpers');
 
+var types = ["GEN", "LPM", "LCF", "FNT", "WEB", "PRD", "OTR"];
+
 exports.get = function get(req, res) {
 	helpers.canIseeThis(req, function (auth) {
 		if (auth) {
@@ -39,12 +41,13 @@ exports.get = function get(req, res) {
 				if (req.query.customer){
 					DB.customers.findOne({_id:new ObjectID(req.query.customer)}, function(e, customer) {
 						DB.invoices.find(query).sort({invoice_date:-1,invoice_number:-1}).toArray(function(e, result) {
-							res.render('invoices', { title: __("Invoices"), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years,year:year,customer:{id:req.query.customer,name:customer.name }});
+							res.render('invoices', { title: __("Invoices"), accounting: require('accounting'), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years, types:types,year:year,customer:{id:req.query.customer,name:customer.name }});
 						});
 					});
 				} else {
 					DB.invoices.find(query).sort({invoice_date:-1,invoice_number:-1}).toArray(function(e, result) {
-						res.render('invoices', { title: __("Invoices"), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years,year:year });
+							//res.send(result);
+						res.render('invoices', { title: __("Invoices"), accounting: require('accounting'), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years, types:types,year:year });
 					});
 				}
 			});
@@ -53,3 +56,20 @@ exports.get = function get(req, res) {
 		}
 	});
 };
+
+exports.post = function post(req, res) {
+  helpers.canIseeThis(req, function (auth) {
+    if (auth) {
+			DB[req.body.req.col].updateOne({_id:ObjectID(req.body.req.id)}, {$set: req.body.set}, function(e, o){
+				if (e) {
+					res.status("400").send(e);
+				} else {
+					res.send(o);
+				}
+			});
+    } else {
+			res.status("400").send("Please login");
+    }
+  });
+};
+

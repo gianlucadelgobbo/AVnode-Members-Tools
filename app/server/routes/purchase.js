@@ -4,6 +4,9 @@ var helpers = require('./../helpers/helpers');
 var ObjectID = require('mongodb').ObjectID;
 var fs = require("fs");
 
+var types = ["GEN", "LPM", "LCF", "FNT", "WEB", "PRD", "OTR"];
+var years = [new Date(new Date().getTime()-(365*24*60*60*1000)).getFullYear(), new Date().getFullYear(), new Date(new Date().getTime()+(365*24*60*60*1000)).getFullYear()];
+
 exports.get = function get(req, res) {
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
@@ -14,7 +17,7 @@ exports.get = function get(req, res) {
               res.send(result);
             } else {
               result = helpers.formatMoney(result);
-              res.render('purchase', { title: __("Purchase"), country:global._config.company.country, result : result, udata : req.session.user });
+              res.render('purchase', { title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : result, udata : req.session.user });
             }
           } else {
             res.render('404', { title: "Page Not Found", udata : req.session.user});
@@ -33,7 +36,7 @@ exports.get = function get(req, res) {
               result.purchase_number = resultPurchase.length+1;
               result.offer = {offer_number:result.offer_number,offer_date:result.offer_date};
               delete result._id;
-              res.render('purchase', {  title: __("Purchase"), country:global._config.company.country, result : result, udata : req.session.user });
+              res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : result, udata : req.session.user });
             });
           } else if (req.query.dup) {
             DB.purchases.findOne({_id:new ObjectID(req.query.dup)},function(e, result) {
@@ -41,11 +44,11 @@ exports.get = function get(req, res) {
               result.purchase_date = new Date();
               result.purchase_number = resultPurchase.length+1;
               delete result._id;
-              res.render('purchase', {  title: __("Purchase"), country:global._config.company.country, result : result, udata : req.session.user });
+              res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : result, udata : req.session.user });
             });
           } else {
             var resultEmpty = {purchase_date:new Date(),purchase_number:resultPurchase.length+1,vat_perc:_config.vat_perc,from_customer:{address:{}},offer:{},items:[{}]};
-            res.render('purchase', {  title: __("Purchase"), country:global._config.company.country, result : resultEmpty, udata : req.session.user });
+            res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : resultEmpty, udata : req.session.user });
           }
         });
       }
@@ -75,7 +78,7 @@ exports.post = function post(req, res) {
                 if (req.body.id) {
                   DB.update_purchase(req.body, req.session.user, function(e, o){
                     errors.push({name:"",m:__("Purchase saved with success")});
-                    res.render('purchase', {  title: __("Purchase"), country:global._config.company.country, result : helpers.formatMoney(o), msg:{c:errors}, udata : req.session.user });
+                    res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : helpers.formatMoney(o), msg:{c:errors}, udata : req.session.user });
                   });
                 } else {
                   DB.insert_purchase(req.body, req.session.user, function(e, o){
@@ -88,7 +91,7 @@ exports.post = function post(req, res) {
                       msg.c.push({name:"",m:__("Purchase saved with success")});
                     }
                     res.redirect('/'+global.settings.dbName+'/accounting/purchase/?id='+o._id.toString());
-//                  res.render('purchase', {  title: __("Purchase"), country:global._config.company.country, result : helpers.formatMoney(o[0]), msg:msg, udata : req.session.user });
+//                  res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : helpers.formatMoney(o[0]), msg:msg, udata : req.session.user });
                   });
                 }
               } else {
@@ -105,7 +108,7 @@ exports.post = function post(req, res) {
                   req.body.offer.offer_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
                 }
                 req.body.from_customer.address={};
-                res.render('purchase', {  title: __("Purchase"), country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
+                res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
               }
             });
           } else {
@@ -122,7 +125,7 @@ exports.post = function post(req, res) {
               req.body.offer.offer_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
             }
             req.body.from_customer.address={};
-            res.render('purchase', {  title: __("Purchase"), country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
+            res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
           }
         });
       } else {
@@ -137,7 +140,7 @@ exports.post = function post(req, res) {
           req.body.offer.offer_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
         }
         req.body.from_customer.address={};
-        res.render('purchase', {  title: __("Purchase"), country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
+        res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
       }
     } else {
       res.redirect('/?from='+req.url);
@@ -191,12 +194,12 @@ exports.print = function print(req, res) {
               DB.customers.findOne({_id:new ObjectID(result.from_customer._id)},function(e, from_customer) {
                 if (!from_customer.contacts) from_customer.contacts = [];
                 res.render('accounts/'+global.settings.dbName+"/style_print", {layout: false}, function (error_style, style) {
-                  res.render('purchase_preview', {  title: __("Purchase"), country:global._config.company.country, result : result, udata : req.session.user, file:folder+filename, style:style, js:"/js/sendemail.js", from_customer:from_customer}, function (error1, html1) {
+                  res.render('purchase_preview', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : result, udata : req.session.user, file:folder+filename, style:style, js:"/js/sendemail.js", from_customer:from_customer}, function (error1, html1) {
                     console.log(error1);
                     // PDF START
                     var pdf = require('html-pdf');
                     var options = { format: 'A4',"header": {"height": "75mm"},"footer": {"height": "30mm"}};
-                    res.render('purchase_pdf', { layout: 'layout_pdf.pug' ,  title: __("Purchase"), country:global._config.company.country, result : result, udata : req.session.user, style:style }, function (error, html) {
+                    res.render('purchase_pdf', { layout: 'layout_pdf.pug' ,  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : result, udata : req.session.user, style:style }, function (error, html) {
                       console.log(error);
                       if (!error) {
                         pdf.create(html, options).toFile('./warehouse'+folder+filename, function(pdferr, pdfres) {
@@ -228,7 +231,7 @@ exports.xml = function get(req, res) {
       DB.purchases.findOne({_id:new ObjectID(req.query.id)},function(e, result) {
         result = helpers.formatMoney(result);
         res.set('Content-Type', 'text/xml');
-        res.render('purchase_xml', { title: __("Purchase"), country:global._config.company.country, result : result, udata : req.session.user });
+        res.render('purchase_xml', { title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : result, udata : req.session.user });
       });
     } else {
       res.redirect('/?from='+req.url);

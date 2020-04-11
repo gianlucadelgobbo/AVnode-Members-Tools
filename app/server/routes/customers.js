@@ -7,8 +7,8 @@ exports.getAll = function get(req, res) {
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
       var msg = {};
-      if (req.params.customer && req.query.del) {
-        DB.delete_customer(req.params.customer, function(err, obj){
+      if (req.query.id && req.query.del) {
+        DB.delete_customer(req.query.id, function(err, obj){
           if (obj){
             msg.c = [];
             msg.c.push({name:"",m:__("Customer deleted successfully")});

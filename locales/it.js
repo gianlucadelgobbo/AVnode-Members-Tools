@@ -304,5 +304,10 @@
 	"CAB": "CAB",
 	"ABI": "ABI",
 	"Condizioni Pagamento": "Condizioni Pagamento",
-	"days": "giorni"
+	"days": "giorni",
+	"Customer deleted successfully": "Customer deleted successfully",
+	"Year": "Year",
+	"Type year": "Type year",
+	"Internal usage": "Internal usage",
+	"Paid": "Paid"
 }

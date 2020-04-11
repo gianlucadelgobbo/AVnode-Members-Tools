@@ -35,6 +35,31 @@ if (document.getElementById('files')) {
 
 }
 
+function setType(data) {
+  console.log("data");
+  console.log(data);
+  $.ajax({
+    method: "POST",
+    url: "/admin-flyer/accounting/set-type/"+data.req.col+"/",
+    data: data
+  })
+  .done(data => {
+    console.log("data");
+    console.log(data);
+  })
+  .fail(function (jqXHR, textStatus) {
+    console.log("jqXHR");
+    console.log(jqXHR);
+    console.log("textStatus");
+    $("#alert")
+    .html("<h4>There are some errors</h4><ul><li>"+jqXHR.responseText+"</li></ul>")
+    .removeClass("hidden")
+    .addClass("alert-danger");
+    $('html,body').animate({scrollTop: $("body").offset().top},'slow');
+    console.log(textStatus);
+  });
+}
+
 function save(r) {
   $.ajax({
     method: "POST",

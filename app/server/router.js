@@ -102,6 +102,7 @@ module.exports = function(app) {
 
   // Invoices //
   app.get('/:dbname/accounting/invoices', invoicesRoutes.get);
+  app.post('/:dbname/accounting/set-type/invoices', invoicesRoutes.post);
   app.get('/:dbname/accounting/invoice', invoiceRoutes.get);
   app.post('/:dbname/accounting/invoice', invoiceRoutes.post);
   app.get('/:dbname/accounting/print/invoice', invoiceRoutes.print);
@@ -109,6 +110,7 @@ module.exports = function(app) {
 
   // Purchases //
   app.get('/:dbname/accounting/purchases', purchasesRoutes.get);
+  app.post('/:dbname/accounting/set-type/purchases', purchasesRoutes.post);
   app.get('/:dbname/accounting/purchase', purchaseRoutes.get);
   app.post('/:dbname/accounting/purchase', purchaseRoutes.post);
   app.get('/:dbname/accounting/print/purchase', purchaseRoutes.print);
