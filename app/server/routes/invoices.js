@@ -24,7 +24,7 @@ exports.get = function get(req, res) {
 			if (!req.query.year) req.query.year = new Date().getUTCFullYear();
 			if (req.query.year && req.query.year!="ALL Years") {
 				year = parseInt(req.query.year);
-				var start = new Date(Date.UTC(year-1, 11, 31));
+				var start = new Date(Date.UTC(year, 0, 1));
 				var end = new Date(Date.UTC(year+1, 0, 1));
 				query.invoice_date = {$gte: start, $lt: end}
 			} else {

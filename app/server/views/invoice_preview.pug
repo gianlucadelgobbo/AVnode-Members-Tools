@@ -115,7 +115,6 @@ block content
                       td.price
                           div=_config.currency[0]+" "+result.total
               footer#pageFooter
-                - console.log(result.bank)
                 if result.bank && result.bank.name
                   p
                     b=__("Bank")

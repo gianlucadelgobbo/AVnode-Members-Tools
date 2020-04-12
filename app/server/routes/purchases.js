@@ -25,7 +25,7 @@ exports.get = function get(req, res) {
 			if (!req.query.year) req.query.year = new Date().getUTCFullYear();
 			if (req.query.year && req.query.year!="ALL Years") {
 				year = parseInt(req.query.year);
-				var start = new Date(Date.UTC(year-1, 11, 31));
+				var start = new Date(Date.UTC(year, 0, 1));
 				var end = new Date(Date.UTC(year+1, 0, 1));
 				query.purchase_date = {$gte: start, $lt: end}
 			} else {
@@ -78,8 +78,8 @@ exports.my_import_act = function my_import_act(req, res) {
 					parseString(imports[a].result, {explicitArray: false}, function (err, result) {
 						var FatturaElettronica = result[Object.keys(result)[0]];
 						// ? result["ns2:FatturaElettronica"] : result["p:FatturaElettronica"] ? result["p:FatturaElettronica"] : result["FatturaElettronica"];
-						console.log("FatturaElettronica");
-						console.log(JSON.stringify(result, null, 4));
+						//console.log("FatturaElettronica");
+						//console.log(JSON.stringify(result, null, 4));
 						if (err) {
 							setTimeout(reject, 500, err);
 						} else {
@@ -148,16 +148,16 @@ exports.my_import_act = function my_import_act(req, res) {
 							/* "bank" : undefined, */
 							"import": imports[a]
 						}
-						console.log(values[a].FatturaElettronica.FatturaElettronicaBody.DatiBeniServizi.DatiRiepilogo);
+						//console.log(values[a].FatturaElettronica.FatturaElettronicaBody.DatiBeniServizi.DatiRiepilogo);
 						if (values[a].FatturaElettronica.FatturaElettronicaBody.DatiBeniServizi.DatiRiepilogo){
 							var DatiRiepilogo = values[a].FatturaElettronica.FatturaElettronicaBody.DatiBeniServizi.DatiRiepilogo;
-							console.log("DatiRiepilogo.length");
-							console.log(DatiRiepilogo.length);
+							//console.log("DatiRiepilogo.length");
+							//console.log(DatiRiepilogo.length);
 							if (DatiRiepilogo.length>0){
 								var vatA = [];
 								for (var c = 0; c<DatiRiepilogo.length; c++) {
-									console.log("DatiRiepilogo "+c);
-									console.log(DatiRiepilogo[c]);
+									//console.log("DatiRiepilogo "+c);
+									//console.log(DatiRiepilogo[c]);
 									if(DatiRiepilogo[c].AliquotaIVA) {
 										if(vatA.indexOf(DatiRiepilogo[c].AliquotaIVA)===-1) vatA.push(DatiRiepilogo[c].AliquotaIVA);
 										new_purchase.vat_perc+= DatiRiepilogo[c].AliquotaIVA+"/";
@@ -229,7 +229,7 @@ exports.my_import_act = function my_import_act(req, res) {
 				//console.log("imports");
 				//console.log(imports);
 				//console.log("new_purchases");
-				console.log(new_purchases);
+				//console.log(new_purchases);
 				//console.log("wrong_purchases");
 				//console.log(wrong_purchases); */
 				//res.send(values)
@@ -239,7 +239,7 @@ exports.my_import_act = function my_import_act(req, res) {
 							
 			})
 			/* .catch(() => {
-				console.log("catchcatchcatchcatchcatchcatchcatchcatchcatchcatch");
+				//console.log("catchcatchcatchcatchcatchcatchcatchcatchcatchcatch");
 			}) */;
       //res.render('purchases_import_results', { title: __("Purchases import"), udata : req.session.user });
     } else {

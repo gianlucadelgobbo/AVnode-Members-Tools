@@ -1,8 +1,8 @@
-db.purchases.find({}).forEach(function(e) {
+db.purchases.find({purchase_number:"264/B/2019"}).forEach(function(e) {
+    printjson(e.purchase_date);
   if (e.purchase_date.getUTCHours()>0){
     e.purchase_date = new Date(e.purchase_date.getTime()+((24-e.purchase_date.getUTCHours())*60*60*1000));
-    printjson(e.purchase_date);
-    db.purchases.save(e);
+    //db.purchases.save(e);
   }
 });
 db.purchases.find({type:{$exists: false}, purchase_date:{$gte: ISODate("2019-01-01T00:00:00.000Z"),$lt: ISODate("2021-01-01T00:00:00.000Z")}}).forEach(function(e) {

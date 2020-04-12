@@ -63,8 +63,6 @@ exports.post = function post(req, res) {
       var errors = [];
       if (req.body.bank==0) delete req.body.bank;
       if (req.body.bank) req.body.bank = JSON.parse(req.body.bank);
-      console.log("req.body.bank");
-      console.log(req.body.bank);
       errors = errors.concat(Validators.checkCustomerID(req.body.to_client._id));
       errors = errors.concat(Validators.checkInvoiceNumber(req.body.invoice_number));
       if (req.body.bank || req.body.payment_days) errors = errors.concat(Validators.checkPaymentDays(req.body.payment_days));
@@ -78,8 +76,6 @@ exports.post = function post(req, res) {
             d = req.body.invoice_date.split("/");
             var date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             var q = {invoice_date:{$gt: date},invoice_number:(req.body.invoice_number-1).toString() };
-            console.log("req.body.bank");
-            console.log(req.body.bank);
             DB.invoices.find(q).toArray(function(e, result) {
               if(errors.length === 0){
                 if (req.body.id) {
