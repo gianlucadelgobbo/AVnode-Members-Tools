@@ -5,7 +5,7 @@ var ObjectID = require('mongodb').ObjectID;
 var fs = require("fs");
 
 var types = ["GEN", "LPM", "LCF", "FNT", "WEB", "PRD", "OTR"];
-var years = [new Date(new Date().getTime()-(365*24*60*60*1000)).getFullYear(), new Date().getFullYear(), new Date(new Date().getTime()+(365*24*60*60*1000)).getFullYear()];
+var years = [new Date(new Date().getTime()-(365*24*60*60*1000)).getUTCFullYear(), new Date().getUTCFullYear(), new Date(new Date().getTime()+(365*24*60*60*1000)).getUTCFullYear()];
 
 exports.get = function get(req, res) {
   helpers.canIseeThis(req, function (auth) {
@@ -25,8 +25,8 @@ exports.get = function get(req, res) {
         });
       } else {
         var dd = new Date();
-        var start = new Date(dd.getFullYear()+"-01-01");
-        var end = new Date(dd.getFullYear()+"-12-31");
+        var start = new Date(dd.getUTCFullYear()+"-01-01");
+        var end = new Date(dd.getUTCFullYear()+"-12-31");
 
         DB.purchases.find({purchase_date:{$gte: start, $lt: end}},{purchase_date:1,purchase_number:1}).sort({purchase_number:1}).toArray(function(e, resultPurchase) {
           if (req.query.offer) {
@@ -188,8 +188,8 @@ exports.print = function print(req, res) {
                 "TP03": "anticipo"
               };
               result = helpers.formatMoney(result);
-              var folder = '/accounts/'+global.settings.dbName+'/purchases/'+result.purchase_date.getFullYear()+'/';
-              var filename = result.purchase_date.getFullYear()+'-'+(result.purchase_date.getMonth()+1)+'-'+result.purchase_date.getDate()+'_'+result.purchase_number+'_'+global.settings.companyName+'_'+result.from_customer.name+'.pdf';
+              var folder = '/accounts/'+global.settings.dbName+'/purchases/'+result.purchase_date.getUTCFullYear()+'/';
+              var filename = result.purchase_date.getUTCFullYear()+'-'+(result.purchase_date.getUTCMonth()+1)+'-'+result.purchase_date.getUTCDate()+'_'+result.purchase_number+'_'+global.settings.companyName+'_'+result.from_customer.name+'.pdf';
               //fs.writeFile('./warehouse/'+global.settings.dbName+"/style_print.pug", "", { flag: 'wx' }, function (err) {
               DB.customers.findOne({_id:new ObjectID(result.from_customer._id)},function(e, from_customer) {
                 if (!from_customer.contacts) from_customer.contacts = [];

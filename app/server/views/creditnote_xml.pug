@@ -49,7 +49,7 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
         // TD04 nota di credito
         Divisa="EUR"
         - d = result.creditnote_date;                      
-        Data=d.getFullYear()+"-"+(("0" + (d.getMonth()+1)).slice(-2))+"-"+(("0" + (d.getDate())).slice(-2))
+        Data=d.getUTCFullYear()+"-"+(("0" + (d.getUTCMonth()+1)).slice(-2))+"-"+(("0" + (d.getUTCDate())).slice(-2))
         Numero=result.creditnote_number
         ImportoTotaleDocumento=result.total
     DatiBeniServizi

@@ -49,7 +49,7 @@ block content
                     .input-group
                       label.input-group-addon(for='invoice_date')=__("Invoice date")
                       - d = result.invoice_date;
-                      input(type="text", name="invoice_date", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()).form-control.date#invoice_date
+                      input(type="text", name="invoice_date", value=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()).form-control.date#invoice_date
               .row
                 .col-sm-12
                   .form-group
@@ -143,7 +143,7 @@ block content
                       label.input-group-addon(for='offer_date')=__("Offer date")
                       - if (result.offer.offer_date)
                         - d = result.offer.offer_date;
-                        input(type="text", name="offer[offer_date]", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear(), disabled).form-control.date#offer_date
+                        input(type="text", name="offer[offer_date]", value=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear(), disabled).form-control.date#offer_date
                       - else
                         input(type="text", name="offer[offer_date]", disabled).form-control.date#offer_date
               .row
@@ -152,7 +152,7 @@ block content
                     .input-group
                       label.input-group-addon(for='delivery_date')=__("Delivery date")
                       - var dd=""
-                      - if (result.delivery_date) dd = result.delivery_date.getDate()+"/"+(result.delivery_date.getMonth()+1)+"/"+result.delivery_date.getFullYear()
+                      - if (result.delivery_date) dd = result.delivery_date.getUTCDate()+"/"+(result.delivery_date.getUTCMonth()+1)+"/"+result.delivery_date.getUTCFullYear()
                       input(type="text", name="delivery_date", value=dd).form-control.date#delivery_date
               .internal
                 .internal_title=__("Internal usage")
@@ -175,7 +175,7 @@ block content
                       select.form-control#type_year(name="type_year")
                         option(value="")="unset"
                         each t in years
-                          option(value=t selected=(result.type_year==t ? "selected" : (!result.type_year && new Date().getFullYear()==t ? "selected" : undefined)))=t
+                          option(value=t selected=(result.type_year==t ? "selected" : (!result.type_year && new Date().getUTCFullYear()==t ? "selected" : undefined)))=t
           hr
           .container_overflow
             table.table.tabCnt

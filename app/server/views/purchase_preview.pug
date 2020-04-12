@@ -34,7 +34,7 @@ block content
                   tr
                     td.nowrap.muted=__("Invoice date")
                     - d = result.purchase_date;
-                    td(colspan="3").paddingleft.paddingright=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                    td(colspan="3").paddingleft.paddingright=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()
                   tr
                     td.nowrap.muted=__("From")
                     td.paddingleft.paddingright
@@ -70,12 +70,12 @@ block content
                     tr
                       td.nowrap.muted=__("Offer date")
                       - d = result.offer.offer_date;
-                      td=(d ? d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear() :"")
+                      td=(d ? d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear() :"")
                   - if (typeof result.delivery_date!=="undefined")
                     tr
                       td.nowrap.muted=__("Delivery date")
                       - d = result.delivery_date;
-                      td=(d ? d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear() :"")
+                      td=(d ? d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear() :"")
               section.print_items
                 table.table
                   thead
@@ -96,12 +96,12 @@ block content
                           !="<br />"
                           if result.items[a].DataInizioPeriodo
                             - var d = result.items[a].DataInizioPeriodo;
-                            !=__("FROM")+" "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                            !=__("FROM")+" "+d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()
                           if result.items[a].DataFinePeriodo
                             if result.items[a].DataInizioPeriodo
                               !=" > "
                             - var d = result.items[a].DataFinePeriodo;
-                            !=__("TO")+" "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                            !=__("TO")+" "+d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()
                         td.price
                           div=_config.currency[0]+" "+result.items[a].price
                         td.price
@@ -145,12 +145,12 @@ block content
                     !="<br />"+__("Condizioni Pagamento")+": "+_config.CondizioniPagamento[result.DatiPagamento.CondizioniPagamento]
                     if result.DatiPagamento.DettaglioPagamento.DataRiferimentoTerminiPagamento
                       - var d = result.DatiPagamento.DettaglioPagamento.DataRiferimentoTerminiPagamento
-                      !="<br />"+__("Data Riferimento Termini Pagamento")+": "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                      !="<br />"+__("Data Riferimento Termini Pagamento")+": "+d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()
                     if result.DatiPagamento.DettaglioPagamento.GiorniTerminiPagamento
                       !="<br />"+__("Giorni Termini Pagamento")+": "+result.DatiPagamento.DettaglioPagamento.GiorniTerminiPagamento
                     if result.DatiPagamento.DettaglioPagamento.DataScadenzaPagamento
                       - var d = result.DatiPagamento.DettaglioPagamento.DataScadenzaPagamento
-                      !="<br />"+__("Data Scadenza Pagamento")+": "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                      !="<br />"+__("Data Scadenza Pagamento")+": "+d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()
                   if result.DatiPagamento.DettaglioPagamento.IBAN
                     p
                       b=__("Bank")

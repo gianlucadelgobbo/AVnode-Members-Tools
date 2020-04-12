@@ -22,8 +22,8 @@ exports.get = function get(req, res) {
         });
       } else {
         var dd = new Date();
-        var start = new Date(dd.getFullYear()+"-01-01");
-        var end = new Date(dd.getFullYear()+"-12-31");
+        var start = new Date(dd.getUTCFullYear()+"-01-01");
+        var end = new Date(dd.getUTCFullYear()+"-12-31");
 
         DB.creditnotes.find({creditnote_date:{$gte: start, $lt: end}},{creditnote_date:1,creditnote_number:1}).sort({creditnote_number:1}).toArray(function(e, resultCreditNote) {
           if (req.query.invoice) {
@@ -151,8 +151,8 @@ exports.print = function print(req, res) {
       if (req.query.id) {
         DB.creditnotes.findOne({_id:new ObjectID(req.query.id)},function(e, result) {
           result = helpers.formatMoney(result);
-          var folder = '/accounts/'+global.settings.dbName+'/creditnotes/'+result.creditnote_date.getFullYear()+'/';
-          var filename = result.creditnote_date.getFullYear()+'-'+(result.creditnote_date.getMonth()+1)+'-'+result.creditnote_date.getDate()+'_'+result.creditnote_number+'_'+global.settings.companyName+'_'+result.to_client.name+'.pdf';
+          var folder = '/accounts/'+global.settings.dbName+'/creditnotes/'+result.creditnote_date.getUTCFullYear()+'/';
+          var filename = result.creditnote_date.getUTCFullYear()+'-'+(result.creditnote_date.getUTCMonth()+1)+'-'+result.creditnote_date.getUTCDate()+'_'+result.creditnote_number+'_'+global.settings.companyName+'_'+result.to_client.name+'.pdf';
           //fs.writeFile('./warehouse/'+global.settings.dbName+"/style_print.pug", "", { flag: 'wx' }, function (err) {
           DB.customers.findOne({_id:new ObjectID(result.to_client._id)},function(e, to_client) {
             if (!to_client.contacts) to_client.contacts = [];

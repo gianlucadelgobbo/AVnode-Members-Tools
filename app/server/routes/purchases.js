@@ -22,7 +22,7 @@ exports.get = function get(req, res) {
 				});
 			}
 			var query = req.query.customer ? {"to_client._id":req.query.customer} : {};
-			if (!req.query.year) req.query.year = new Date().getFullYear();
+			if (!req.query.year) req.query.year = new Date().getUTCFullYear();
 			if (req.query.year && req.query.year!="ALL Years") {
 				year = parseInt(req.query.year);
 				var start = new Date(year-1, 11, 31);
@@ -33,9 +33,9 @@ exports.get = function get(req, res) {
 			}
 
 			DB.purchases.find({},{purchase_date: 1}).toArray(function(e, result) {
-				var years = [new Date().getFullYear()];
+				var years = [new Date().getUTCFullYear()];
 				for (var a=0;a<result.length;a++) {
-					var y = new Date(result[a].purchase_date).getFullYear();
+					var y = new Date(result[a].purchase_date).getUTCFullYear();
 					if (years.indexOf(y) == -1) years.push(y);
 				}
 				years.sort();
@@ -130,6 +130,8 @@ exports.my_import_act = function my_import_act(req, res) {
 							"purchase_number" : values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento.Numero,
 							"purchase_date" : new Date(values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento.Data),
 							"from_customer" : values[a].from,
+							"type" : "GEN",
+							"type_year" : new Date(values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento.Data).getUTCFullYear(),
 							/* "payment" : undefined,
 							"destination" : undefined,
 							"offer" : {

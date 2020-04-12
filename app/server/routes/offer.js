@@ -22,8 +22,8 @@ exports.get = function get(req, res) {
         });
       } else {
         var dd = new Date();
-        var start = new Date(dd.getFullYear()+"-01-01");
-        var end = new Date(dd.getFullYear()+"-12-31");
+        var start = new Date(dd.getUTCFullYear()+"-01-01");
+        var end = new Date(dd.getUTCFullYear()+"-12-31");
 
         DB.offers.find({offer_date:{$gte: start, $lt: end}},{offer_date:1,offer_number:1}).sort({offer_number:1}).toArray(function(e, resultOffer) {
           if (req.query.dup) {
@@ -144,8 +144,8 @@ exports.print = function print(req, res) {
       if (req.query.id) {
         DB.offers.findOne({_id:new ObjectID(req.query.id)},function(e, result) {
           result = helpers.formatMoney(result);
-          var folder = '/accounts/'+global.settings.dbName+'/offers/'+result.offer_date.getFullYear()+'/';
-          var filename = result.offer_date.getFullYear()+'-'+(result.offer_date.getMonth()+1)+'-'+result.offer_date.getDate()+'_'+result.offer_number+'_'+global.settings.companyName+'_'+result.to_client.name+'.pdf';
+          var folder = '/accounts/'+global.settings.dbName+'/offers/'+result.offer_date.getUTCFullYear()+'/';
+          var filename = result.offer_date.getUTCFullYear()+'-'+(result.offer_date.getUTCMonth()+1)+'-'+result.offer_date.getUTCDate()+'_'+result.offer_number+'_'+global.settings.companyName+'_'+result.to_client.name+'.pdf';
           //fs.writeFile('./warehouse/'+global.settings.dbName+"/style_print.pug", "", { flag: 'wx' }, function (err) {
           DB.customers.findOne({_id:new ObjectID(result.to_client._id)},function(e, to_client) {
             if (!to_client.contacts) to_client.contacts = [];

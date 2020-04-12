@@ -37,7 +37,7 @@ block content
                     td.nowrap.paddingright.paddingleft=result.offer_number
                     td.nowrap=__("Offer date")
                     - d = result.offer_date;
-                    td=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()
+                    td=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()
                   tr
                     td(colspan="2").nowrap=__("Customer")
                     td(colspan="2")
@@ -70,7 +70,7 @@ block content
                     tr
                       td.nowrap=__("Delivery date")
                       - d = result.delivery_date;
-                      td=(d ? d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear() :"")
+                      td=(d ? d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear() :"")
               section.print_items
                 - if (result.description)
                   p!=result.description.replace(/\n/g,'<br />')

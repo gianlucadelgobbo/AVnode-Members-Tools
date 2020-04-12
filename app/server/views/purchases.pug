@@ -76,7 +76,7 @@ block content
                     span.h3(style="margin-top:2px;display:inline-block;")
                       span(class=" label label-"+(typeof customer != "undefined" || parseInt(year)!=year ? "info" : x.purchase_number==result.length-index ? "success" : "danger"))=x.purchase_number
                   - dd = new Date(x.purchase_date)
-                  td=dd.getDate()+"/"+(dd.getMonth()+1)+"/"+dd.getFullYear()
+                  td=dd.getUTCDate()+"/"+(dd.getUTCMonth()+1)+"/"+dd.getUTCFullYear()
                   td
                     a(href="/"+global.settings.dbName+"/accounting/customers/"+x.from_customer._id)=x.from_customer.name
                   td=x.payment
@@ -84,7 +84,7 @@ block content
                   td=x.offer_number
                   - var dd=""
                   if x.delivery_date
-                    - dd = x.delivery_date.getDate()+"/"+(x.delivery_date.getMonth()+1)+"/"+x.delivery_date.getFullYear()
+                    - dd = x.delivery_date.getUTCDate()+"/"+(x.delivery_date.getUTCMonth()+1)+"/"+x.delivery_date.getUTCFullYear()
                   td=dd
                   td.text-right=x.subtotal
                   td.text-right=x.vat_amount

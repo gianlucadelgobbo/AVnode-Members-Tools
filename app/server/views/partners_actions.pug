@@ -59,7 +59,7 @@ block content
                     td
                       - d = new Date(result.date);
                       if d
-                        !=d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear()
+                        !=d.getUTCDate() + "/" + (d.getUTCMonth() + 1) + "/" + d.getUTCFullYear()
                     td
                       if result.analysis && result.analysis.length
                         if result.analysis[result.analysis.length - 1].facebook
@@ -67,7 +67,7 @@ block content
                           - d = new Date(result.analysis[result.analysis.length-1].facebook.created_time);
                             if d
                               span.hide=d.getTime()
-                              !=d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear()
+                              !=d.getUTCDate() + "/" + (d.getUTCMonth() + 1) + "/" + d.getUTCFullYear()
                       else
                         !=__("NO ANALISIS PERFORMED")
                     td

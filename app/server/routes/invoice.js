@@ -5,7 +5,7 @@ var ObjectID = require('mongodb').ObjectID;
 var fs = require("fs");
 
 var types = ["GEN", "LPM", "LCF", "FNT", "WEB", "PRD", "OTR"];
-var years = [new Date(new Date().getTime()-(365*24*60*60*1000)).getFullYear(), new Date().getFullYear(), new Date(new Date().getTime()+(365*24*60*60*1000)).getFullYear()];
+var years = [new Date(new Date().getTime()-(365*24*60*60*1000)).getUTCFullYear(), new Date().getUTCFullYear(), new Date(new Date().getTime()+(365*24*60*60*1000)).getUTCFullYear()];
 
 exports.get = function get(req, res) {
   helpers.canIseeThis(req, function (auth) {
@@ -25,8 +25,8 @@ exports.get = function get(req, res) {
         });
       } else {
         var dd = new Date();
-        var start = new Date(dd.getFullYear()+"-01-01");
-        var end = new Date(dd.getFullYear()+"-12-31");
+        var start = new Date(dd.getUTCFullYear()+"-01-01");
+        var end = new Date(dd.getUTCFullYear()+"-12-31");
 
         DB.invoices.find({invoice_date:{$gte: start, $lt: end}},{invoice_date:1,invoice_number:1}).sort({invoice_number:1}).toArray(function(e, resultInvoice) {
           if (req.query.offer) {
@@ -161,8 +161,8 @@ exports.print = function print(req, res) {
       if (req.query.id) {
         DB.invoices.findOne({_id:new ObjectID(req.query.id)},function(e, result) {
           result = helpers.formatMoney(result);
-          var folder = '/accounts/'+global.settings.dbName+'/invoices/'+result.invoice_date.getFullYear()+'/';
-          var filename = result.invoice_date.getFullYear()+'-'+(result.invoice_date.getMonth()+1)+'-'+result.invoice_date.getDate()+'_'+result.invoice_number+'_'+global.settings.companyName+'_'+result.to_client.name+'.pdf';
+          var folder = '/accounts/'+global.settings.dbName+'/invoices/'+result.invoice_date.getUTCFullYear()+'/';
+          var filename = result.invoice_date.getUTCFullYear()+'-'+(result.invoice_date.getUTCMonth()+1)+'-'+result.invoice_date.getUTCDate()+'_'+result.invoice_number+'_'+global.settings.companyName+'_'+result.to_client.name+'.pdf';
           //fs.writeFile('./warehouse/'+global.settings.dbName+"/style_print.pug", "", { flag: 'wx' }, function (err) {
           DB.customers.findOne({_id:new ObjectID(result.to_client._id)},function(e, to_client) {
             if (!to_client.contacts) to_client.contacts = [];

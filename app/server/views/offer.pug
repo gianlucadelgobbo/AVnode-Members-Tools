@@ -48,7 +48,7 @@ block content
                     .input-group
                       label.input-group-addon(for='offer_date')=__("Offer date")
                       - d = result.offer_date;
-                      input(type="text", name="offer_date", value=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()).form-control.date#offer_date
+                      input(type="text", name="offer_date", value=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()).form-control.date#offer_date
               .row
                 .col-sm-12
                   .form-group
@@ -124,7 +124,7 @@ block content
                     .input-group
                       label.input-group-addon(for='delivery_date')=__("Delivery date")
                       - var dd = ""
-                      - if (result.delivery_date) dd = result.delivery_date.getDate()+"/"+(result.delivery_date.getMonth()+1)+"/"+result.delivery_date.getFullYear()
+                      - if (result.delivery_date) dd = result.delivery_date.getUTCDate()+"/"+(result.delivery_date.getUTCMonth()+1)+"/"+result.delivery_date.getUTCFullYear()
                       input(type="text", name="delivery_date", value=dd).form-control.date#delivery_date
           hr
           .form-group

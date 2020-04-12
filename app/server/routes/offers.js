@@ -18,7 +18,7 @@ exports.get = function get(req, res) {
 				});
 			}
 			var query = req.query.customer ? {"to_client._id":req.query.customer} : {};
-			if (!req.query.year) req.query.year = new Date().getFullYear();
+			if (!req.query.year) req.query.year = new Date().getUTCFullYear();
 			if (req.query.year && req.query.year!="ALL Years") {
 				year = parseInt(req.query.year);
 				var start = new Date(year-1, 11, 31);
@@ -29,9 +29,9 @@ exports.get = function get(req, res) {
 			}
 
 			DB.offers.find().toArray(function(e, result) {
-				var years = [new Date().getFullYear()];
+				var years = [new Date().getUTCFullYear()];
 				for (var a=0;a<result.length;a++) {
-					var y = new Date(result[a].offer_date).getFullYear();
+					var y = new Date(result[a].offer_date).getUTCFullYear();
 					if (years.indexOf(y) == -1) years.push(y);
 				}
 				years.sort();
