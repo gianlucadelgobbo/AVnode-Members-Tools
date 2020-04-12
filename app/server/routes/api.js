@@ -30,7 +30,10 @@ exports.getPayments = function getPayments(req, res) {
 };
 
 exports.getInvoices = function getInvoices(req, res) {
-  DB.invoices.find({},{invoice_number:1,invoice_date:1,to_client:1,description:1}).sort({invoice_number:-1}).toArray(function(e, result) {
+  var d = req.query.invoice_date.split("/");
+  req.query.invoice_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
+  var query = req.query.invoice_date ? {invoice_date: {$gt: req.query.invoice_date}} : {};
+  DB.invoices.find(query,{invoice_number:1,invoice_date:1,to_client:1,description:1}).sort({invoice_number:-1}).toArray(function(e, result) {
     console.dir(result);
     res.status(200).send({result:result});
   });

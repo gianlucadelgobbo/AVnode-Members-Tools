@@ -22,8 +22,8 @@ exports.get = function get(req, res) {
         });
       } else {
         var dd = new Date();
-        var start = new Date(dd.getUTCFullYear()+"-01-01");
-        var end = new Date(dd.getUTCFullYear()+"-12-31");
+        var start = new Date(Date.UTC(dd.getUTCFullYear(), 1, 1));
+        var end = new Date(Date.UTC(dd.getUTCFullYear(), 12, 31));
 
         DB.creditnotes.find({creditnote_date:{$gte: start, $lt: end}},{creditnote_date:1,creditnote_number:1}).sort({creditnote_number:1}).toArray(function(e, resultCreditNote) {
           if (req.query.invoice) {
@@ -68,7 +68,7 @@ exports.post = function post(req, res) {
           var d;
           if (result) {
             d = req.body.creditnote_date.split("/");
-            var date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+            var date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             var q = {creditnote_date:{$gt: date},creditnote_number:(req.body.creditnote_number-1).toString() };
             DB.creditnotes.find(q).toArray(function(e, result) {
               if(errors.length === 0){
@@ -95,14 +95,14 @@ exports.post = function post(req, res) {
                 if (req.body.id) req.body._id = req.body.id;
                 errors.push({name:"creditnote_date",m:__("Data must be greater than")+": "+result.creditnote_date});
                 var d = req.body.invoice_date.split("/");
-                req.body.creditnote_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+                req.body.creditnote_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
                 if (req.body.delivery_date) {
                   d = req.body.delivery_date.split("/");
-                  req.body.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+                  req.body.delivery_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
                 }
                 if (req.body.invoice.invoice_date) {
                   d = req.body.invoice.invoice_date.split("/");
-                  req.body.invoice.invoice_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+                  req.body.invoice.invoice_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
                 }
                 req.body.to_client.address={};
                 res.render('creditnote', {  title: __("Credit Note"), country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
@@ -112,14 +112,14 @@ exports.post = function post(req, res) {
             if (req.body.id) req.body._id = req.body.id;
             errors.push({name:"to_client[name]",m:__("You have to insert a valid customer")});
             d = req.body.invoice_date.split("/");
-            req.body.creditnote_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+            req.body.creditnote_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             if (req.body.delivery_date) {
               d = req.body.delivery_date.split("/");
-              req.body.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+              req.body.delivery_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             }
             if (req.body.invoice.invoice_date) {
               d = req.body.invoice.invoice_date.split("/");
-              req.body.invoice.invoice_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+              req.body.invoice.invoice_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             }
             req.body.to_client.address={};
             res.render('creditnote', {  title: __("Credit Note"), country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
@@ -127,14 +127,14 @@ exports.post = function post(req, res) {
         });
       } else {
         if (req.body.id) req.body._id = req.body.id;
-        req.body.creditnote_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+        req.body.creditnote_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         if (req.body.delivery_date) {
           d = req.body.delivery_date.split("/");
-          req.body.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+          req.body.delivery_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         }
         if (req.body.invoice.invoice_date) {
           d = req.body.invoice.invoice_date.split("/");
-          req.body.invoice.invoice_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+          req.body.invoice.invoice_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         }
         req.body.to_client.address={};
         res.render('creditnote', {  title: __("Credit Note"), country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });

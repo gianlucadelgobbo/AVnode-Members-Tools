@@ -309,5 +309,6 @@
 	"Year": "Year",
 	"Type year": "Type year",
 	"Internal usage": "Internal usage",
-	"Paid": "Paid"
+	"Paid": "Paid",
+	"Invoice date is not date": "Invoice date is not date"
 }

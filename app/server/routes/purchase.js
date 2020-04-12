@@ -25,8 +25,8 @@ exports.get = function get(req, res) {
         });
       } else {
         var dd = new Date();
-        var start = new Date(dd.getUTCFullYear()+"-01-01");
-        var end = new Date(dd.getUTCFullYear()+"-12-31");
+        var start = new Date(Date.UTC(dd.getUTCFullYear(), 1, 1));
+        var end = new Date(Date.UTC(dd.getUTCFullYear(), 12, 31));
 
         DB.purchases.find({purchase_date:{$gte: start, $lt: end}},{purchase_date:1,purchase_number:1}).sort({purchase_number:1}).toArray(function(e, resultPurchase) {
           if (req.query.offer) {
@@ -71,7 +71,7 @@ exports.post = function post(req, res) {
           var d;
           if (result) {
             d = req.body.purchase_date.split("/");
-            var date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+            var date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             var q = {purchase_date:{$gt: date},purchase_number:(req.body.purchase_number-1).toString() };
             DB.purchases.find(q).toArray(function(e, result) {
               if(errors.length === 0){
@@ -98,14 +98,14 @@ exports.post = function post(req, res) {
                 if (req.body.id) req.body._id = req.body.id;
                 errors.push({name:"purchase_date",m:__("Data must be greater than")+": "+result.purchase_date});
                 var d = req.body.offer_date.split("/");
-                req.body.purchase_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+                req.body.purchase_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
                 if (req.body.delivery_date) {
                   d = req.body.delivery_date.split("/");
-                  req.body.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+                  req.body.delivery_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
                 }
                 if (req.body.offer.offer_date) {
                   d = req.body.offer.offer_date.split("/");
-                  req.body.offer.offer_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+                  req.body.offer.offer_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
                 }
                 req.body.from_customer.address={};
                 res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
@@ -115,14 +115,14 @@ exports.post = function post(req, res) {
             if (req.body.id) req.body._id = req.body.id;
             errors.push({name:"from_customer[name]",m:__("You have to insert a valid customer")});
             d = req.body.offer_date.split("/");
-            req.body.purchase_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+            req.body.purchase_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             if (req.body.delivery_date) {
               d = req.body.delivery_date.split("/");
-              req.body.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+              req.body.delivery_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             }
             if (req.body.offer.offer_date) {
               d = req.body.offer.offer_date.split("/");
-              req.body.offer.offer_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+              req.body.offer.offer_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
             }
             req.body.from_customer.address={};
             res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
@@ -130,14 +130,14 @@ exports.post = function post(req, res) {
         });
       } else {
         if (req.body.id) req.body._id = req.body.id;
-        req.body.purchase_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+        req.body.purchase_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         if (req.body.delivery_date) {
           d = req.body.delivery_date.split("/");
-          req.body.delivery_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+          req.body.delivery_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         }
         if (req.body.offer.offer_date) {
           d = req.body.offer.offer_date.split("/");
-          req.body.offer.offer_date = new Date(parseInt(d[2], 10),parseInt(d[1], 10)-1,parseInt(d[0], 10));
+          req.body.offer.offer_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         }
         req.body.from_customer.address={};
         res.render('purchase', {  title: __("Purchase"), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });

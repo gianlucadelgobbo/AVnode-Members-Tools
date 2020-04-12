@@ -84,8 +84,8 @@ $(function() {
 		changeMonth: true,
 		changeYear: true,
 		dateFormat: "dd/mm/yy",
-		showOtherMonths: true,
-		onSelect: checkDate
+		showOtherMonths: true/* ,
+		onSelect: checkDate */
 	});
 	
 	// Binds
@@ -166,26 +166,6 @@ function setBinds(){
 		}
 	});
 
-}
-
-function checkDate() {
-	var purchase_date = $("#purchase_date");
-	var d = purchase_date.val().split("/");
-	$.ajax({
-		url: "/api/accounting/purchases",
-		dataType: "json",
-		data: {
-			ajax: true,
-			purchase_date:purchase_date.val(),
-			purchase_number:$("#purchase_number").val()
-		},
-		success: function( data ) {
-			if (data.result.length) {
-				var d = new Date(data.result[data.result.length-1].purchase_date);
-				showModal('error', "La data deve essere uguale o successiva al "+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear(), function () {setTimeout("\$(\"#purchase_date\").focus()",50)});
-			}
-		}
-	});
 }
 
 function checkQuantity(input){

@@ -21,8 +21,8 @@ exports.get = function get(req, res) {
 			if (!req.query.year) req.query.year = new Date().getUTCFullYear();
 			if (req.query.year && req.query.year!="ALL Years") {
 				year = parseInt(req.query.year);
-				var start = new Date(year-1, 11, 31);
-				var end = new Date(year+1, 0, 1);
+				var start = new Date(Date.UTC(year-1, 11, 31));
+				var end = new Date(Date.UTC(year+1, 0, 1));
 				query.offer_date = {$gte: start, $lt: end}
 			} else {
 				year = req.query.year;

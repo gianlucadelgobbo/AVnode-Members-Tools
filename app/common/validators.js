@@ -193,7 +193,7 @@ Validators.is_date = function (aaaa,mm,gg){
   var res = true;
   var mmNew = parseFloat(mm)-1;
   mm = (mmNew.toString().length==1 ? "0"+mmNew : mmNew);
-  var dteDate=new Date(aaaa,mm,gg);
+  var dteDate=new Date(Date.UTC(aaaa,mm,gg));
   if (!((gg==dteDate.getUTCDate()) && (mm==dteDate.getUTCMonth()) && (aaaa==dteDate.getUTCFullYear())))
     res = false;
   return res;
