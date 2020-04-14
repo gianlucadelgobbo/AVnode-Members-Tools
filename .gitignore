@@ -8,5 +8,5 @@ app.js
 app/public/css/style.css
 warehouse/accounts/*
 package-lock.json 
-app/server/config.js
+app/config.js
 *.code-workspace

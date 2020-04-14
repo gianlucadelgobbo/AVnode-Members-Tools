@@ -12,18 +12,18 @@ global.settings = {
   root_path:		__dirname,
   defaultLocales: ["en","it"],
   defaultLocale: 	"en",
-  roles: require('./app/server/config.js')._roles.roles,
+  roles: require('./config/config.js')._roles.roles,
   googleAnalytics: "UA-91163374-1"
 };
-var DBUsers = require('./app/server/helpers/db-users-manager');
+var DBUsers = require('./app/helpers/db-users-manager');
 
 DBUsers.init(function(){
   var exp = require('express');
   var app = exp();
   app.set('port', process.env.PORT || global.settings.port);
 
-  require('./app/server/setup')(app, exp);
-  require('./app/server/router')(app);
+  require('./app/setup')(app, exp);
+  require('./app/router')(app);
 
   app.listen(app.get('port'), function(){
     console.log("Express server listening on port %d in %s mode", app.get('port'), app.settings.env);

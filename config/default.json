@@ -1,0 +1,46 @@
+{
+  "invoices": {
+    "title_list": "Invoices",
+    "title_single": "Invoice",
+    "coll": "invoices",
+    "folder": "invoices",
+    "puglist": "invoices",
+    "pugdett": "invoice",
+    "doc_preview": "invoice_preview",
+    "doc_pdf": "invoice_pdf",
+    "doc_xml": "invoice_xml"
+  },
+  "offers": {
+    "title_list": "Offers",
+    "title_single": "Offer",
+    "coll": "offers",
+    "folder": "offers",
+    "puglist": "invoices",
+    "pugdett": "offer",
+    "doc_preview": "invoice_preview",
+    "doc_pdf": "invoice_pdf",
+    "doc_xml": "invoice_xml"
+  },
+  "creditnotes": {
+    "title_list": "Credit Notes",
+    "title_single": "Credit Note",
+    "coll": "creditnotes",
+    "folder": "creditnotes",
+    "puglist": "invoices",
+    "pugdett": "creditnote",
+    "doc_preview": "invoice_preview",
+    "doc_pdf": "invoice_pdf",
+    "doc_xml": "invoice_xml"
+  },
+  "purchases": {
+    "title_list": "Purchases",
+    "title_single": "Purchase",
+    "coll": "purchases",
+    "folder": "purchases",
+    "puglist": "invoices",
+    "pugdett": "purchase",
+    "doc_preview": "invoice_preview",
+    "doc_pdf": "invoice_pdf",
+    "doc_xml": "invoice_xml"
+  }
+}

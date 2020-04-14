@@ -1,0 +1,30 @@
+#sidebar.sidebar-offcanvas
+  .col-md-12
+    h3=__("Accounting")
+    ul.nav.nav-pills.nav-stacked
+      li(class=(global.settings.currenturl == '/'+global.settings.dbName+'/accounting/customers/' ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/customers/")=__("Customers")
+      li(class=(global.settings.currenturl == '/'+global.settings.dbName+'/accounting/customers/new/' ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/customers/new/")=__("New customer")
+
+      li(class=(global.settings.currenturl != '/'+global.settings.dbName+'/accounting/offers/new/' && global.settings.currenturl.indexOf('/accounting/offers/')>0 ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/offers/")=__("Offers")
+      li(class=(global.settings.currenturl == '/'+global.settings.dbName+'/accounting/offers/new/' ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/offers/new/")=__("New offer")
+
+      li(class=(global.settings.currenturl != '/'+global.settings.dbName+'/accounting/invoices/new/' && global.settings.currenturl.indexOf('/accounting/invoices/')>0 ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/invoices/")=__("Invoices")
+      li(class=(global.settings.currenturl == '/'+global.settings.dbName+'/accounting/invoices/new/' ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/invoices/new/")=__("New invoice")
+
+      li(class=(global.settings.currenturl != '/'+global.settings.dbName+'/accounting/creditnotes/new/' && global.settings.currenturl.indexOf('/accounting/creditnotes/')>0 ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/creditnotes/")=__("Credit Notes")
+      li(class=(global.settings.currenturl == '/'+global.settings.dbName+'/accounting/creditnotes/new/' ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/creditnotes/new/")=__("New Credit Note")
+
+      li(class=(global.settings.currenturl != '/'+global.settings.dbName+'/accounting/purchases/new/' && global.settings.currenturl != '/'+global.settings.dbName+'/accounting/purchases/import/' && global.settings.currenturl.indexOf('/accounting/purchases/')>0 ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/purchases/")=__("Purchases")
+      li(class=(global.settings.currenturl == '/'+global.settings.dbName+'/accounting/purchases/new/' ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/purchases/new/")=__("New Purchase")
+      li(class=(global.settings.currenturl == '/'+global.settings.dbName+'/accounting/purchases/import/' ? "active" : undefined))
+        a(href="/" + global.settings.dbName + "/accounting/purchases/import/")=__("Import Purchases")

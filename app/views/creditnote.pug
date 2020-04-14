@@ -1,0 +1,267 @@
+extends layout
+block content
+  .row-offcanvas.row-offcanvas-left.cnt
+    include accounting_sidebar
+    #main
+      .col-md-12
+        form(method="post", action="/"+global.settings.dbName+"/accounting/creditnote/?id="+result._id,onsubmit='$("[disabled]").removeAttr("disabled")')#creditnote
+          .row
+            .col-sm-6
+              h1.page-title=(result.doc_number ? __("Credit Note")+": "+result.doc_number : __("New creditnote"))
+            .col-sm-6
+              .pull-right
+                input(type="submit", value=__("SAVE")).btn.btn-success
+                - if (result._id)
+                  span!="&nbsp;"
+                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/creditnote/new/?dup="+result._id+"'").btn.btn-primary
+                  span!="&nbsp;"
+                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/creditnote/?id="+result._id+"'").btn.btn-primary
+                  span(style=(_config.company.address.country=="Italy" ? "" : "display:none;"))
+                    span!="&nbsp;"
+                    a(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.doc_number).slice(-5))+".xml", href="window.location='/"+global.settings.dbName+"/accounting/xml/creditnote/?id="+result._id+"'").btn.btn-primary=__("XML")
+                  span!="&nbsp;"
+                  input(type="button", value=__("DELETE"), onclick="window.location='/" + global.settings.dbName + "/accounting//creditnotes/?id=" + result._id + "&del=1").btn.btn-danger
+                  input(type="hidden", name="id", value=result._id)
+          hr
+          - if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
+            .alert.alert-danger
+              h4=__("There are some errors")
+              ul
+                - for(a=0;a<msg.e.length;a++)
+                  li=msg.e[a].m
+          - if (typeof msg !== "undefined" && typeof msg.c !== "undefined" && msg.c.length)
+            .alert.alert-success
+              h4=__("There are some messages")
+              ul
+                - for(a=0;a<msg.c.length;a++)
+                  li=msg.c[a].m
+          div.row
+            .col-sm-7
+              .row
+                .col-sm-6
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='doc_number')=__("Credit Note number")
+                      input(type="text", name="doc_number", value=result.doc_number, disabled).form-control#doc_number
+                      a.input-group-addon.btn(href='#', onclick='$("#doc_number").removeAttr("disabled")')=__("Edit")
+                .col-sm-6
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='doc_date')=__("Credit Note date")
+                      - d = result.doc_date;
+                      input(type="text", name="doc_date", value=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()).form-control.date#doc_date
+              .row
+                .col-sm-12
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='doc_to')=__("Customer")
+                      input(type="text", name="doc_to[name]", value=result.doc_to.name).form-control#doc_to
+                      a(href="/"+global.settings.dbName+"/accounting/customers/new/").btn.input-group-addon=__("Insert new customer")
+                      input(type="hidden", name="doc_to[_id]", value=result.doc_to._id)#customer_id
+              .row
+                .col-sm-12
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='address')=__("Address")
+                      input(type="text", name="doc_to[address][street]", value=result.doc_to.address.street, disabled).street.form-control#street
+              .row
+                .col-sm-3
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='zipcode')=__("ZIP code")
+                      input(type="text", name="doc_to[address][zipcode]", value=result.doc_to.address.zipcode, disabled).zipcode.form-control#zipcode
+                .col-sm-3
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='city')=__("City")
+                      input(type="text", name="doc_to[address][city]", value=result.doc_to.address.city, disabled).city.form-control#city
+                .col-sm-3
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='province')=__("Province")
+                      input(type="text", name="doc_to[address][province]", value=result.doc_to.address.province, disabled).province.form-control#province
+                .col-sm-3
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='country')=__("Country")
+                      input(type="text", name="doc_to[address][country]", value=result.doc_to.address.country, disabled).country.form-control#country
+                      input(type="hidden", name="doc_to[address][countrycode]", value=result.doc_to.address.countrycode).countrycode.form-control#countrycode
+                      span.input-group-addon.countrycode_visible#countrycode_visible=result.doc_to.address.countrycode
+                      //(type="text", name="doc_to[address][countrycode]", value=result.doc_to.address.countrycode, disabled).country.form-control#countrycode
+              .row
+                .col-sm-12
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='vat_number')=__("VAT number")
+                      input(type="text", name="doc_to[vat_number]", value=result.doc_to.vat_number, disabled).vat_number.form-control#vat_number
+              #italyonly(style=(result.doc_to.address.country=="Italy" ? "" : "display:none;"))
+                .row
+                  .col-sm-12
+                    .form-group
+                      .input-group
+                        label.input-group-addon(for='fiscal_code')=__("Fiscal code")
+                        input(type="text", name="doc_to[fiscal_code]", value=result.doc_to.fiscal_code, disabled).fiscal_code.form-control#fiscal_code
+                .row
+                  .col-sm-6
+                    .form-group
+                      .input-group
+                        label.input-group-addon(for='unique_code')=__("Unique code")
+                        input(type="text", name="doc_to[unique_code]", value=result.doc_to.unique_code, disabled).unique_code.form-control#unique_code
+                  .col-sm-6
+                    .form-group
+                      .input-group
+                        label.input-group-addon(for='pec')=__("PEC")
+                        input(type="text", name="doc_to[pec]", value=result.doc_to.pec, disabled).pec.form-control#pec
+            .col-sm-5
+              .row
+                .col-sm-12
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='payment')=__("Payment")
+                      input(type="text", name="payment", value=result.payment).form-control#payment
+              .row
+                .col-sm-12
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='destination')=__("Shipped to")
+                      input(type="text", name="destination", value=result.destination).form-control#destination
+              .row
+                .col-sm-12
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='doc_number')=__("Invoice number")
+                      input(type="text", name="invoice[doc_number]", value=result.invoice.doc_number, disabled).form-control#doc_number
+                      a.input-group-addon.btn.btn-default(onclick='showInvoices()')=__("Select")
+                      a.input-group-addon.btn(href='#', disabled)#invoice_url
+                        i.glyphicon.glyphicon-eye-open
+                        .sr-only=__("View")
+                  input(type="hidden", name="invoice[invoice_id]", value=result.invoice.invoice_id)#invoice_id
+              .row
+                .col-sm-12
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='doc_date')=__("Invoice date")
+                      - if (result.invoice.doc_date)
+                        - d = result.invoice.doc_date;
+                        input(type="text", name="invoice[doc_date]", value=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear(), disabled).form-control.date#doc_date
+                      - else
+                        input(type="text", name="invoice[doc_date]", disabled).form-control.date#doc_date
+              .row
+                .col-sm-12
+                  .form-group
+                    .input-group
+                      label.input-group-addon(for='delivery_date')=__("Delivery date")
+                      - var dd=""
+                      - if (result.delivery_date) dd = result.delivery_date.getUTCDate()+"/"+(result.delivery_date.getUTCMonth()+1)+"/"+result.delivery_date.getUTCFullYear()
+                      input(type="text", name="delivery_date", value=dd).form-control.date#delivery_date
+          hr
+          .container_overflow
+            table.table.tabCnt
+              thead
+                tr
+                  th.tabQuantity=__("Quantity")
+                  th.tabDescription=__("Description")
+                  th.tabPrice=__("Price")
+                  th.tabAmount=__("Amount")
+                  th.tabDelete
+              tbody#items
+                - var a = 0
+                - for(a=0;a<result.items.length;a++)
+                  tr
+                    td.tabQuantity
+                      input(type="text", name="items["+a+"][quantity]",value=result.items[a].quantity,id="quantity_"+a).form-control.quantity
+                    td.tabDescription
+                      textarea(type="text", name="items["+a+"][description]",id="description_"+a).description.form-control=result.items[a].description
+                    td.tabPrice
+                      .input-group
+                        span.input-group-addon=_config.currency[0]
+                        input(type="text", name="items["+a+"][price]",value=result.items[a].price,id="price_"+a).price.form-control
+                    td.tabAmount
+                      .input-group
+                        span.input-group-addon=_config.currency[0]
+                        input(type="text", name="items["+a+"][amount]",value=result.items[a].amount,id="amount_"+a, disabled).amount.form-control
+                    td.tabDelete
+                      a.btn(href="#", onclick="removeRow(this); return false;")
+                        i.glyphicon.glyphicon-remove
+              tfoot
+                tr
+                  td(colspan="5")
+                    .text-center
+                      a.btn.btn-primary(href="#", onclick="addNewRow(); return false;")
+                        i.glyphicon.glyphicon-plus
+                tr
+                  td
+                  td
+                  td
+                    label.pull-right(for='subtotal')=__("Subtotal")
+                  td
+                    .input-group
+                      span.input-group-addon=_config.currency[0]
+                      input(type="text", name="subtotal", value=result.subtotal, disabled).form-control.totals#subtotal.input-medium
+                  td
+                tr
+                  td
+                  td
+                  td
+                    .input-group
+                      label.input-group-addon(for='vat_perc')=__("VAT")
+                      input(type="text", name="vat_perc", value=result.vat_perc).form-control#vat_perc.input-mini
+                      span.input-group-addon %
+                  td
+                    .input-group
+                      span.input-group-addon=_config.currency[0]
+                      input(type="text", name="vat_amount", value=result.vat_amount, disabled).form-control.totals.vat_amount.input-medium
+                  td
+                tr
+                  td
+                  td
+                  td
+                    label.pull-right(for='shipping_costs')=__("Shipping costs")
+                  td
+                    .input-group
+                      span.input-group-addon=_config.currency[0]
+                      input(type="text", name="shipping_costs", value=result.shipping_costs).form-control.totals#shipping_costs.input-medium
+                  td
+                tr
+                  td
+                  td
+                  td
+                    label.pull-right(for='total')=__("TOTAL")
+                  td
+                    .input-group
+                      span.input-group-addon=_config.currency[0]
+                      input(type="text", name="total", value=result.total, disabled).form-control.total#total.input-medium
+                  td
+          hr.clearfix
+          label.add-on(for='bank')=__("Bank")
+          select(id="bank",name="bank").form-control
+            option=__("Select a bank account")
+            - for (a=0;a<_config.banks.length;a++)
+              - var b = _config.banks[a]
+              - if (_config.banks[a]==result.bank)
+                option(value=_config.banks[a], selected="selected")=_config.banks[a]
+              - else
+                option(value=_config.banks[a])=_config.banks[a]
+          div.row
+            .col-sm-6
+            .col-sm-6
+              .pull-right
+                br
+                input(type="submit", value=__("SAVE")).btn.btn-success
+                - if (result._id)
+                  span!="&nbsp;"
+                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/creditnote/new/?dup=" + result._id + "'").btn.btn-primary
+                  span!="&nbsp;"
+                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/creditnote/?id=" + result._id + "'").btn.btn-primary
+      
+        - if (result.revisions)
+          br
+          div.container-fluid.well
+            h3=__("Revisions")
+            ul
+              each x in result.revisions
+                //li=x.userID+" "+x.username+" "+x.time
+                li!="<b>"+x.username+"</b> "+x.time
+      
+        br
+        - js = '/js/creditnote.js'

@@ -4,7 +4,7 @@ var Validators = {};
 Validators.checkCustomerID = function(customerID){
   var errors = [];
   if(!customerID){
-    errors.push({name:"to_client[name]",m:__("You have to insert a valid customer")});
+    errors.push({name:"doc_to[name]",m:__("You have to insert a valid customer")});
   }
   return errors;
 };
@@ -93,26 +93,26 @@ Validators.checkVAT = function (pi, country, callback) {
   return errors;
 };
 
-Validators.checkInvoiceNumber = function(invoiceNumber){
+Validators.checkDocNumber = function(invoiceNumber){
   var errors = [];
-  if (!invoiceNumber) errors.push({name:"invoice_number",m:__("No invoice number")});
+  if (!invoiceNumber) errors.push({name:"doc_number",m:__("No invoice number")});
   return errors;
 };
 
-Validators.checkInvoiceDate = function(invoiceDate){
+Validators.checkDocDate = function(invoiceDate){
   var errors = [];
   if (!invoiceDate) {
-    errors.push({name:"invoice_date",m:__("No invoice date")});
+    errors.push({name:"doc_date",m:__("No document date")});
   } else {
     var d = invoiceDate.split("/");
-    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"invoice_date",m:__("Invoice date is not date")});
+    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Document date is not date")});
   }
   return errors;
 };
 
 Validators.checkCreditNoteNumber = function(creditnoteNumber){
   var errors = [];
-  if (!creditnoteNumber) errors.push({name:"creditnote_number",m:__("No credit note number")});
+  if (!creditnoteNumber) errors.push({name:"doc_number",m:__("No credit note number")});
   return errors;
 };
 Validators.checkPaymentDays = function(payment_days){
@@ -124,27 +124,27 @@ Validators.checkPaymentDays = function(payment_days){
 Validators.checkCreditNoteDate = function(creditnoteDate){
   var errors = [];
   if (!creditnoteDate) {
-    errors.push({name:"creditnote_date",m:__("No credit note date")});
+    errors.push({name:"doc_date",m:__("No credit note date")});
   } else {
     var d = creditnoteDate.split("/");
-    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"creditnote_date",m:__("Credit Note date is not date")});
+    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Credit Note date is not date")});
   }
   return errors;
 };
 
 Validators.checkPurchaseNumber = function(purchaseNumber){
   var errors = [];
-  if (!purchaseNumber) errors.push({name:"purchase_number",m:__("No purchase number")});
+  if (!purchaseNumber) errors.push({name:"doc_number",m:__("No purchase number")});
   return errors;
 };
 
 Validators.checkPurchaseDate = function(purchaseDate){
   var errors = [];
   if (!purchaseDate) {
-    errors.push({name:"purchase_date",m:__("No purchase date")});
+    errors.push({name:"doc_date",m:__("No purchase date")});
   } else {
     var d = purchaseDate.split("/");
-    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"purchase_date",m:__("Purchase date is not date")});
+    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Purchase date is not date")});
   }
   return errors;
 };
@@ -162,18 +162,18 @@ Validators.checkDeliveryDate = function(deliveryDate){
 
 Validators.checkOfferNumber = function(offerNumber){
   var errors = [];
-  if (!offerNumber) errors.push({name:"offer_number",m:__("No offer number")});
+  if (!offerNumber) errors.push({name:"doc_number",m:__("No offer number")});
   return errors;
 };
 
 Validators.checkOfferDate = function(offerDate){
   var errors = [];
   if (!offerDate) {
-    errors.push({name:"offer_date",m:__("No offer date")});
+    errors.push({name:"doc_date",m:__("No offer date")});
   } else {
     var d = offerDate.split("/");
-    //if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"invoice_date",m:__("Invoice date is not date")});
-    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"invoice_date",m:__("Invoice date is not date")});
+    //if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Invoice date is not date")});
+    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Document date is not date")});
   }
   return errors;
 };

@@ -1,0 +1,63 @@
+doctype xml
+ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2')
+  FatturaElettronicaHeader
+    DatiTrasmissione
+      IdTrasmittente
+        IdPaese=udata.countrycode
+        IdCodice=udata.fiscal_code.toUpperCase()
+      ProgressivoInvio=result.doc_number
+      FormatoTrasmissione="FPR12"
+      //valori ammessi: [FPA12] = fattura verso PA [FPR12] = fattura verso privati
+      if result.doc_from.unique_code
+        CodiceDestinatario=result.doc_from.unique_code
+      if result.doc_from.pec
+        PECDestinatario=result.doc_from.pec
+    CedentePrestatore
+      DatiAnagrafici
+        IdFiscaleIVA
+          IdPaese=_config.company.address.countrycode
+          IdCodice=_config.company.vat_number
+        CodiceFiscale=_config.company.fiscal_code
+        Anagrafica
+          Denominazione=_config.company.name.toUpperCase()
+        RegimeFiscale="RF01"
+      Sede
+        Indirizzo=_config.company.address.street.toUpperCase()
+        //numerocivico=_config.company.address.street
+        CAP=_config.company.address.zipcode.toUpperCase()
+        Comune=_config.company.address.city.toUpperCase()
+        Provincia=_config.company.address.province.toUpperCase()
+        Nazione=_config.company.address.countrycode
+    CessionarioCommittente
+      DatiAnagrafici
+        IdFiscaleIVA
+          IdPaese=result.doc_from.address.countrycode
+          IdCodice=result.doc_from.vat_number.toUpperCase()
+        CodiceFiscale=result.doc_from.fiscal_code.toUpperCase()
+        Anagrafica
+          Denominazione=result.doc_from.name.toUpperCase()
+      Sede
+        Indirizzo=result.doc_from.address.street.toUpperCase()
+        CAP=result.doc_from.address.zipcode.toUpperCase()
+        Comune=result.doc_from.address.city.toUpperCase()
+        Provincia=result.doc_from.address.province.toUpperCase()
+        Nazione=result.doc_from.address.countrycode
+  FatturaElettronicaBody
+    DatiGenerali
+      DatiGeneraliDocumento
+        TipoDocumento="TD01"
+        // TD04 nota di credito
+        Divisa="EUR"
+        - d = result.doc_date;                      
+        Data=d.getUTCFullYear()+"-"+(("0" + (d.getUTCMonth()+1)).slice(-2))+"-"+(("0" + (d.getUTCDate())).slice(-2))
+        Numero=result.doc_number
+        ImportoTotaleDocumento=result.total
+    DatiBeniServizi
+      - for(a=0;a<result.items.length;a++)
+        DettaglioLinee
+          NumeroLinea=(a+1)
+          descrizione=result.items[a].description.toUpperCase()
+          Quantita=result.items[a].quantity
+          PrezzoUnitario=result.items[a].price
+          PrezzoTotale=result.items[a].amount
+          AliquotaIVA=result.vat_perc
