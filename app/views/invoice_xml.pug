@@ -74,17 +74,17 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
           // [TP01]: pagamento a rate
           // [TP02]: pagamento completo
           // [TP03]: anticipo
-          DettaglioPagamento
-            Beneficiario=_config.company.name.toUpperCase()
-            ModalitaPagamento="MP05"
-            DataRiferimentoTerminiPagamento=d.getUTCFullYear()+"-"+(("0" + (d.getUTCMonth()+1)).slice(-2))+"-"+(("0" + (d.getUTCDate())).slice(-2))
-            - var d2 = new Date(d.getTime()+(60*24*60*60*1000))
-            GiorniTerminiPagamento=result.payment_days
-            DataScadenzaPagamento=d2.getUTCFullYear()+"-"+(("0" + (d2.getUTCMonth()+1)).slice(-2))+"-"+(("0" + (d2.getUTCDate())).slice(-2))
-            ImportoPagamento=parseFloat(result.total).toFixed(2)
-            IstitutoFinanziario=result.bank.name
-            IBAN=result.bank.IBAN
-            CAB=result.bank.CAB
-            ABI=result.bank.ABI
+        DettaglioPagamento
+          Beneficiario=_config.company.name.toUpperCase()
+          ModalitaPagamento="MP05"
+          DataRiferimentoTerminiPagamento=d.getUTCFullYear()+"-"+(("0" + (d.getUTCMonth()+1)).slice(-2))+"-"+(("0" + (d.getUTCDate())).slice(-2))
+          - var d2 = new Date(d.getTime()+(60*24*60*60*1000))
+          GiorniTerminiPagamento=result.payment_days
+          DataScadenzaPagamento=d2.getUTCFullYear()+"-"+(("0" + (d2.getUTCMonth()+1)).slice(-2))+"-"+(("0" + (d2.getUTCDate())).slice(-2))
+          ImportoPagamento=parseFloat(result.total).toFixed(2)
+          IstitutoFinanziario=result.bank.name
+          IBAN=result.bank.IBAN
+          CAB=result.bank.CAB
+          ABI=result.bank.ABI
           
           
