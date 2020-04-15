@@ -51,16 +51,16 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
         Divisa="EUR"
         Data=d.getUTCFullYear()+"-"+(("0" + (d.getUTCMonth()+1)).slice(-2))+"-"+(("0" + (d.getUTCDate())).slice(-2))
         Numero=result.doc_number
-        ImportoTotaleDocumento=result.total
+        ImportoTotaleDocumento=parseFloat(result.total).toFixed(2)
     DatiBeniServizi
       - for(a=0;a<result.items.length;a++)
         DettaglioLinee
           NumeroLinea=(a+1)
           descrizione=result.items[a].description.toUpperCase()
           Quantita=result.items[a].quantity
-          PrezzoUnitario=result.items[a].price
-          PrezzoTotale=result.items[a].amount
-          AliquotaIVA=result.vat_perc
+          PrezzoUnitario=parseFloat(result.items[a].price).toFixed(2)
+          PrezzoTotale=parseFloat(result.items[a].amount).toFixed(2)
+          AliquotaIVA=parseFloat(result.vat_perc).toFixed(2)
     if result.bank && result.bank.name
       DatiPagamento
         CondizioniPagamento="TP02"
@@ -74,7 +74,7 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
             - var d2 = new Date(d.getTime()+(60*24*60*60*1000))
             GiorniTerminiPagamento=result.payment_days
             DataScadenzaPagamento=d2.getUTCFullYear()+"-"+(("0" + (d2.getUTCMonth()+1)).slice(-2))+"-"+(("0" + (d2.getUTCDate())).slice(-2))
-            ImportoPagamento=result.total
+            ImportoPagamento=parseFloat(result.total).toFixed(2)
             IstitutoFinanziario=result.bank.name
             IBAN=result.bank.IBAN
             CAB=result.bank.CAB

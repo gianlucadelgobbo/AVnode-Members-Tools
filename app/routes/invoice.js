@@ -186,7 +186,7 @@ exports.getXML = (req, res) => {
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
       DB[config[req.params.sez].coll].findOne({_id:new ObjectID(req.params.id)},function(e, result) {
-        result = helpers.formatMoney(result);
+        //result = helpers.formatMoney(result);
         res.set('Content-Type', 'text/xml');
         res.render(config[req.params.sez].doc_xml, { title: __(config[req.params.sez].title_single), country:global._config.company.country, result : result, udata : req.session.user });
       });

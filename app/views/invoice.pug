@@ -15,14 +15,14 @@ block content
                 input(type="submit", value=__("SAVE")).btn.btn-success
                 - if (result._id)
                   span!="&nbsp;"
-                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/new/?dup=1'").btn.btn-primary
+                  a.btn.btn-primary(href="/"+global.settings.dbName+"/accounting/invoices/new/?dup="+result._id)=__("DUPLICATE")
                   span!="&nbsp;"
-                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/print'").btn.btn-primary
+                  a.btn.btn-primary(href="/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/print")=__("PRINT")
                   span(style=(_config.company.address.country=="Italy" ? "" : "display:none;"))
                     span!="&nbsp;"
-                    a(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.doc_number).slice(-5))+".xml", href="window.location='/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/xml'").btn.btn-primary=__("XML")
+                    a.btn.btn-primary(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.doc_number).slice(-5))+".xml", href="/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/xml")=__("XML")
                   span!="&nbsp;"
-                  input(type="button", value=__("DELETE"), onclick="window.location='/" + global.settings.dbName + "/accounting//invoices/" + result._id + "/del").btn.btn-danger
+                  a.btn.btn-danger(href="/" + global.settings.dbName + "/accounting/invoices/" + result._id + "/del")=__("DELETE")
                   input(type="hidden", name="id", value=result._id)
           hr
           - if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
@@ -270,14 +270,14 @@ block content
                 input(type="submit", value=__("SAVE")).btn.btn-success
                 - if (result._id)
                   span!="&nbsp;"
-                  input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/new/?dup=1'").btn.btn-primary
+                  a.btn.btn-primary(href="/"+global.settings.dbName+"/accounting/invoices/new/?dup="+result._id)=__("DUPLICATE")
                   span!="&nbsp;"
-                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/print'").btn.btn-primary
+                  a.btn.btn-primary(href="/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/print")=__("PRINT")
                   span(style=(_config.company.address.country=="Italy" ? "" : "display:none;"))
                     span!="&nbsp;"
-                    a(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.doc_number).slice(-5))+".xml", href="window.location='/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/xml'").btn.btn-primary=__("XML")
+                    a.btn.btn-primary(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.doc_number).slice(-5))+".xml", href="/"+global.settings.dbName+"/accounting/invoices/"+result._id+"/xml")=__("XML")
                   span!="&nbsp;"
-                  input(type="button", value=__("DELETE"), onclick="window.location='/" + global.settings.dbName + "/accounting//invoices/" + result._id + "/del").btn.btn-danger
+                  a.btn.btn-danger(href="/" + global.settings.dbName + "/accounting/invoices/" + result._id + "/del")=__("DELETE")
       
         - if (result.revisions)
           br
