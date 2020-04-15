@@ -53,14 +53,21 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
         Numero=result.doc_number
         ImportoTotaleDocumento=parseFloat(result.total).toFixed(2)
     DatiBeniServizi
+      - var ImponibileImporto = 0
       - for(a=0;a<result.items.length;a++)
         DettaglioLinee
           NumeroLinea=(a+1)
-          descrizione=result.items[a].description.toUpperCase()
-          Quantita=result.items[a].quantity
+          Descrizione=result.items[a].description.toUpperCase()
+          Quantita=parseFloat(result.items[a].quantity).toFixed(2)
           PrezzoUnitario=parseFloat(result.items[a].price).toFixed(2)
+          - ImponibileImporto+=parseFloat(result.items[a].amount)
           PrezzoTotale=parseFloat(result.items[a].amount).toFixed(2)
           AliquotaIVA=parseFloat(result.vat_perc).toFixed(2)
+      DatiRiepilogo
+        AliquotaIVA=parseFloat(result.vat_perc).toFixed(2)
+        ImponibileImporto=parseFloat(result.subtotal).toFixed(2)
+        Imposta=parseFloat(result.vat_amount).toFixed(2)
+        EsigibilitaIVA="I"
     if result.bank && result.bank.name
       DatiPagamento
         CondizioniPagamento="TP02"
