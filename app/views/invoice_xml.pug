@@ -71,9 +71,9 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
     if result.bank && result.bank.name
       DatiPagamento
         CondizioniPagamento="TP02"
-          // [TP01]: pagamento a rate
-          // [TP02]: pagamento completo
-          // [TP03]: anticipo
+        // [TP01]: pagamento a rate
+        // [TP02]: pagamento completo
+        // [TP03]: anticipo
         DettaglioPagamento
           Beneficiario=_config.company.name.toUpperCase()
           ModalitaPagamento="MP05"
