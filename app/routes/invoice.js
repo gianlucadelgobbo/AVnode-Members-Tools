@@ -146,10 +146,11 @@ exports.getPrint = (req, res) => {
           var folder = '/accounts/'+global.settings.dbName+'/'+config[req.params.sez].folder+'/'+result.doc_date.getUTCFullYear()+'/';
           var filename = result.doc_date.getUTCFullYear()+'-'+(result.doc_date.getUTCMonth()+1)+'-'+result.doc_date.getUTCDate()+'_'+result.doc_number+'_'+global.settings.companyName+'_'+result.doc_to.name+'.pdf';
           //fs.writeFile('./warehouse/'+global.settings.dbName+"/style_print.pug", "", { flag: 'wx' }, function (err) {
-          DB.customers.findOne({_id:new ObjectID(result.doc_to._id)},function(e, doc_to) {
-            if (!doc_to.contacts) doc_to.contacts = [];
+          var id = req.params.sez == "purchases" ? result.doc_from._id : result.doc_to._id
+          DB.customers.findOne({_id:new ObjectID(id)},function(e, customer) {
+            if (!customer.contacts) customer.contacts = [];
             res.render('accounts/'+global.settings.dbName+"_style_print", {layout: false}, function (error_style, style) {
-              res.render(config[req.params.sez].doc_preview, {  title: __(config[req.params.sez].title_single), country:global._config.company.country, result : result, udata : req.session.user , file:folder+filename, style:style, js:"/js/sendemail.js", doc_to:doc_to/* */}, function (error1, html1) {
+              res.render(config[req.params.sez].doc_preview, {  title: __(config[req.params.sez].title_single), country:global._config.company.country, result : result, udata : req.session.user , file:folder+filename, style:style, js:"/js/sendemail.js", customer:customer/* */}, function (error1, html1) {
                 console.log("error_style");
                 console.log(config[req.params.sez].doc_preview);
                   console.log(error1);
