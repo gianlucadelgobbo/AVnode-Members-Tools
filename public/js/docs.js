@@ -67,9 +67,14 @@ $(function() {
 		}
 	});
 
-	$("#invoice").submit(function() {
-		$(".disabled").removeAttr('disabled');
-		return checkInvoice();
+	$("#doc_form").submit(function(event) {
+		event.preventDefault();
+		$("[disabled]").removeAttr("disabled");
+		if ($("#customer_id").length) {
+			if (checkDoc()) $(this).unbind('submit').submit();
+		} else {
+			$(this).unbind('submit').submit();
+		}
 	});
 	
 	// datepicker
@@ -230,7 +235,7 @@ function checkVATPerc(input){
 	}
 }
 
-function checkInvoice(){
+function checkDoc(){
 	var res = true;
 	// Check _id customer
 	if (!$("#customer_id").val()){

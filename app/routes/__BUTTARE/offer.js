@@ -1,7 +1,7 @@
 var ObjectID = require('mongodb').ObjectID;
-var DB = require('./../helpers/db-manager');
-var Validators = require('../common/validators').Validators;
-var helpers = require('./../helpers/helpers');
+var DB = require('../../helpers/db-manager');
+var Validators = require('../../common/validators').Validators;
+var helpers = require('../../helpers/helpers');
 var fs = require("fs");
 
 exports.get = function get(req, res) {

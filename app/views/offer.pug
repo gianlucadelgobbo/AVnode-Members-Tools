@@ -4,7 +4,7 @@ block content
     include accounting_sidebar
     #main
       .col-md-12
-        form(method="post", onsubmit='$("[disabled]").removeAttr("disabled")')#offer
+        form(method="post")#doc_form
           .row
             .col-sm-6
               h1.page-title=(result.doc_number ? __("Offer")+": "+result.doc_number : __("New offer"))
@@ -35,63 +35,7 @@ block content
                 - for(a=0;a<msg.c.length;a++)
                   li=msg.c[a].m
           div.row
-            .col-sm-7
-              .row
-                .col-sm-6
-                  .form-group
-                    .input-group
-                      label.input-group-addon(for='doc_number')=__("Offer number")
-                      input(type="text", name="doc_number", value=result.doc_number, disabled).form-control#doc_number
-                      a.input-group-addon.btn(href='#', onclick='$("#doc_number").removeAttr("disabled")')=__("Edit")
-                .col-sm-6
-                  .form-group
-                    .input-group
-                      label.input-group-addon(for='doc_date')=__("Offer date")
-                      - d = result.doc_date;
-                      input(type="text", name="doc_date", value=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()).form-control.date#doc_date
-              .row
-                .col-sm-12
-                  .form-group
-                    .input-group
-                      label.input-group-addon(for='doc_to')=__("Customer")
-                      input(type="text", name="doc_to[name]", value=result.doc_to.name).form-control#doc_to
-                      a(href="/"+global.settings.dbName+"/accounting/customers/new/").btn.input-group-addon=__("Insert new customer")
-                      input(type="hidden", name="doc_to[_id]", value=result.doc_to._id)#customer_id
-              .row
-                .col-sm-12
-                  .form-group
-                    .input-group
-                      label.input-group-addon(for='address')=__("Address")
-                      input(type="text", name="doc_to[address][street]", value=result.doc_to.address.street, disabled).form-control.street#address
-              .row
-                .col-sm-4
-                  .form-group
-                    .input-group
-                      label.input-group-addon(for='zipcode')=__("ZIP code")
-                      input(type="text", name="doc_to[address][zipcode]", value=result.doc_to.address.zipcode, disabled).form-control.zipcode#zipcode
-                .col-sm-4
-                  .form-group
-                    .input-group
-                      label.input-group-addon(for='city')=__("City")
-                      input(type="text", name="doc_to[address][city]", value=result.doc_to.address.city, disabled).form-control.city#city
-                .col-sm-4
-                  .form-group
-                    .input-group
-                      label.input-group-addon(for='country')=__("Country")
-                      input(type="text", name="doc_to[address][country]", value=result.doc_to.address.country, disabled).form-control.country#country
-              .row
-                .col-sm-12
-                  .form-group
-                    .input-group
-                      label.input-group-addon(for='vat_number')=__("VAT number")
-                      input(type="text", name="doc_to[vat_number]", value=result.doc_to.vat_number, disabled).form-control.vat_number#vat_number
-              - if(country=="Italy")
-                .row
-                  .col-sm-12
-                    .form-group
-                      .input-group
-                        label.input-group-addon(for='fiscal_code')=__("Fiscal code")
-                        input(type="text", name="doc_to[fiscal_code]", value=result.doc_to.fiscal_code, disabled).form-control.fiscal_code#fiscal_code
+            include partials/doc_to
             .col-sm-5
               .row
                 .col-sm-12
@@ -235,4 +179,4 @@ block content
                 li!="<b>"+x.username+"</b> "+x.time
 
         br
-        - js = '/js/offer.js'
+        - js = '/js/docs.js'

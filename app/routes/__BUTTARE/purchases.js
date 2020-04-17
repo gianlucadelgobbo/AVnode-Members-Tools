@@ -1,7 +1,7 @@
 var ObjectID = require('mongodb').ObjectID;
-var DB = require('./../helpers/db-manager');
-var helpers = require('./../helpers/helpers');
-var CT = require('../helpers/country-list');
+var DB = require('../../helpers/db-manager');
+var helpers = require('../../helpers/helpers');
+var CT = require('../../helpers/country-list');
 
 var types = ["GEN", "LPM", "LCF", "FNT", "WEB", "PRD", "OTR"];
 

@@ -1,6 +1,6 @@
-var DB = require('./../helpers/db-manager');
-var Validators = require('../common/validators').Validators;
-var helpers = require('./../helpers/helpers');
+var DB = require('../../helpers/db-manager');
+var Validators = require('../../common/validators').Validators;
+var helpers = require('../../helpers/helpers');
 var ObjectID = require('mongodb').ObjectID;
 var fs = require("fs");
 

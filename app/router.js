@@ -10,14 +10,7 @@ var settingsRoutes = require('./routes/settings');
 var lostPasswordRoutes = require('./routes/lost-password');
 var resetPasswordRoutes = require('./routes/reset-password');
 var customersRoutes = require('./routes/customers');
-var invoicesRoutes = require('./routes/invoices');
-var invoiceRoutes = require('./routes/invoice');
-var purchasesRoutes = require('./routes/purchases');
-var purchaseRoutes = require('./routes/purchase');
-var offerRoutes = require('./routes/offer');
-var offersRoutes = require('./routes/offers');
-var creditnotesRoutes = require('./routes/creditnotes');
-var creditnoteRoutes = require('./routes/creditnote');
+var docsRoutes = require('./routes/docs');
 var apiRoutes = require('./routes/api');
 var errorsRoutes = require('./routes/errors');
 
@@ -30,7 +23,6 @@ module.exports = function(app) {
   app.get('/logout', logoutRoutes.get);
 
   // Api //
-  //app.get('/api/partners', apiRoutes.getPartners);
   app.get('/api/accounting/customers', apiRoutes.getCustomers);
   app.get('/api/accounting/payments', apiRoutes.getPayments);
   app.get('/api/accounting/invoices', apiRoutes.getInvoices);
@@ -72,42 +64,16 @@ module.exports = function(app) {
   app.post('/:dbname/accounting/customers/:customer', customersRoutes.post);
 
   // Invoices //
-  app.get('/:dbname/accounting/:sez', invoiceRoutes.getList);
-  app.get('/:dbname/accounting/:sez/new', invoiceRoutes.getDett);
-  app.get('/:dbname/accounting/purchases/import', invoiceRoutes.my_import);
-  app.post('/:dbname/accounting/purchases/import', invoiceRoutes.my_import_act);
-  app.get('/:dbname/accounting/:sez/:id', invoiceRoutes.getDett);
-  app.get('/:dbname/accounting/:sez/:id/del', invoiceRoutes.delete);
-  app.post('/:dbname/accounting/:sez/:id', invoiceRoutes.post);
-  app.get('/:dbname/accounting/:sez/:id/print', invoiceRoutes.getPrint);
-  app.get('/:dbname/accounting/:sez/:id/xml', invoiceRoutes.getXML);
-  app.post('/:dbname/accounting/:sez/:id/set-type', invoiceRoutes.setType);
-  /*app.get('/:dbname/accounting/invoices', invoicesRoutes.get); */
-  //app.get('/:dbname/accounting/invoice', invoiceRoutes.get);
-  //
-  //app.get('/:dbname/accounting/print/invoice', invoiceRoutes.print);
-  //app.get('/:dbname/accounting/xml/invoice', invoiceRoutes.xml);
-
-  // Purchases //
-  //app.get('/:dbname/accounting/purchases', purchasesRoutes.get);
-  /* app.post('/:dbname/accounting/set-type/purchases', purchasesRoutes.post);
-  app.get('/:dbname/accounting/purchase', purchaseRoutes.get);
-  app.post('/:dbname/accounting/purchase', purchaseRoutes.post);
-  app.get('/:dbname/accounting/print/purchase', purchaseRoutes.print);
-  app.get('/:dbname/accounting/xml/purchase', purchaseRoutes.xml);
-
-  // Credit Note //
-  //app.get('/:dbname/accounting/creditnotes', creditnotesRoutes.get);
-  app.get('/:dbname/accounting/creditnote', creditnoteRoutes.get);
-  app.post('/:dbname/accounting/creditnote', creditnoteRoutes.post);
-  app.get('/:dbname/accounting/print/creditnote', creditnoteRoutes.print);
-  app.get('/:dbname/accounting/xml/creditnote', creditnoteRoutes.xml);
-
-  // Offers //
-  //app.get('/:dbname/accounting/offers', offersRoutes.get);
-  app.get('/:dbname/accounting/offer', offerRoutes.get);
-  app.post('/:dbname/accounting/offer', offerRoutes.post);
-  app.get('/:dbname/accounting/print/offer', offerRoutes.print); */
+  app.get('/:dbname/accounting/:sez', docsRoutes.getList);
+  app.get('/:dbname/accounting/:sez/new', docsRoutes.getDett);
+  app.get('/:dbname/accounting/purchases/import', docsRoutes.my_import);
+  app.post('/:dbname/accounting/purchases/import', docsRoutes.my_import_act);
+  app.get('/:dbname/accounting/:sez/:id', docsRoutes.getDett);
+  app.get('/:dbname/accounting/:sez/:id/del', docsRoutes.delete);
+  app.post('/:dbname/accounting/:sez/:id', docsRoutes.post);
+  app.get('/:dbname/accounting/:sez/:id/print', docsRoutes.getPrint);
+  app.get('/:dbname/accounting/:sez/:id/xml', docsRoutes.getXML);
+  app.post('/:dbname/accounting/:sez/:id/set-type', docsRoutes.setType);
 
   // ChangeDB //
   app.get('/:dbname', changedbRoutes.get);

@@ -1,6 +1,6 @@
-var DB = require('./../helpers/db-manager');
+var DB = require('../helpers/db-manager');
 var Validators = require('../common/validators').Validators;
-var helpers = require('./../helpers/helpers');
+var helpers = require('../helpers/helpers');
 var ObjectID = require('mongodb').ObjectID;
 var fs = require("fs");
 const config = require('getconfig');
@@ -196,19 +196,25 @@ exports.getXML = (req, res) => {
     }
   });
 };
-
 exports.post = (req, res) => {
+  console.log("SALVA SALVA SALVA SALVA SALVA ")
+  console.log(req.body)
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
       var errors = [];
       if (req.body.paid=="on") req.body.paid = "true";
       if (req.body.bank==0) delete req.body.bank;
-      if (req.body.bank) req.body.bank = JSON.parse(req.body.bank);
-      errors = errors.concat(Validators.checkCustomerID(req.body.doc_to._id));
+      if (req.body.bank && Validators.isJson(req.body.bank)) {
+        req.body.bank = JSON.parse(req.body.bank);
+      } else {
+        delete req.body.bank;
+      }
+      errors = errors.concat(Validators.checkCustomer(req.params.sez == "purchases" ? req.body.doc_from : req.body.doc_to));
       errors = errors.concat(Validators.checkDocNumber(req.body.doc_number));
       if (req.body.bank || req.body.payment_days) errors = errors.concat(Validators.checkPaymentDays(req.body.payment_days));
       errors = errors.concat(Validators.checkDocDate(req.body.doc_date));
       errors = errors.concat(Validators.checkDeliveryDate(req.body.delivery_date));
+      errors = errors.concat(Validators.checkOfferDate(req.body.offer_date));
       var d = req.body.doc_date.split("/");
       if (errors.length === 0){
         DB.customers.findOne({_id:new ObjectID(req.body.doc_to._id)},function(e, result) {
@@ -281,11 +287,11 @@ exports.post = (req, res) => {
           d = req.body.delivery_date.split("/");
           req.body.delivery_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         }
-        if (req.body.offer.doc_date) {
+        if (req.body.offer && req.body.offer.doc_date) {
           d = req.body.offer.doc_date.split("/");
           req.body.offer.doc_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         }
-        req.body.doc_to.address={};
+        if (!req.body.doc_to.address) req.body.doc_to.address={};
         res.render(config[req.params.sez].pugdett, {  title: __(config[req.params.sez].title_single), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
       }
     } else {

@@ -1,20 +1,19 @@
 var ObjectID = require('mongodb').ObjectID;
-var DB = require('./../helpers/db-manager');
-var helpers = require('./../helpers/helpers');
+var DB = require('../../helpers/db-manager');
+var helpers = require('../../helpers/helpers');
 
 exports.get = function get(req, res) {
 	helpers.canIseeThis(req, function (auth) {
 		if (auth) {
 			var msg = {};
-			var year;
 			if (req.query.id && req.query.del) {
-				DB.delete_creditnote(req.query.id, function(err, obj){
+				DB.delete_offer(req.query.id, function(err, obj){
 					if (obj){
 						msg.c = [];
-						msg.c.push({name:"",m:__("Credit Note deleted successfully")});
+						msg.c.push({name:"",m:__("Offer deleted successfully")});
 					} else {
 						msg.e = [];
-						msg.e.push({name:"",m:__("Credit Note not found")});
+						msg.e.push({name:"",m:__("Offer not found")});
 					}
 				});
 			}
@@ -29,7 +28,7 @@ exports.get = function get(req, res) {
 				year = req.query.year;
 			}
 
-			DB.creditnotes.find().toArray(function(e, result) {
+			DB.offers.find().toArray(function(e, result) {
 				var years = [new Date().getUTCFullYear()];
 				for (var a=0;a<result.length;a++) {
 					var y = new Date(result[a].doc_date).getUTCFullYear();
@@ -38,13 +37,13 @@ exports.get = function get(req, res) {
 				years.sort();
 				if (req.query.customer){
 					DB.customers.findOne({_id:new ObjectID(req.query.customer)}, function(e, customer) {
-						DB.creditnotes.find(query).sort({doc_date:-1,doc_number:-1}).toArray(function(e, result) {
-							res.render('creditnotes', { title: __("Credit Notes"), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years,year:year,customer:{id:req.query.customer,name:customer.name }});
+						DB.offers.find(query).sort({doc_date:-1,doc_number:-1}).toArray(function(e, result) {
+							res.render('offers', { title: __("Offers"), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years,year:year,customer:{id:req.query.customer,name:customer.name }});
 						});
 					});
 				} else {
-					DB.creditnotes.find(query).sort({doc_date:-1,doc_number:-1}).toArray(function(e, result) {
-						res.render('creditnotes', { title: __("Credit Notes"), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years,year:year });
+					DB.offers.find(query).sort({doc_date:-1,doc_number:-1}).toArray(function(e, result) {
+						res.render('offers', { title: __("offers"), result : helpers.formatMoneyList(result), msg:msg, udata : req.session.user,years:years,year:year });
 					});
 				}
 			});

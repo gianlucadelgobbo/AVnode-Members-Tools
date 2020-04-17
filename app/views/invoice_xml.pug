@@ -31,9 +31,10 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
         Nazione=_config.company.address.countrycode
     CessionarioCommittente
       DatiAnagrafici
-        IdFiscaleIVA
-          IdPaese=result.doc_to.address.countrycode
-          IdCodice=result.doc_to.vat_number.toUpperCase()
+        if result.doc_to.vat_number
+          IdFiscaleIVA
+            IdPaese=result.doc_to.address.countrycode
+            IdCodice=result.doc_to.vat_number.toUpperCase()
         CodiceFiscale=result.doc_to.fiscal_code.toUpperCase()
         Anagrafica
           Denominazione=result.doc_to.name.toUpperCase()
@@ -84,7 +85,5 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
           ImportoPagamento=parseFloat(result.total).toFixed(2)
           IstitutoFinanziario=result.bank.name
           IBAN=result.bank.IBAN
-          CAB=result.bank.CAB
-          ABI=result.bank.ABI
           
           

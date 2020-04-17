@@ -1,11 +1,24 @@
 
 var Validators = {};
 
-Validators.checkCustomerID = function(customerID){
+Validators.checkCustomer = function(customer){
   var errors = [];
-  if(!customerID){
+  if(!customer.name || !customer.name.length) 
     errors.push({name:"doc_to[name]",m:__("You have to insert a valid customer")});
-  }
+  if(!customer.address.street || !customer.address.street.length) 
+    errors.push({name:"doc_to[address][street]",m:__("You have to insert a valid street")});
+  if(!customer.address.zipcode || !customer.address.zipcode.length)
+    errors.push({name:"doc_to[address][zipcode]",m:__("You have to insert a valid zipcode")});
+  if(!customer.address.city || !customer.address.city.length)
+    errors.push({name:"doc_to[address][city]",m:__("You have to insert a valid city")});
+  if(!customer.address.province || customer.address.province.length!=2 || customer.address.province != customer.address.province.toUpperCase())
+    errors.push({name:"doc_to[address][province]",m:__("You have to insert a valid province")});
+  if(!customer.address.countrycode || customer.address.countrycode.length!=2 || customer.address.countrycode != customer.address.countrycode.toUpperCase())
+    errors.push({name:"doc_to[address][countrycode]",m:__("You have to insert a valid country code")});
+  if(customer.address.countrycode == "IT" && (!customer.unique_code || !customer.unique_code.length || !customer.pec || !customer.pec.length))
+    errors.push({name:"doc_to[unique_code]",m:__("You have to insert a valid pec or unique code")});
+  if(customer.countrycode == "IT" && (!customer.fiscal_code || !customer.fiscal_code.length))
+    errors.push({name:"doc_to[fiscal_code]",m:__("You have to insert a valid fiscal code")});
   return errors;
 };
 
@@ -110,17 +123,44 @@ Validators.checkDocDate = function(invoiceDate){
   return errors;
 };
 
-Validators.checkCreditNoteNumber = function(creditnoteNumber){
-  var errors = [];
-  if (!creditnoteNumber) errors.push({name:"doc_number",m:__("No credit note number")});
-  return errors;
-};
 Validators.checkPaymentDays = function(payment_days){
   var errors = [];
   if (!payment_days) errors.push({name:"payment_days",m:__("No payment days")});
   if (payment_days && (isNaN(parseFloat(payment_days)) || !isFinite(payment_days))) errors.push({name:"payment_days",m:__("Payment days have to be a number")});
   return errors;
 };
+
+Validators.checkDeliveryDate = function(deliveryDate){
+  var errors = [];
+  if(deliveryDate){
+    var d = deliveryDate.split("/");
+    if (!this.is_date(d[2],d[1],d[0])){
+      errors.push({name:"delivery_date",m:__("Delivery date is not date")});
+    }
+  }
+  return errors;
+};
+
+Validators.checkOfferDate = function(offerDate){
+  var errors = [];
+  /* if (!offerDate) {
+    errors.push({name:"doc_date",m:__("No offer date")});
+  } else { */
+  if (offerDate) {
+      var d = offerDate.split("/");
+    //if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Invoice date is not date")});
+    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Document date is not date")});
+  }
+  return errors;
+};
+
+/*
+Validators.checkCreditNoteNumber = function(creditnoteNumber){
+  var errors = [];
+  if (!creditnoteNumber) errors.push({name:"doc_number",m:__("No credit note number")});
+  return errors;
+};
+
 Validators.checkCreditNoteDate = function(creditnoteDate){
   var errors = [];
   if (!creditnoteDate) {
@@ -149,35 +189,13 @@ Validators.checkPurchaseDate = function(purchaseDate){
   return errors;
 };
 
-Validators.checkDeliveryDate = function(deliveryDate){
-  var errors = [];
-  if(deliveryDate){
-    var d = deliveryDate.split("/");
-    if (!this.is_date(d[2],d[1],d[0])){
-      errors.push({name:"delivery_date",m:__("Delivery date is not date")});
-    }
-  }
-  return errors;
-};
-
 Validators.checkOfferNumber = function(offerNumber){
   var errors = [];
   if (!offerNumber) errors.push({name:"doc_number",m:__("No offer number")});
   return errors;
 };
 
-Validators.checkOfferDate = function(offerDate){
-  var errors = [];
-  if (!offerDate) {
-    errors.push({name:"doc_date",m:__("No offer date")});
-  } else {
-    var d = offerDate.split("/");
-    //if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Invoice date is not date")});
-    if (!this.is_date(d[2],d[1],d[0])) errors.push({name:"doc_date",m:__("Document date is not date")});
-  }
-  return errors;
-};
-
+ */
 
 // General Functions //
 Validators.validateStringLength = function(s, min, max) {
@@ -198,5 +216,14 @@ Validators.is_date = function (aaaa,mm,gg){
     res = false;
   return res;
 };
+
+Validators.isJson = (str) => {
+  try {
+      JSON.parse(str);
+  } catch (e) {
+      return false;
+  }
+  return true;
+}
 
 if (typeof exports !== 'undefined') exports.Validators = Validators;

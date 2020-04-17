@@ -301,8 +301,6 @@
 	"Giorni Termini Pagamento": "Giorni Termini Pagamento",
 	"Istituto Finanziario": "Istituto Finanziario",
 	"IBAN": "IBAN",
-	"CAB": "CAB",
-	"ABI": "ABI",
 	"Condizioni Pagamento": "Condizioni Pagamento",
 	"days": "giorni",
 	"Customer deleted successfully": "Cliente eliminato con successo",
@@ -321,5 +319,13 @@
 	"Document": "Documento",
 	"from": "da",
 	"to": "a",
-	"deleted successfully": "deleted successfully"
+	"deleted successfully": "deleted successfully",
+	"You have to insert a valid street": "You have to insert a valid street",
+	"You have to insert a valid zipcode": "You have to insert a valid zipcode",
+	"You have to insert a valid city": "You have to insert a valid city",
+	"You have to insert a valid province": "You have to insert a valid province",
+	"You have to insert a valid country code": "You have to insert a valid country code",
+	"No offer date": "No offer date",
+	"You have to insert a valid pec or unique code": "You have to insert a valid pec or unique code",
+	"No invoice number": "No invoice number"
 }

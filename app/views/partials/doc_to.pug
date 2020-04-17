@@ -1,0 +1,76 @@
+.col-sm-7
+  .row
+    .col-sm-6
+      .form-group
+        .input-group
+          label.input-group-addon(for='doc_number')=__("Document number")
+          input(type="text", name="doc_number", value=result.doc_number, disabled).form-control#doc_number
+          a.input-group-addon.btn(href='#', onclick='$("#doc_number").removeAttr("disabled")')=__("Edit")
+    .col-sm-6
+      .form-group
+        .input-group
+          label.input-group-addon(for='doc_date')=__("Document date")
+          - d = result.doc_date;
+          input(type="text", name="doc_date", value=d.getUTCDate()+"/"+(d.getUTCMonth()+1)+"/"+d.getUTCFullYear()).form-control.date#doc_date
+  .row
+    .col-sm-12
+      .form-group
+        .input-group
+          label.input-group-addon(for='doc_to')=__("Customer")
+          input(type="text", name="doc_to[name]", value=result.doc_to.name).form-control#doc_to
+          a(href="/"+global.settings.dbName+"/accounting/customers/new/").btn.input-group-addon=__("Insert new customer")
+          input(type="hidden", name="doc_to[_id]", value=result.doc_to._id)#customer_id
+  .row
+    .col-sm-12
+      .form-group
+        .input-group
+          label.input-group-addon(for='address')=__("Address")
+          input(type="text", name="doc_to[address][street]", value=result.doc_to.address.street, disabled).street.form-control#street
+  .row
+    .col-sm-3
+      .form-group
+        .input-group
+          label.input-group-addon(for='zipcode')=__("ZIP code")
+          input(type="text", name="doc_to[address][zipcode]", value=result.doc_to.address.zipcode, disabled).zipcode.form-control#zipcode
+    .col-sm-3
+      .form-group
+        .input-group
+          label.input-group-addon(for='city')=__("City")
+          input(type="text", name="doc_to[address][city]", value=result.doc_to.address.city, disabled).city.form-control#city
+    .col-sm-3
+      .form-group
+        .input-group
+          label.input-group-addon(for='province')=__("Province")
+          input(type="text", name="doc_to[address][province]", value=result.doc_to.address.province, disabled).province.form-control#province
+    .col-sm-3
+      .form-group
+        .input-group
+          label.input-group-addon(for='country')=__("Country")
+          input(type="text", name="doc_to[address][country]", value=result.doc_to.address.country, disabled).country.form-control#country
+          input(type="hidden", name="doc_to[address][countrycode]", value=result.doc_to.address.countrycode).countrycode.form-control#countrycode
+          span.input-group-addon.countrycode_visible#countrycode_visible=result.doc_to.address.countrycode
+          //(type="text", name="doc_to[address][countrycode]", value=result.doc_to.address.countrycode, disabled).country.form-control#countrycode
+  .row
+    .col-sm-12
+      .form-group
+        .input-group
+          label.input-group-addon(for='vat_number')=__("VAT number")
+          input(type="text", name="doc_to[vat_number]", value=result.doc_to.vat_number, disabled).vat_number.form-control#vat_number
+  #italyonly(style=(result.doc_to.address.country=="Italy" ? "" : "display:none;"))
+    .row
+      .col-sm-12
+        .form-group
+          .input-group
+            label.input-group-addon(for='fiscal_code')=__("Fiscal code")
+            input(type="text", name="doc_to[fiscal_code]", value=result.doc_to.fiscal_code, disabled).fiscal_code.form-control#fiscal_code
+    .row
+      .col-sm-6
+        .form-group
+          .input-group
+            label.input-group-addon(for='unique_code')=__("Unique code")
+            input(type="text", name="doc_to[unique_code]", value=result.doc_to.unique_code, disabled).unique_code.form-control#unique_code
+      .col-sm-6
+        .form-group
+          .input-group
+            label.input-group-addon(for='pec')=__("PEC")
+            input(type="text", name="doc_to[pec]", value=result.doc_to.pec, disabled).pec.form-control#pec

@@ -4,7 +4,7 @@ block content
     include accounting_sidebar
     #main
       .col-md-12
-        form(method="post", action="/"+global.settings.dbName+"/accounting/purchase/?id="+result._id,onsubmit='$("[disabled]").removeAttr("disabled")')#purchase
+        form(method="post")#doc_form
           .row
             .col-sm-6
               h1.page-title=(result.doc_number ? __("Purchase")+": "+result.doc_number : __("New purchase"))
@@ -273,4 +273,4 @@ block content
                 li!="<b>"+x.username+"</b> "+x.time
       
         br
-        - js = '/js/purchase.js'
+        - js = '/js/docs.js'
