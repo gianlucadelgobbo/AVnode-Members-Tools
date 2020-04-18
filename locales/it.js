@@ -319,13 +319,13 @@
 	"Document": "Documento",
 	"from": "da",
 	"to": "a",
-	"deleted successfully": "deleted successfully",
-	"You have to insert a valid street": "You have to insert a valid street",
-	"You have to insert a valid zipcode": "You have to insert a valid zipcode",
-	"You have to insert a valid city": "You have to insert a valid city",
-	"You have to insert a valid province": "You have to insert a valid province",
-	"You have to insert a valid country code": "You have to insert a valid country code",
-	"No offer date": "No offer date",
-	"You have to insert a valid pec or unique code": "You have to insert a valid pec or unique code",
-	"No invoice number": "No invoice number"
+	"deleted successfully": "eliminato con successo",
+	"You have to insert a valid street": "Devi inserire una strada valida",
+	"You have to insert a valid zipcode": "Devi inserire un codice postale valido",
+	"You have to insert a valid city": "Devi inserire una città valida",
+	"You have to insert a valid province": "Devi inserire una provincia valida",
+	"You have to insert a valid country code": "Devi inserire una codice di nazione valido",
+	"No offer date": "Nessuna data dell'ovverta",
+	"You have to insert a valid pec or unique code": "Devi inserire la pec o il codice univoco",
+	"No invoice number": "Nessuna numero fattura"
 }
