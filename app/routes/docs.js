@@ -14,7 +14,7 @@ exports.getList = (req, res, msg={}) => {
     if (auth) {
       if (req.params.sez && config[req.params.sez] && config[req.params.sez].coll && DB[config[req.params.sez].coll]) {
         var year;
-        var query = req.query.customer ? (req.params.sez=="purchases" ? {"doc_from._id":req.query.customer} : {"doc_to._id":req.query.customer}) : {};
+        var query = req.query.customer ? (req.params.sez=="purchases" ? {"doc_from._id":new ObjectID(req.query.customer)} : {"doc_to._id":new ObjectID(req.query.customer)}) : {};
         if (!req.query.year) req.query.year = new Date().getUTCFullYear();
         if (req.query.year && req.query.year!="ALL Years") {
           year = parseInt(req.query.year);
@@ -225,6 +225,7 @@ exports.getXML = (req, res) => {
     }
   });
 };
+
 exports.post = (req, res) => {
   console.log("SALVA SALVA SALVA SALVA SALVA ")
   console.log(req.body)
@@ -245,6 +246,7 @@ exports.post = (req, res) => {
       errors = errors.concat(Validators.checkDeliveryDate(req.body.delivery_date));
       errors = errors.concat(Validators.checkOfferDate(req.body.offer_date));
       var d = req.body.doc_date.split("/");
+      if (req.params.sez == "purchases") {req.body.doc_from._id = new ObjectID(req.body.doc_from._id); } else { req.body.doc_to._id = new ObjectID(req.body.doc_to._id)};
       if (errors.length === 0){
         DB.customers.findOne({_id:new ObjectID(req.body.doc_to._id)},function(e, result) {
           var d;
@@ -414,7 +416,9 @@ exports.my_import_act = function my_import_act(req, res) {
 					//console.log(values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento);
 					var CessionarioCommittente = values[a].FatturaElettronica.FatturaElettronicaHeader.CessionarioCommittente.DatiAnagrafici;
 					if ((CessionarioCommittente.IdFiscaleIVA && CessionarioCommittente.IdFiscaleIVA.IdCodice && _config.company.vat_number == CessionarioCommittente.IdFiscaleIVA.IdCodice)||(CessionarioCommittente.CodiceFiscale && _config.company.fiscal_code == CessionarioCommittente.CodiceFiscale)) {
-						var new_purchase = {
+            console.log("values[a].from");
+            console.log(values[a].from);
+            var new_purchase = {
 							"doc_number" : values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento.Numero,
 							"doc_date" : new Date(values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento.Data),
 							"doc_from" : values[a].from,
