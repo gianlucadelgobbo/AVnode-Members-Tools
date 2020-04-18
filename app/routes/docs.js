@@ -250,10 +250,11 @@ exports.post = (req, res) => {
           var d;
           if (result) {
             d = req.body.doc_date.split("/");
-            var date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
-            var q = {doc_date:{$gt: date},doc_number:(req.body.doc_number-1).toString() };
-            DB[config[req.params.sez].coll].find(q).toArray(function(e, result) {
-              if(errors.length === 0){
+            //var date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
+            
+            //var q = {doc_date:{$gt: date},doc_number:(req.body.doc_number-1).toString() };
+            //DB[config[req.params.sez].coll].find(q).toArray(function(e, result) {
+              //if(errors.length === 0){
                 if (req.body.id) {
                   DB.update_doc(config[req.params.sez].coll, req.body, req.session.user, function(e, o){
                     //console.log("req.body.id");
@@ -275,7 +276,7 @@ exports.post = (req, res) => {
 //                  res.render(config[req.params.sez].pugdett, {  title: __(config[req.params.sez].title_single), country:global._config.company.country, result : helpers.formatMoney(o[0]), msg:msg, udata : req.session.user });
                   });
                 }
-              } else {
+              /* } else {
                 if (req.body.id) req.body._id = req.body.id;
                 errors.push({name:"doc_date",m:__("Data must be greater than")+": "+result.doc_date});
                 var d = req.body.doc_date.split("/");
@@ -288,10 +289,10 @@ exports.post = (req, res) => {
                   d = req.body.offer.doc_date.split("/");
                   req.body.offer.doc_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
                 }
-                req.body.doc_to.address={};
+                //req.body.doc_to.address={};
                 res.render(config[req.params.sez].pugdett, {  title: __(config[req.params.sez].title_single), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
-              }
-            });
+              } */
+            //});
           } else {
             if (req.body.id) req.body._id = req.body.id;
             errors.push({name:"doc_to[name]",m:__("You have to insert a valid customer")});
