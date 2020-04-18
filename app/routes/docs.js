@@ -246,7 +246,7 @@ exports.post = (req, res) => {
       var d = req.body.doc_date.split("/");
       if (req.params.sez == "purchases") {req.body.doc_from._id = new ObjectID(req.body.doc_from._id); } else { req.body.doc_to._id = new ObjectID(req.body.doc_to._id)};
       if (errors.length === 0){
-        DB.customers.findOne({_id:new ObjectID(req.body.doc_to._id)},function(e, result) {
+        DB.customers.findOne({_id:(req.params.sez == "purchases" ? req.body.doc_from._id : req.body.doc_to._id)},function(e, result) {
           var d;
           if (result) {
             d = req.body.doc_date.split("/");

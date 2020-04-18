@@ -15,7 +15,7 @@ Validators.checkCustomer = function(customer){
     errors.push({name:"doc_to[address][province]",m:__("You have to insert a valid province")});
   if(!customer.address.countrycode || customer.address.countrycode.length!=2 || customer.address.countrycode != customer.address.countrycode.toUpperCase())
     errors.push({name:"doc_to[address][countrycode]",m:__("You have to insert a valid country code")});
-  if(customer.address.countrycode == "IT" && (!customer.unique_code || !customer.unique_code.length || !customer.pec || !customer.pec.length))
+  if(customer.address.countrycode == "IT" && (!customer.unique_code || !customer.unique_code.length) && (!customer.pec || !customer.pec.length))
     errors.push({name:"doc_to[unique_code]",m:__("You have to insert a valid pec or unique code")});
   if(customer.countrycode == "IT" && (!customer.fiscal_code || !customer.fiscal_code.length))
     errors.push({name:"doc_to[fiscal_code]",m:__("You have to insert a valid fiscal code")});
