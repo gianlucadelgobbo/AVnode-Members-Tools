@@ -22,9 +22,9 @@ exports.getAll = function get(req, res) {
         var conta = 0;
         if (result.length) {
           result.forEach(function(item, index, arr) {
-            DB.invoices.find({"doc_to._id":arr[index]._id.toString()}).toArray(function (e, result) {
+            DB.invoices.find({"doc_to._id":arr[index]._id}).toArray(function (e, result) {
               arr[index].invoicesCount = result.length;
-              DB.purchases.find({"doc_from.vat_number":arr[index].vat_number, "doc_from.fiscal_code":arr[index].fiscal_code}).toArray(function (e, result) {
+              DB.purchases.find({"doc_from._id":arr[index]._id}).toArray(function (e, result) {
                 conta++;
                 arr[index].purchasesCount = result.length;
                 if (conta == arr.length) res.render('customers', { title: __("Customers"), result : arr, msg: msg, udata : req.session.user });
