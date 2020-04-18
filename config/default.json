@@ -17,9 +17,9 @@
     "folder": "offers",
     "puglist": "docs",
     "pugdett": "offer",
-    "doc_preview": "invoice_preview",
-    "doc_pdf": "invoice_pdf",
-    "doc_xml": "invoice_xml"
+    "doc_preview": "offer_preview",
+    "doc_pdf": "offer_pdf",
+    "doc_xml": "offer_xml"
   },
   "creditnotes": {
     "title_list": "Credit Notes",
@@ -28,9 +28,9 @@
     "folder": "creditnotes",
     "puglist": "docs",
     "pugdett": "creditnote",
-    "doc_preview": "invoice_preview",
-    "doc_pdf": "invoice_pdf",
-    "doc_xml": "invoice_xml"
+    "doc_preview": "creditnote_preview",
+    "doc_pdf": "creditnote_pdf",
+    "doc_xml": "creditnote_xml"
   },
   "purchases": {
     "title_list": "Purchases",
@@ -39,8 +39,8 @@
     "folder": "purchases",
     "puglist": "docs",
     "pugdett": "purchase",
-    "doc_preview": "invoice_preview",
-    "doc_pdf": "invoice_pdf",
-    "doc_xml": "invoice_xml"
+    "doc_preview": "purchase_preview",
+    "doc_pdf": "purchase_pdf",
+    "doc_xml": "purchase_xml"
   }
 }

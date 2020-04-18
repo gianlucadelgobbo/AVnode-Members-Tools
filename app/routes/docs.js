@@ -9,7 +9,6 @@ var CT = require('../helpers/country-list');
 
 var types = ["GEN", "LPM", "LCF", "FNT", "WEB", "PRD", "OTR"];
 var years = [new Date(new Date().getTime()-(365*24*60*60*1000)).getUTCFullYear(), new Date().getUTCFullYear(), new Date(new Date().getTime()+(365*24*60*60*1000)).getUTCFullYear()];
-
 exports.getList = (req, res, msg={}) => {
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
@@ -137,10 +136,40 @@ exports.getDett = (req, res) => {
   });
 };
 
-exports.getPrint = (req, res) => {
-  helpers.canIseeThis(req, function (auth) {
+exports.getPrint = (req, res) => {  
+    helpers.canIseeThis(req, function (auth) {
     if (auth) {
       if (req.params.id) {
+        global._config.ModalitaPagamento = {
+          "MP01": "contanti",
+          "MP02": "assegno",
+          "MP03": "assegno circolare",
+          "MP04": "contanti presso Tesoreria",
+          "MP05": "bonifico",
+          "MP06": "vaglia cambiario",
+          "MP07": "bollettino bancario",
+          "MP08": "carta di pagamento",
+          "MP09": "RID",
+          "MP10": "RID utenze",
+          "MP11": "RID veloce",
+          "MP12": "RIBA",
+          "MP13": "MAV",
+          "MP14": "quietanza erario",
+          "MP15": "giroconto su conti di contabilità speciale",
+          "MP16": "domiciliazione bancaria",
+          "MP17": "domiciliazione postale",
+          "MP18": "bollettino di c/c postale",
+          "MP19": "SEPA Direct Debit",
+          "MP20": "SEPA Direct Debit CORE",
+          "MP21": "SEPA Direct Debit B2B",
+          "MP22": "Trattenuta su somme già riscosse",
+          "MP23": "PagoPA"
+        };
+        global._config.CondizioniPagamento = {
+          "TP01": "pagamento a rate",
+          "TP02": "pagamento completo",
+          "TP03": "anticipo"
+        };
         DB[config[req.params.sez].coll].findOne({_id:new ObjectID(req.params.id)},function(e, result) {
           result = helpers.formatMoney(result);
           var folder = '/accounts/'+global.settings.dbName+'/'+config[req.params.sez].folder+'/'+result.doc_date.getUTCFullYear()+'/';
