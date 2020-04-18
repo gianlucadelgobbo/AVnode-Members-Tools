@@ -1,8 +1,8 @@
 var queryResult;
 $(function() {
 	$(".disabled").attr('disabled', 'disabled');
-	var doc_to = $("#doc_to");
-	doc_to.bind("keypress", function(event) {
+	var doc = $("#doc_to").length ? $("#doc_to") : $("#doc_from");
+	doc.bind("keypress", function(event) {
 		if ($("#customer_id").val()!="" &&  event.keyCode != 13) {
 			$("#customer_id").val("");
 			$(".street").val("");
@@ -21,7 +21,7 @@ $(function() {
 	});
 	
 	//autocomplete
-	doc_to.autocomplete({
+	doc.autocomplete({
 		source: function(req,res){
 			getAutoCompleteList(req,"/api/accounting/customers");
 			var x = [];
@@ -52,6 +52,7 @@ $(function() {
 			} 
 		}
 	});
+
 	$('#payment').autocomplete({
 		source: function(req,res){
 			getAutoCompleteList(req,"/api/accounting/payments");

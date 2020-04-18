@@ -322,7 +322,8 @@ exports.post = (req, res) => {
           d = req.body.offer.doc_date.split("/");
           req.body.offer.doc_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
         }
-        if (!req.body.doc_to.address) req.body.doc_to.address={};
+        /* if (req.body.doc_to && !req.body.doc_to.address) req.body.doc_to.address={};
+        if (req.body.doc_from && !req.body.doc_from.address) req.body.doc_from.address={}; */
         res.render(config[req.params.sez].pugdett, {  title: __(config[req.params.sez].title_single), years: years, types: types, country:global._config.company.country, result : req.body, msg:{e:errors}, udata : req.session.user });
       }
     } else {
