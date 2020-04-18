@@ -32,7 +32,7 @@ exports.getList = (req, res, msg={}) => {
             if (years.indexOf(y) == -1) years.push(y);
           }
           years.sort();
-          console.log(query)
+          //console.log(query)
           if (req.query.customer){
             DB.customers.findOne({_id:new ObjectID(req.query.customer)}, function(e, customer) {
               DB[config[req.params.sez].coll].find(query).sort({doc_date:-1,doc_number:-1}).toArray(function(e, result) {
@@ -103,7 +103,7 @@ exports.getDett = (req, res) => {
         var start = new Date(Date.UTC(dd.getUTCFullYear(), 0, 1));
         var end = new Date(Date.UTC(dd.getUTCFullYear(), 12, 31));
         var query = {doc_date:{$gte: start, $lt: end}};
-        console.log(global._config.company);
+        //console.log(global._config.company);
         DB[config[req.params.sez].coll].find({doc_date:{$gte: start, $lt: end}},{doc_date:1,doc_number:1}).sort({doc_number:1}).toArray(function(e, resultDoc) {
           if (req.query.offer) {
             DB.offers.findOne({_id:new ObjectID(req.query.offer)},function(e, result) {
@@ -112,8 +112,6 @@ exports.getDett = (req, res) => {
               result.doc_date = new Date();
               result.doc_number = resultDoc.length+1;
               delete result._id;
-              console.log("result.offer")
-              console.log(result.offer)
               res.render(config[req.params.sez].pugdett, {  title: __(config[req.params.sez].title_single), years: years, types: types, country:global._config.company.country, result : result, udata : req.session.user });
             });
           } else if (req.query.dup) {
@@ -180,20 +178,20 @@ exports.getPrint = (req, res) => {
             if (!customer.contacts) customer.contacts = [];
             res.render('accounts/'+global.settings.dbName+"_style_print", {layout: false}, function (error_style, style) {
               res.render(config[req.params.sez].doc_preview, {  title: __(config[req.params.sez].title_single), country:global._config.company.country, result : result, udata : req.session.user , file:folder+filename, style:style, js:"/js/sendemail.js", customer:customer/* */}, function (error1, html1) {
-                console.log("error_style");
-                console.log(config[req.params.sez].doc_preview);
-                  console.log(error1);
+                //console.log("error_style");
+                //console.log(config[req.params.sez].doc_preview);
+                //console.log(error1);
                 // PDF START
                 var pdf = require('html-pdf');
                 var options = { format: 'A4',"header": {"height": "75mm"},"footer": {"height": "30mm"}};
                 res.render(config[req.params.sez].doc_pdf, { layout: 'layout_pdf.pug' ,  title: __(config[req.params.sez].title_single), country:global._config.company.country, result : result, udata : req.session.user, style:style }, function (error, html) {
-                  console.log("error");
-                  console.log('./warehouse'+folder+filename);
-                  console.log(html);
+                  //console.log("error");
+                  //console.log('./warehouse'+folder+filename);
+                  //console.log(html);
                   if (!error) {
                     pdf.create(html, options).toFile('./warehouse'+folder+filename, function(pdferr, pdfres) {
-                      console.log(pdferr);
-                      console.log(pdfres);
+                      //console.log(pdferr);
+                      //console.log(pdfres);
                       res.status(200).send(html1);
                     });
                   }
@@ -227,8 +225,8 @@ exports.getXML = (req, res) => {
 };
 
 exports.post = (req, res) => {
-  console.log("SALVA SALVA SALVA SALVA SALVA ")
-  console.log(req.body)
+  //console.log("SALVA SALVA SALVA SALVA SALVA ")
+  //console.log(req.body)
   helpers.canIseeThis(req, function (auth) {
     if (auth) {
       var errors = [];
@@ -258,8 +256,8 @@ exports.post = (req, res) => {
               if(errors.length === 0){
                 if (req.body.id) {
                   DB.update_doc(config[req.params.sez].coll, req.body, req.session.user, function(e, o){
-                    console.log("req.body.id");
-                    console.log(o);
+                    //console.log("req.body.id");
+                    //console.log(o);
                     errors.push({name:"",m:__(config[req.params.sez].title_single)+" "+__("saved with success")});
                     res.render(config[req.params.sez].pugdett, {  title: __(config[req.params.sez].title_single), years: years, types: types, country:global._config.company.country, result : helpers.formatMoney(o), msg:{c:errors}, udata : req.session.user });
                   });
@@ -417,8 +415,6 @@ exports.my_import_act = function my_import_act(req, res) {
 					//console.log(values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento);
 					var CessionarioCommittente = values[a].FatturaElettronica.FatturaElettronicaHeader.CessionarioCommittente.DatiAnagrafici;
 					if ((CessionarioCommittente.IdFiscaleIVA && CessionarioCommittente.IdFiscaleIVA.IdCodice && _config.company.vat_number == CessionarioCommittente.IdFiscaleIVA.IdCodice)||(CessionarioCommittente.CodiceFiscale && _config.company.fiscal_code == CessionarioCommittente.CodiceFiscale)) {
-            console.log("values[a].from");
-            console.log(values[a].from);
             var new_purchase = {
 							"doc_number" : values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento.Numero,
 							"doc_date" : new Date(values[a].FatturaElettronica.FatturaElettronicaBody.DatiGenerali.DatiGeneraliDocumento.Data),

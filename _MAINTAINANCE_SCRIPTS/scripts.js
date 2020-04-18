@@ -1,5 +1,31 @@
 import { ObjectId } from "mongodb";
 
+db.purchases.find({}).forEach(function(e) {
+  printjson("");
+  printjson("");
+  printjson("");
+  printjson(e.doc_from._id.str);
+  if (!e.doc_from._id.str){
+    printjson(e.doc_from._id);
+    e.doc_from._id = ObjectId(e.doc_from._id)
+    printjson(e.doc_from._id);
+    db.purchases.save(e);
+  }
+});
+
+db.invoices.find({}).forEach(function(e) {
+  printjson("");
+  printjson("");
+  printjson("");
+  printjson(e.doc_to._id.str);
+  if (!e.doc_to._id.str){
+    printjson(e.doc_to._id);
+    e.doc_to._id = ObjectId(e.doc_to._id)
+    printjson(e.doc_to._id);
+    db.invoices.save(e);
+  }
+});
+
 db.purchases.find({doc_number:"264/B/2019"}).forEach(function(e) {
     printjson(e.doc_date);
   if (e.doc_date.getUTCHours()>0){

@@ -126,7 +126,6 @@ function showOffers() {
 		url: "/api/accounting/offers",
 		dataType: "json",
 		success: function( data ) {
-			console.log(data);
 			var str = "<div class=\"list-group\">";
 			for(var a=0;a<data.result.length;a++){
 				var d = new Date(data.result[a].doc_date);
