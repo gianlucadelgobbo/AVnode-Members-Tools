@@ -23,9 +23,12 @@ exports.getAll = function get(req, res) {
         if (result.length) {
           result.forEach(function(item, index, arr) {
             DB.invoices.find({"doc_to._id":arr[index]._id.toString()}).toArray(function (e, result) {
-              conta++;
               arr[index].invoicesCount = result.length;
-              if (conta == arr.length) res.render('customers', { title: __("Customers"), result : arr, msg: msg, udata : req.session.user });
+              DB.purchases.find({"doc_from._id":arr[index]._id.toString()}).toArray(function (e, result) {
+                conta++;
+                arr[index].purchasesCount = result.length;
+                if (conta == arr.length) res.render('customers', { title: __("Customers"), result : arr, msg: msg, udata : req.session.user });
+              });
             });
           });
         } else {
