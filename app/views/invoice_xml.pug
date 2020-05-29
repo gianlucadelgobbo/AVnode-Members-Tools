@@ -64,8 +64,13 @@ ns2:FatturaElettronica(versione='FPR12', xmlns:ns2='http://ivaservizi.agenziaent
           - ImponibileImporto+=parseFloat(result.items[a].amount)
           PrezzoTotale=parseFloat(result.items[a].amount).toFixed(2)
           AliquotaIVA=parseFloat(result.vat_perc).toFixed(2)
+          if parseFloat(result.vat_perc) == 0
+            Natura="N2"
       DatiRiepilogo
         AliquotaIVA=parseFloat(result.vat_perc).toFixed(2)
+        if parseFloat(result.vat_perc) == 0
+          Natura="N2"
+
         ImponibileImporto=parseFloat(result.subtotal).toFixed(2)
         Imposta=parseFloat(result.vat_amount).toFixed(2)
         EsigibilitaIVA="I"
