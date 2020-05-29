@@ -12,6 +12,23 @@ db.purchases.find({}).forEach(function(e) {
     db.purchases.save(e);
   }
 });
+db.clients.find({"address.country":"Italy"}).forEach(function(e) {
+  printjson(e);
+  e.address.countrycode = "IT";
+  db.clients.save(e);
+});
+
+db.clients.find({"address.city":"Roma"}).forEach(function(e) {
+  printjson(e);
+  e.address.province = "RM";
+  e.address.city = "Roma";
+  db.clients.save(e);
+});
+
+db.invoices.count({})
+db.invoices.remove({"ajax" : "true"}).forEach(function(e) {
+   printjson(e);
+});
 
 db.invoices.find({}).forEach(function(e) {
   printjson("");

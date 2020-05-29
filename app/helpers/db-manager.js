@@ -110,7 +110,7 @@ DB.update_doc = function(coll, newData, userData, callback) {
       d = newData.delivery_date.split("/");
       newData.delivery_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
     }
-    if(newData.offer.doc_date!=""){
+    if(newData.offer && newData.offer.doc_date!=""){
       d = newData.offer.doc_date.split("/");
       newData.offer.doc_date = new Date(Date.UTC(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])));
     }
