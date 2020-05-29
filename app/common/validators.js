@@ -11,7 +11,7 @@ Validators.checkCustomer = function(customer){
     errors.push({name:"doc_to[address][zipcode]",m:__("You have to insert a valid zipcode")});
   if(!customer.address.city || !customer.address.city.length)
     errors.push({name:"doc_to[address][city]",m:__("You have to insert a valid city")});
-  if(!customer.address.province || customer.address.province.length!=2 || customer.address.province != customer.address.province.toUpperCase())
+  if(customer.address.countrycode == "IT" && (!customer.address.province || customer.address.province.length!=2 || customer.address.province != customer.address.province.toUpperCase()))
     errors.push({name:"doc_to[address][province]",m:__("You have to insert a valid province")});
   if(!customer.address.countrycode || customer.address.countrycode.length!=2 || customer.address.countrycode != customer.address.countrycode.toUpperCase())
     errors.push({name:"doc_to[address][countrycode]",m:__("You have to insert a valid country code")});

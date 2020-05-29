@@ -64,6 +64,17 @@ db.invoices.find({type:{$exists: false}, doc_date:{$gte: ISODate("2019-01-01T00:
   db.invoices.save(e);
 });
 
+    e.doc_from = {
+      "name" : "Flyer srl impresa sociale",
+      "address" : {
+        "street" : "Via Cardinal de Luca 10",
+        "zipcode" : "00196",
+        "city" : "Roma",
+        "country" : "Italy"
+      },
+      "vat_number" : "06589171005",
+      "fiscal_code" : "06589171005"
+    };
 
 
 db.invoices.find({}).forEach(function(e) {
@@ -77,15 +88,16 @@ db.invoices.find({}).forEach(function(e) {
     e.doc_to = e.to_client;
     delete e.to_client;
     e.doc_from = {
-      "name" : "Flyer srl impresa sociale",
+      "name" : "Associazione Culturale Linux Club Italia",
       "address" : {
-        "street" : "Via Cardinal de Luca 10",
-        "zipcode" : "00196",
+        "street" : "Via del Verano 39",
+        "zipcode" : "00185",
         "city" : "Roma",
-        "country" : "Italy"
+        "country" : "RM",
+        "countrycode" : "IT"
       },
-      "vat_number" : "06589171005",
-      "fiscal_code" : "06589171005"
+      "vat_number" : "08459281005",
+      "fiscal_code" : "97318630585"
     };
     printjson(e.invoice_date);
     printjson(e.invoice_number);
@@ -94,6 +106,17 @@ db.invoices.find({}).forEach(function(e) {
     db.invoices.save(e);
   }
 });
+    e.doc_from = {
+      "name" : "1063GB",
+      "address" : {
+        "street" : "Arondeusstraat 7",
+        "zipcode" : "1063GB",
+        "city" : "Amsterdam",
+        "country" : "Netherlands",
+        "countrycode" : "NL"
+      },
+      "vat_number" : "NL856555253B01"
+    };
 
 db.offers.find({}).forEach(function(e) {
   if (e.offer_date) {
