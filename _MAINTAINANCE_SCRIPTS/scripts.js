@@ -26,7 +26,8 @@ db.clients.find({"address.city":"Roma"}).forEach(function(e) {
 });
 
 db.invoices.count({})
-db.invoices.remove({"ajax" : "true"}).forEach(function(e) {
+db.invoices.find({name:{$exists:true}}).forEach(function(e) {
+  db.invoices.remove({name:{$exists:true}});
    printjson(e);
 });
 

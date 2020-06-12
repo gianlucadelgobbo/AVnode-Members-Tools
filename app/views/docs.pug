@@ -16,7 +16,7 @@ block content
                 a.btn.btn-primary(href="/"+global.settings.dbName+"/accounting/"+basepath+"/?year="+year + (typeof customer != "undefined" ? "&customer=" + customer.id : ""))=__(year)
                 button.btn.btn-primary.dropdown-toggle(data-toggle="dropdown")#changeyear
                   span.caret
-                ul.dropdown-menu
+                ul.dropdown-menu.dropdown-menu-right
                   li
                     a(href="/"+global.settings.dbName+"/accounting/"+basepath+"/?year=ALL Years" + (typeof customer != "undefined" ? "&customer=" + customer.id : ""))=__("ALL Years")
                   each year in years
@@ -43,12 +43,12 @@ block content
                 th.tabActions=__("Actions")
                 th=__("Document number")
                 th=__("Document date")
+                th=__("Type")
                 th=__("Document")+" "+(sez=="purchases" ? __("from") : __("to"))
                 th.text-right=__("Subtotal")
                 th.text-right=__("VAT")
                 th.text-right=__("Shipping costs")
                 th.text-right=__("TOTAL")
-                th=__("Type")
                 th=__("Paid")
             tbody
               each x, index in result
@@ -75,11 +75,24 @@ block content
                       span(class=" label label-"+(typeof customer != "undefined" || parseInt(year)!=year || sez!="invoices" ? "info" : x.doc_number==result.length-index ? "success" : "danger"))=x.doc_number
                   - dd = new Date(x.doc_date)
                   td=dd.getUTCDate()+"/"+(dd.getUTCMonth()+1)+"/"+dd.getUTCFullYear()
+                  td(style="white-space: nowrap;")
+                    form.form-inline
+                      select.form-control.input-sm(name="type" onchange="setType({req: {id:'"+x._id+"', col:'"+sez+"'}, set:{type:this.value}})")
+                        option(value="")="unset"
+                        each t in types
+                          option(value=t selected=x.type==t ? "selected" : undefined)=t
+                      !=" "
+                      select.form-control.input-sm(name="type_year" onchange="setType({req: {id:'"+x._id+"', col:'"+sez+"'}, set:{type_year:this.value}})")
+                        option(value="")="unset"
+                        each year in years
+                          option(value=year selected=x.type_year==year ? "selected" : undefined)=year
                   td
-                    if sez=="purchases"
-                      a(href="/"+global.settings.dbName+"/accounting/customers/"+x.doc_from._id)=x.doc_from.name
-                    else 
-                      a(href="/"+global.settings.dbName+"/accounting/customers/"+x.doc_to._id)=x.doc_to.name
+                    div
+                      if sez=="purchases"
+                        a(href="/"+global.settings.dbName+"/accounting/customers/"+x.doc_from._id)=x.doc_from.name
+                      else 
+                        a(href="/"+global.settings.dbName+"/accounting/customers/"+x.doc_to._id)=x.doc_to.name
+                    .small=x.items[0].description.length > 100 ? x.items[0].description.substring(0,100)+"..." : x.items[0].description
                   td.text-right=x.subtotal
                   td.text-right=x.vat_amount
                   td.text-right=x.shipping_costs
@@ -91,18 +104,8 @@ block content
                     - if (!types_subtotals[x.type][x.type_year]) types_subtotals[x.type][x.type_year] = {subtotal: 0, vat_amount: 0}
                     - types_subtotals[x.type][x.type_year].subtotal+= accounting.unformat(x.subtotal)*100
                     - types_subtotals[x.type][x.type_year].vat_amount+= accounting.unformat(x.vat_amount)*100
-                  td
-                    form.form-inline
-                      select.form-control.input-sm(name="type" onchange="setType({req: {id:'"+x._id+"', col:'"+coll+"'}, set:{type:this.value}})")
-                        option(value="")="unset"
-                        each t in types
-                          option(value=t selected=x.type==t ? "selected" : undefined)=t
-                      select.form-control.input-sm(name="type_year" onchange="setType({req: {id:'"+x._id+"', col:'"+coll+"'}, set:{type_year:this.value}})")
-                        option(value="")="unset"
-                        each year in years
-                          option(value=year selected=x.type_year==year ? "selected" : undefined)=year
                   td.text-center
-                    input.form-control(type='checkbox' name="paid" checked=(x.paid=="true" ? "checked" : undefined) onclick="setType({req: {id:'"+x._id+"', col:'"+coll+"'}, set:{paid:this.checked}})")
+                    input(type='checkbox' name="paid" checked=(x.paid=="true" ? "checked" : undefined) onclick="setType({req: {id:'"+x._id+"', col:'"+sez+"'}, set:{paid:this.checked}})")
           table.table
             thead
               tr
