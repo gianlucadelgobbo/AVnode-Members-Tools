@@ -25,7 +25,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon app",
     "start": "node app.js",
-    "jenkins": "NODE_ENV=production forever --uid 'avnode-members-tools' start --append app.js ",
+    "forever": "NODE_ENV=production forever --uid 'avnode-members-tools' start --append app.js ",
     "pm2start": "pm2 start app.js --name avnode-members-tools --env production --watch --log logs.log --time",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

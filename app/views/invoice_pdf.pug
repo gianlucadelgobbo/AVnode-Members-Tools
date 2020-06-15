@@ -95,7 +95,5 @@ block content
 								div=_config.currency[0]+" "+result.total
 	footer#pageFooter
 		b=__("Bank")
-		br
-		- for (a=0;a<_config.banks.length;a++)
-			- if (_config.banks[a]==result.bank)
-				span=_config.banks[a]
+		!="<br />"+result.bank.name
+		!="<br />"+__("IBAN")+": "+result.bank.IBAN
