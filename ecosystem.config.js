@@ -1,19 +1,29 @@
 module.exports = {
   apps : [{
     name: 'avnode-members-tools',
+    max_memory_restart: "600M",
     script: 'app.js',
-
-    // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
-    args: 'one two',
+    log_file: "node_avnode_tools-combined.log",
+    out_file: "node_avnode_tools-out.log",
+    error_file: "node_avnode_tools-err.log",
+    ignore_watch: [
+      "public",
+      "warehouse",
+      "locales"
+    ],
+    time: true,
     instances: 1,
+    exec_mode: "fork",
     autorestart: true,
-    watch: false,
-    max_memory_restart: '1G',
+    watch: true,
+    watch_options: {
+      followSymlinks: false
+    },
     env: {
-      NODE_ENV: 'development'
+      NODE_ENV: "development"
     },
     env_production: {
-      NODE_ENV: 'production'
+      NODE_ENV: "production"
     }
   }],
 
