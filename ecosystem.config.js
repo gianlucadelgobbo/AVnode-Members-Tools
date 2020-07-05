@@ -3,9 +3,9 @@ module.exports = {
     name: 'avnode-members-tools',
     max_memory_restart: "600M",
     script: 'app.js',
-    log_file: "/var/log/nginx/node_avnode_tools-combined.log",
-    out_file: "/var/log/nginx/node_avnode_tools-out.log",
-    error_file: "/var/log/nginx/node_avnode_tools-err.log",
+    log_file: "/sites/logs/node_avnode_tools-combined.log",
+    out_file: "/sites/logs/node_avnode_tools-out.log",
+    error_file: "/sites/logs/node_avnode_tools-err.log",
     ignore_watch: [
       "public",
       "warehouse",
