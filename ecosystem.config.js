@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'avnode-members-tools',
-    max_memory_restart: "600M",
+    max_memory_restart: "200M",
     script: 'app.js',
     log_file: "/sites/logs/node_avnode_tools-combined.log",
     out_file: "/sites/logs/node_avnode_tools-out.log",
