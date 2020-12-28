@@ -15,12 +15,12 @@ block content
                   span!="&nbsp;"
                   input(type="button", value=__("DUPLICATE"), onclick="window.location='/"+global.settings.dbName+"/accounting/creditnote/new/?dup="+result._id+"'").btn.btn-primary
                   span!="&nbsp;"
-                  input(type="button", value=__("PRINT"), onclick="window.location='/"+global.settings.dbName+"/accounting/print/creditnote/?id="+result._id+"'").btn.btn-primary
+                  input(type="button", value=__("PRINT"), onclick="/"+global.settings.dbName+"/accounting/creditnotes/"+result._id+"/print").btn.btn-primary
                   span(style=(_config.company.address.country=="Italy" ? "" : "display:none;"))
                     span!="&nbsp;"
                     a(download=_config.company.address.countrycode+_config.company.vat_number+"_"+(("00000" + result.doc_number).slice(-5))+".xml", href="/"+global.settings.dbName+"/accounting/creditnotes/"+result._id+"/xml").btn.btn-primary=__("XML")
                   span!="&nbsp;"
-                  input(type="button", value=__("DELETE"), onclick="window.location='/" + global.settings.dbName + "/accounting//creditnotes/?id=" + result._id + "&del=1").btn.btn-danger
+                  input(type="button", value=__("DELETE"), onclick="window.location='/" + global.settings.dbName + "/accounting/creditnotes/?id=" + result._id + "&del=1").btn.btn-danger
                   input(type="hidden", name="id", value=result._id)
           hr
           - if (typeof msg !== "undefined" && typeof msg.e !== "undefined" && msg.e.length)
