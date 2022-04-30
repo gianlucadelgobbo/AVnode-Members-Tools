@@ -18,7 +18,7 @@ module.exports = function(app, exp) {
     app.use(cookieParser());
     app.use(session({ secret: 'mongo-invoices', resave: false, saveUninitialized: true, cookie: { maxAge: 3600000 } }));
     app.use(methodOverride());
-    app.use(require('stylus').middleware({ src: global.settings.root_path + '/public' }));
+    //app.use(require('stylus').middleware({ src: global.settings.root_path + '/public' }));
     app.use(exp.static(global.settings.root_path + '/app/common'));
     app.use(exp.static(global.settings.root_path + '/public'));
     app.use(exp.static(global.settings.root_path + '/warehouse'));

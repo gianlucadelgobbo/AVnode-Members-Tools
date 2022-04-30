@@ -5,6 +5,8 @@
 	"2018": 2018,
 	"2019": 2019,
 	"2020": 2020,
+	"2021": 2021,
+	"2022": 2022,
 	"Please Login To Your Account": "Accedi al tuo account",
 	"Sign in": "Accedi",
 	"Forgot Your Password": "Hai dimenticato la password?",

@@ -18,6 +18,10 @@ db.clients.find({"address.country":"Italy"}).forEach(function(e) {
   db.clients.save(e);
 });
 
+db.clients.find({}).forEach(function(e) {
+  printjson(e.name+"\t\t"+e.address.street+"\t"+e.address.city+"\t"+e.address.zipcode+"\t"+e.address.province+"\t\t"+e.address.country+"\t"+(e.contacts && e.contacts.length ? (e.contacts[0].email+"\t"+e.contacts[0].name) : "\t\t")+"\t\t"+e.vat_number+"\t"+e.fiscal_code+"\t\t"+e.pec+"\t"+e.unique_code);
+});
+
 db.clients.find({"address.city":"Roma"}).forEach(function(e) {
   printjson(e);
   e.address.province = "RM";
